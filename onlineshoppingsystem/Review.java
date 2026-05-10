@@ -1,4 +1,4 @@
-
+package onlineshoppingsystem;
 public class Review {
     private int reviewId;
     private int rating;

@@ -10,6 +10,7 @@ public abstract class User {
     
     protected Scanner input = new Scanner(System.in);
 
+
     public User(String userId, String name, String email, String password) {
 
         // User ID Validation
