@@ -2,6 +2,7 @@ package onlineshoppingsystem;
 
 public class EasyPaisaPayment extends Payment {
     private String phoneNumber;
+    private static final double Transaction_Limit = 50000.0;
     
 
     public EasyPaisaPayment(int paymentId, double amount, String phoneNumber) {
@@ -9,9 +10,18 @@ public class EasyPaisaPayment extends Payment {
         this.phoneNumber = phoneNumber;
     }
 
+    public boolean isWithinTransactionLimit() {
+        return getAmount() <= Transaction_Limit;
+    }
+
     public void sendOTP() {
-        System.out.println("OTP sent to phone number: " + phoneNumber);
-    
+        if (!isWithinTransactionLimit()) {
+            System.out.println("Cannot send OTP: Transaction exceeds limit of Rs. " + Transaction_Limit);
+            return;
+        }
+        else{
+            System.out.println("OTP sent to phone number: " + phoneNumber);
+        }
     }
 
 
@@ -26,9 +36,12 @@ public class EasyPaisaPayment extends Payment {
     }
 
     public void processPayment() {
+        if (!validatePhoneNumber()) {
+            System.out.println("Invalid phone number. Payment cannot be processed.");
+            return;
+        }
         sendOTP();
         System.out.println("Processing EasyPaisa payment of $" + getAmount());
-    
     }
 
     public String getPhoneNumber() {
