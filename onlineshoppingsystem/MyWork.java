@@ -1,4 +1,4 @@
-package Online_Shopping_System_Java;
+package onlineshoppingsystem;
 import java.time.LocalDate;
 
 
