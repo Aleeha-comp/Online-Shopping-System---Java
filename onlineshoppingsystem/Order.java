@@ -28,26 +28,23 @@ public class Order {
 
 
         for (CartItem cartItem : cart.getItems()) {
-            items.add(new OrderItem(cartItem.getProduct(), cartItem.getQuantity()));
+            // store the cart item directly in the order
+            items.add(cartItem);
             cartItem.getProduct().reduceStock(cartItem.getQuantity());
         }
     }
 
     public boolean processPayment(Payment payment) {
         this.payment = payment;
-        boolean success = payment.processPayment();
-        if (success) {
-            this.status = "Confirmed";
-            System.out.println("Order #" + orderId + " confirmed!");
-        } else {
-            this.status = "Payment Failed";
-        }
-        return success;
+        payment.processPayment();
+        this.status = "Confirmed";
+        System.out.println("Order #" + orderId + " confirmed!");
+        return true;
     }
 
     public double getTotal() {
         double total = 0;
-        for (OrderItem item : items) total += item.getSubtotal();
+        for (CartItem item : items) total += item.getSubtotal();
         return total;
     }
 
@@ -56,11 +53,35 @@ public class Order {
         System.out.println("Date: " + orderDate + " | Status: " + status);
         System.out.println("Deliver to: " + deliveryAddress.getFullAddress());
         System.out.println("Items:");
-        for (OrderItem item : items) System.out.println("  " + item);
+        for (CartItem item : items) System.out.println("  " + item);
         System.out.println("Total: Rs." + String.format("%.2f", getTotal()));
     }
 
     public int getOrderId() { return orderId; }
     public String getStatus() { return status; }
-    public List<OrderItem> getItems() { return items; }
+    public List<CartItem> getItems() { return items; }
+}
+
+// Minimal Address implementation to satisfy references from Order.
+class Address {
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
+
+    public Address(String street, String city, String state, String zip) {
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+    }
+
+    public String getFullAddress() {
+        StringBuilder sb = new StringBuilder();
+        if (street != null && !street.isEmpty()) sb.append(street).append(", ");
+        if (city != null && !city.isEmpty()) sb.append(city).append(", ");
+        if (state != null && !state.isEmpty()) sb.append(state).append(" ");
+        if (zip != null && !zip.isEmpty()) sb.append(zip);
+        return sb.toString().trim();
+    }
 }

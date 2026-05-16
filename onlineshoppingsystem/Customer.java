@@ -2,6 +2,7 @@ package onlineshoppingsystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import onlineshoppingsystem.Address;
 
 public class Customer extends User {
 
