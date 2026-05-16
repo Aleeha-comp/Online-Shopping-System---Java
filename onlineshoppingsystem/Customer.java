@@ -2,7 +2,6 @@ package onlineshoppingsystem;
 
 import java.util.ArrayList;
 import java.util.List;
-import onlineshoppingsystem.Address;
 
 public class Customer extends User {
 
@@ -13,7 +12,7 @@ public class Customer extends User {
     public Customer(String userId, String name, String email, String password) {
         super(userId, name, email, password);
         this.addresses = new ArrayList<>();
-        this.cart = new Cart(userId);           // cart tied to customer
+        this.cart = new Cart();           // cart tied to customer // should not ye pass userID??????
         this.orders = new ArrayList<>();    
     }
 
@@ -66,11 +65,11 @@ public class Customer extends User {
         
             int orderId = orders.size() + 1; // Simple order ID generation
 
-            Order order = new Order(orderId, this.getUserId(), cart.getItems(), address, payment);
+            Order order = new Order(orderId, cart, address);
             order.processPayment(payment);
             orders.add(order);
             System.out.println("Order placed successfully! Order ID: " + orderId);
-            cart.clear();           // Clear the cart after placing the order
+            cart.getItems().clear();           // Clear the cart after placing the order
             return order;
         }
 
@@ -91,7 +90,7 @@ public class Customer extends User {
             for (Order order : orders) {
                 System.out.println("Order ID: " + order.getOrderId());
                 System.out.println("Items: " + order.getItems());
-                System.out.println("Shipping Address: " + order.getShippingAddress());
+                System.out.println("Shipping Address: " + order.getShippingAddress().getFullAddress());
                 System.out.println("Payment Status: " + order.getPaymentStatus());
             }
         } 

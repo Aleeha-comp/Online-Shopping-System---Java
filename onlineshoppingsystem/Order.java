@@ -60,6 +60,8 @@ public class Order {
     public int getOrderId() { return orderId; }
     public String getStatus() { return status; }
     public List<CartItem> getItems() { return items; }
+    public Address getShippingAddress() { return deliveryAddress; }
+    public String getPaymentStatus() { return status; }
 }
 
 // Minimal Address implementation to satisfy references from Order.

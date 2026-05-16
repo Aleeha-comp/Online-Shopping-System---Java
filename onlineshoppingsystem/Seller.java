@@ -5,7 +5,7 @@ public class Seller extends User {
     private Shop shop;
     private double rating;
 
-    public Seller(int userId, String name, String email, String password, Shop shop, double rating) {
+    public Seller(String userId, String name, String email, String password, Shop shop, double rating) {
         super(userId, name, email, password);
 
         // Validation checks
