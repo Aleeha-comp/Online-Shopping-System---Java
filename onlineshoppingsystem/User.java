@@ -1,15 +1,10 @@
 package onlineshoppingsystem;
 
-import java.util.Scanner;
-
 public abstract class User {
     private String userId;
     private String name;
     private String email;
     private String password;
-    
-    protected Scanner input = new Scanner(System.in);
-
 
     public User(String userId, String name, String email, String password) {
 
@@ -25,9 +20,7 @@ public abstract class User {
             } 
             
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter User ID again: ");
-                userId = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
 
@@ -43,9 +36,7 @@ public abstract class User {
             } 
             
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter Name again: ");
-                name = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
 
@@ -61,9 +52,7 @@ public abstract class User {
             } 
 
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter Email again: ");
-                email = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
 
@@ -79,9 +68,7 @@ public abstract class User {
             } 
             
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter Password again: ");
-                password = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
@@ -117,9 +104,7 @@ public abstract class User {
             } 
             
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter User ID again: ");
-                userId = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
@@ -136,9 +121,7 @@ public abstract class User {
             } 
             
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter Name again: ");
-                name = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
@@ -155,9 +138,7 @@ public abstract class User {
             } 
             
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter Email again: ");
-                email = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
@@ -174,9 +155,7 @@ public abstract class User {
             } 
             
             catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.print("Enter Password again: ");
-                password = input.nextLine();
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
