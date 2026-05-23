@@ -1,6 +1,8 @@
 package onlineshoppingsystem;
 
-public class Seller extends User {
+import java.io.Serializable;
+
+public class Seller extends User implements Serializable {
     
     private Shop shop;
     private double rating;

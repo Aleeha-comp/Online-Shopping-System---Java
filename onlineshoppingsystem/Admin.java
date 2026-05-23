@@ -1,8 +1,9 @@
 package onlineshoppingsystem;
 
-import java.util.List;
+import java.util.*;
+import java.io.Serializable;
 
-public class Admin extends User {
+public class Admin extends User implements Serializable {
 
     private String department;
 

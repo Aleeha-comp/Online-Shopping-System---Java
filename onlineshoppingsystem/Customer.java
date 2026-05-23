@@ -1,13 +1,13 @@
 package onlineshoppingsystem;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.io.Serializable;
 
-public class Customer extends User {
+public class Customer extends User implements Serializable {
 
-    private List<Address> addresses;
+    private ArrayList<Address> addresses;
     private Cart cart;
-    private List<Order> orders;
+    private ArrayList<Order> orders;
 
     public Customer(String userId, String name, String email, String password) {
         super(userId, name, email, password);

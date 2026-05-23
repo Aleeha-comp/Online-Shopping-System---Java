@@ -15,6 +15,16 @@ public class Main {
  
     public static void main (String args[]){
         
+        // Load previous data
+        loadAllData();
+
+        // If no data exists
+        if (shops.isEmpty()) {
+            initializeData();
+        }
+        
+        // Save before exiting
+        saveAllData();
     }
 
     // Mutators (Setters)
@@ -180,7 +190,7 @@ public class Main {
         catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-        
+
         return categories; 
     }
 
@@ -298,5 +308,154 @@ public class Main {
     Product p2 = new Product("Wireless Earbuds", 3500, 25, techShop);
     Product p3 = new Product("USB-C Charger", 1200, 50, techShop);
 
+}
+
+// Saving data to sile
+public static void saveAllData() {
+
+    // Exception fo customer
+    try {
+        if (customers == null) {
+            throw new Exception("Customer list is empty. Add data to customer list!");
+        }
+
+        FileHandling.saveData("customers.dat", customers);
+    }
+
+    catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+
+    // Exception for seller
+    try {
+        if (sellers == null) {
+            throw new Exception("Seller list is empty. Add data to seller list!");
+        }
+
+        FileHandling.saveData("sellers.dat", sellers);
+    }
+
+    catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+
+    // Exception for admin
+    try {
+        if (admins == null) {
+            throw new Exception("Admin list is empty. Add data to admin list!");
+        }
+
+        FileHandling.saveData("admins.dat", admins);
+    }
+
+    catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+
+    // Exception for Shops
+    try {
+        if (shops == null) {
+            throw new Exception("Shop list is empty. Add data to shop list!");
+        }
+
+        FileHandling.saveData("shops.dat", shops);
+    }
+
+    catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+
+    // Exception for Categories
+    try {
+        if (categories == null) {
+            throw new Exception("Category list is empty. Add data to categories list!");
+        }
+
+        FileHandling.saveData("categories.dat", categories);
+    }
+
+    catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+}
+
+// Loading Data from file
+@SuppressWarnings("unchecked")
+
+public static void loadAllData() {
+
+    try {
+
+        // ---------- CUSTOMER ----------
+        Object c = FileHandling.loadData("customers.dat");
+
+        if (c != null){
+            if (c instanceof ArrayList<?>) {         // ? means arraylist of any type. This is called wildcard in java generics.
+                customers = (ArrayList<Customer>) c;
+            }
+        }
+
+        else {
+            throw new Exception("Data not found in customers.dat");
+        }
+    
+        // ---------- SELLERS ----------
+        Object s = FileHandling.loadData("sellers.dat");
+
+        if (s != null){
+            if (s instanceof ArrayList<?>) {
+                sellers = (ArrayList<Seller>) s;
+            }
+        }
+
+        else {
+            throw new Exception("Data not found in sellers.dat");
+        }
+
+        // ---------- ADMIN ----------
+        Object a = FileHandling.loadData("admins.dat");
+
+        if (a != null){
+            if (a instanceof ArrayList<?>) {
+                admins = (ArrayList<Admin>) a;
+            }
+        }
+
+        else {
+            throw new Exception("Data not found in admins.dat");
+        }
+
+        // ---------- SHOPS ----------
+        Object sh = FileHandling.loadData("shops.dat");
+
+        if (sh != null){
+            if (sh instanceof ArrayList<?>) {
+                shops = (ArrayList<Shop>) sh;
+            }
+        }
+
+        else {
+            throw new Exception("Data not found in shops.dat");
+        }
+
+        // ---------- CATEGORIES ----------
+        Object cat = FileHandling.loadData("categories.dat");
+
+        if (cat != null){
+            if (cat instanceof ArrayList<?>) {
+                categories = (ArrayList<ShopCategory>) cat;
+            }
+        }
+
+        System.out.println("All data loaded successfully!");
+    }
+
+    catch (ClassCastException e) {
+        System.out.println("Type casting error while loading data: " + e.getMessage());
+    }
+
+    catch (Exception e) {
+        System.out.println("Error while loading data: " + e.getMessage());
+    }
 }
 }

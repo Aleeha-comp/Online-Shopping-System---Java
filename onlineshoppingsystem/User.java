@@ -1,6 +1,8 @@
 package onlineshoppingsystem;
 
-public abstract class User {
+import java.io.Serializable;
+
+public abstract class User implements Serializable{
     private String userId;
     private String name;
     private String email;
