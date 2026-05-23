@@ -65,7 +65,7 @@ public class Order {
 }
 
 // Minimal Address implementation to satisfy references from Order.
-class Address {
+/*class Address {
     private String street;
     private String city;
     private String state;
@@ -87,3 +87,4 @@ class Address {
         return sb.toString().trim();
     }
 }
+ */

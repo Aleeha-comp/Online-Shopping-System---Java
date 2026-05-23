@@ -14,9 +14,33 @@ public class Address {
     // Auto ID generator
     private static int idCounter = 1;
 
-    public Address(String street, String city,
-                   String province, String country,
-                   String zipCode, String label) {
+    public Address(String street, String city, String province, String country, String zipCode, String label) {
+
+        try {
+            // Validation checks
+            if (street == null || street.trim().isEmpty()) {
+                throw new IllegalArgumentException("Street cannot be empty!");
+            }
+
+            if (city == null || city.trim().isEmpty()) {
+                throw new IllegalArgumentException( "City cannot be empty!");
+            }
+
+            if (province == null || province.trim().isEmpty()) {
+                throw new IllegalArgumentException("Province cannot be empty!");
+            }
+
+            if (country == null || country.trim().isEmpty()) {
+                throw new IllegalArgumentException("Country cannot be empty!");
+            }
+
+            if (zipCode == null || zipCode.trim().isEmpty()) {
+                throw new IllegalArgumentException("Zip code cannot be empty!");
+            }
+
+            if (label == null || label.trim().isEmpty()) {
+                throw new IllegalArgumentException( "Label cannot be empty!");
+            }
 
         this.addressId = idCounter++;
 
@@ -26,25 +50,29 @@ public class Address {
         this.country = country;
         this.zipCode = zipCode;
         this.label = label;
+
+    } catch (IllegalArgumentException e) {
+
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
-    // Validate address
-    public boolean validate() {
-
-        return street != null && !street.isEmpty()
-            && city != null && !city.isEmpty()
-            && zipCode != null && !zipCode.isEmpty();
-    }
 
     // Full address
     public String getFullAddress() {
 
-        return label + ": "
-            + street + ", "
-            + city + ", "
-            + province + ", "
-            + country + " - "
-            + zipCode;
+        try {
+            return label + ": "
+                + street + ", "
+                + city + ", "
+                + province + ", "
+                + country + " - "
+                + zipCode;
+
+    } catch (Exception e) {
+
+            return "Error generating full address.";
+        }
     }
 
     // Getters
@@ -76,17 +104,48 @@ public class Address {
         return label;
     }
 
+
     // Setters
     public void setStreet(String street) {
+            try {
+                if (street == null || street.trim().isEmpty()) {
+                    throw new IllegalArgumentException("Street cannot be empty!");
+                }
+
         this.street = street;
+
+        }catch (IllegalArgumentException e) {
+
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
+    
     public void setCity(String city) {
-        this.city = city;
+        try {
+            if (city == null || city.trim().isEmpty()) {
+                throw new IllegalArgumentException("City cannot be empty!");
+            }
+
+            this.city = city;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     public void setLabel(String label) {
+        try {
+            if (label == null || label.trim().isEmpty()) {
+                throw new IllegalArgumentException("Label cannot be empty!");
+            }
+
         this.label = label;
+
+        } catch (IllegalArgumentException e) {
+
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     // toString

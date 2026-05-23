@@ -4,7 +4,6 @@ package onlineshoppingsystem;
 // Product class implements Discountable interface
 public class Product implements Discountable {
 
-    // Attributes
     private int productId;
 
     private String name;
@@ -20,10 +19,24 @@ public class Product implements Discountable {
     private static int idCounter = 1;
 
     // Constructor
-    public Product(String name,
-                   double price,
-                   int stock,
-                   Shop shop) {
+    public Product(String name,double price,int stock,Shop shop) {
+
+          try {
+            if (name == null || name.trim().isEmpty()) {
+                throw new IllegalArgumentException("Product name cannot be empty!");
+            }
+
+            if (price < 0) {
+                throw new IllegalArgumentException("Price cannot be negative!");
+            }
+
+            if (stock < 0) {
+                throw new IllegalArgumentException("Stock cannot be negative!");
+            }
+
+            if (shop == null) {
+                throw new NullPointerException("Shop cannot be null!");
+            }
 
         this.productId = idCounter++;
 
@@ -34,25 +47,32 @@ public class Product implements Discountable {
 
         this.shop = shop;
         this.discountPct = 0.0;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+
+        } catch (NullPointerException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     // Apply discount
     @Override
     public void applyDiscount(double percentage) {
+         try {
+            if (percentage < 0 || percentage > 100) {
+                throw new IllegalArgumentException(
+                    "Discount must be between 0% and 100%!"
+                );
+            }
 
-        if (percentage < 0 || percentage > 100) {
+            this.discountPct = percentage;
 
-            throw new IllegalArgumentException(
-                "Discount must be between 0% and 100%!"
-            );
+            System.out.println("Discount of " + percentage +"% applied to: " + name );
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        this.discountPct = percentage;
-
-        System.out.println(
-            "Discount of " + percentage +
-            "% applied to: " + name
-        );
     }
 
     // Get discounted price
@@ -71,41 +91,53 @@ public class Product implements Discountable {
     // Check stock for quantity
     public boolean isInStock(int qty) {
 
-        return stock >= qty;
+       try {
+            if (qty <= 0) {
+                throw new IllegalArgumentException("Quantity must be greater than 0!");
+            }
+
+            return stock >= qty;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
     }
 
     // Reduce stock
     public void reduceStock(int qty) {
 
-        if (qty <= 0) {
+            try {
+            if (qty <= 0) {
+                throw new IllegalArgumentException("Quantity must be greater than 0!");
+            }
 
-            throw new IllegalArgumentException(
-                "Quantity must be greater than 0!"
-            );
+            if (qty > stock) {
+                throw new IllegalArgumentException( "Not enough stock available!");
+            }
+
+            stock -= qty;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        if (qty > stock) {
-
-            throw new IllegalArgumentException(
-                "Not enough stock available!"
-            );
-        }
-
-        stock -= qty;
     }
 
     // Increase stock
     public void increaseStock(int qty) {
 
-        if (qty <= 0) {
+            try {
+            if (qty <= 0) {
+                throw new IllegalArgumentException("Quantity must be greater than 0!");
+            }
 
-            throw new IllegalArgumentException(
-                "Quantity must be greater than 0!"
-            );
+            stock += qty;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        stock += qty;
     }
+
 
     // Product details
     public String getDetails() {
@@ -150,52 +182,68 @@ public class Product implements Discountable {
     // Setters
     public void setName(String name) {
 
-        this.name = name;
+        try {
+            if (name == null || name.trim().isEmpty()) {
+                throw new IllegalArgumentException("Product name cannot be empty!");
+            }
+
+            this.name = name;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     public void setPrice(double price) {
 
-        if (price < 0) {
+          try {
+            if (price < 0) {
+                throw new IllegalArgumentException("Price cannot be negative!");
+            }
 
-            throw new IllegalArgumentException(
-                "Price cannot be negative!"
-            );
+            this.price = price;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        this.price = price;
     }
+
     public void setStock(int stock) {
 
-        if (stock < 0) {
+          try {
+            if (stock < 0) {
+                throw new IllegalArgumentException("Stock cannot be negative!");
+            }
 
-            throw new IllegalArgumentException(
-                "Stock cannot be negative!"
-            );
+            this.stock = stock;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        this.stock = stock;
     }
+
     public void setShop(Shop shop) {
 
-        if (shop == null) {
+        try {
+            if (shop == null) {
+                throw new NullPointerException("Shop cannot be null!");
+            }
 
-            throw new IllegalArgumentException(
-                "Shop cannot be null!"
-            );
+            this.shop = shop;
+
+        } catch (NullPointerException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        this.shop = shop;
     }
 
     // toString method
     @Override
     public String toString() {
 
-        return name
-            + " - Rs. "
-            + String.format("%.2f", getDiscountedPrice())
-            + (discountPct > 0
-                ? " (" + (int) discountPct + "% off)"
-                : "");
+        return name + " - Rs. "
+                    + String.format("%.2f", getDiscountedPrice())
+                    + (discountPct > 0
+                        ? " (" + (int) discountPct + "% off)"
+                        : "");
     }
 }
