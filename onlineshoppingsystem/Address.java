@@ -19,39 +19,27 @@ public class Address {
         try {
             // Validation checks
             if (street == null || street.trim().isEmpty()) {
-                throw new IllegalArgumentException(
-                    "Street cannot be empty!"
-                );
+                throw new IllegalArgumentException("Street cannot be empty!");
             }
 
             if (city == null || city.trim().isEmpty()) {
-                throw new IllegalArgumentException(
-                    "City cannot be empty!"
-                );
+                throw new IllegalArgumentException( "City cannot be empty!");
             }
 
             if (province == null || province.trim().isEmpty()) {
-                throw new IllegalArgumentException(
-                    "Province cannot be empty!"
-                );
+                throw new IllegalArgumentException("Province cannot be empty!");
             }
 
             if (country == null || country.trim().isEmpty()) {
-                throw new IllegalArgumentException(
-                    "Country cannot be empty!"
-                );
+                throw new IllegalArgumentException("Country cannot be empty!");
             }
 
             if (zipCode == null || zipCode.trim().isEmpty()) {
-                throw new IllegalArgumentException(
-                    "Zip code cannot be empty!"
-                );
+                throw new IllegalArgumentException("Zip code cannot be empty!");
             }
 
             if (label == null || label.trim().isEmpty()) {
-                throw new IllegalArgumentException(
-                    "Label cannot be empty!"
-                );
+                throw new IllegalArgumentException( "Label cannot be empty!");
             }
 
         this.addressId = idCounter++;
