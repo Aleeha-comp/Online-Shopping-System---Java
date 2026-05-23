@@ -1,4 +1,5 @@
 package onlineshoppingsystem;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class Order {
     private Payment payment;
 
     public Order() {
-        this.orderId = 0;
+        this.orderId = 1;
         this.orderDate = LocalDate.now();
         this.status = "Pending";
         this.deliveryAddress = null;
@@ -20,71 +21,144 @@ public class Order {
     }
 
     public Order(int orderId, Cart cart, Address deliveryAddress) {
+
+        if (orderId <= 0) {
+            throw new IllegalArgumentException(
+                "Order ID must be greater than 0."
+            );
+        }
+
+        if (cart == null) {
+            throw new IllegalArgumentException(
+                "Cart cannot be null."
+            );
+        }
+
+        if (deliveryAddress == null) {
+            throw new IllegalArgumentException(
+                "Delivery address cannot be null."
+            );
+        }
+
+        if (cart.getItems().isEmpty()) {
+            throw new IllegalStateException(
+                "Cannot create an order from an empty cart."
+            );
+        }
+
         this.orderId = orderId;
         this.orderDate = LocalDate.now();
         this.status = "Pending";
         this.deliveryAddress = deliveryAddress;
         this.items = new ArrayList<>();
 
-
         for (CartItem cartItem : cart.getItems()) {
-            // store the cart item directly in the order
+
+            if (cartItem == null) {
+                throw new IllegalStateException(
+                    "Cart contains an invalid item."
+                );
+            }
+
             items.add(cartItem);
-            cartItem.getProduct().reduceStock(cartItem.getQuantity());
+
+            cartItem.getProduct()
+                    .reduceStock(cartItem.getQuantity());
         }
     }
 
     public boolean processPayment(Payment payment) {
+
+        if (payment == null) {
+            throw new IllegalArgumentException(
+                "Payment object cannot be null."
+            );
+        }
+
+        if (items.isEmpty()) {
+            throw new IllegalStateException(
+                "Cannot process payment for an empty order."
+            );
+        }
+
         this.payment = payment;
+
         payment.processPayment();
+
         this.status = "Confirmed";
-        System.out.println("Order #" + orderId + " confirmed!");
+
+        System.out.println(
+            "Order #" + orderId + " confirmed!"
+        );
+
         return true;
     }
 
     public double getTotal() {
+
         double total = 0;
-        for (CartItem item : items) total += item.getSubtotal();
+
+        for (CartItem item : items) {
+            total += item.getSubtotal();
+        }
+
         return total;
     }
 
     public void displayOrder() {
+
+        if (items.isEmpty()) {
+            throw new IllegalStateException(
+                "Order contains no items."
+            );
+        }
+
+        if (deliveryAddress == null) {
+            throw new IllegalStateException(
+                "Delivery address is missing."
+            );
+        }
+
         System.out.println("=== Order #" + orderId + " ===");
-        System.out.println("Date: " + orderDate + " | Status: " + status);
-        System.out.println("Deliver to: " + deliveryAddress.getFullAddress());
+        System.out.println(
+            "Date: " + orderDate +
+            " | Status: " + status
+        );
+
+        System.out.println(
+            "Deliver to: " +
+            deliveryAddress.getFullAddress()
+        );
+
         System.out.println("Items:");
-        for (CartItem item : items) System.out.println("  " + item);
-        System.out.println("Total: Rs." + String.format("%.2f", getTotal()));
+
+        for (CartItem item : items) {
+            System.out.println("  " + item);
+        }
+
+        System.out.println(
+            "Total: Rs." +
+            String.format("%.2f", getTotal())
+        );
     }
 
-    public int getOrderId() { return orderId; }
-    public String getStatus() { return status; }
-    public List<CartItem> getItems() { return items; }
-    public Address getShippingAddress() { return deliveryAddress; }
-    public String getPaymentStatus() { return status; }
-}
-
-// Minimal Address implementation to satisfy references from Order.
-/*class Address {
-    private String street;
-    private String city;
-    private String state;
-    private String zip;
-
-    public Address(String street, String city, String state, String zip) {
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public String getFullAddress() {
-        StringBuilder sb = new StringBuilder();
-        if (street != null && !street.isEmpty()) sb.append(street).append(", ");
-        if (city != null && !city.isEmpty()) sb.append(city).append(", ");
-        if (state != null && !state.isEmpty()) sb.append(state).append(" ");
-        if (zip != null && !zip.isEmpty()) sb.append(zip);
-        return sb.toString().trim();
+    public String getStatus() {
+        return status;
+    }
+
+    public List<CartItem> getItems() {
+        return items;
+    }
+
+    public Address getShippingAddress() {
+        return deliveryAddress;
+    }
+
+    public String getPaymentStatus() {
+        return status;
     }
 }
- */

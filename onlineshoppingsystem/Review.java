@@ -1,4 +1,5 @@
 package onlineshoppingsystem;
+
 public class Review {
     private int reviewId;
     private int rating;
@@ -7,30 +8,76 @@ public class Review {
 
     public Review() {
         this.reviewId = 0;
-        this.rating = 0;
+        this.rating = 1;
         this.comment = "";
         this.reviewerName = "Anonymous";
     }
-    
-    public Review(int reviewId, int rating, String comment, String reviewerName) {
-        this.reviewId = reviewId;
-        this.rating = rating;
-        this.comment = comment;
-        this.reviewerName = reviewerName;
+
+    public Review(int reviewId, int rating,
+                  String comment, String reviewerName) {
+
+        setReviewId(reviewId);
+        setRating(rating);
+        setComment(comment);
+        setReviewerName(reviewerName);
     }
 
-    public int getRating() { return rating; }
+    public int getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(int reviewId) {
+        if (reviewId <= 0) {
+            throw new IllegalArgumentException(
+                "Review ID must be greater than 0."
+            );
+        }
+        this.reviewId = reviewId;
+    }
+
+    public int getRating() {
+        return rating;
+    }
 
     public void setRating(int rating) {
         if (rating < 1 || rating > 5) {
-            System.out.println("Rating must be between 1 and 5.");
-            return;
+            throw new IllegalArgumentException(
+                "Rating must be between 1 and 5."
+            );
         }
         this.rating = rating;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        if (comment == null || comment.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                "Comment cannot be empty."
+            );
+        }
+        this.comment = comment;
+    }
+
+    public String getReviewerName() {
+        return reviewerName;
+    }
+
+    public void setReviewerName(String reviewerName) {
+        if (reviewerName == null || reviewerName.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                "Reviewer name cannot be empty."
+            );
+        }
+        this.reviewerName = reviewerName;
+    }
+
     @Override
     public String toString() {
-        return "Review by " + reviewerName + " | Rating: " + rating + "/5 | " + comment;
+        return "Review by " + reviewerName +
+               " | Rating: " + rating + "/5 | " +
+               comment;
     }
 }
