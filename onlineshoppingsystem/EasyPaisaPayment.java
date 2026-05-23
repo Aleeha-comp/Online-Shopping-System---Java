@@ -1,56 +1,94 @@
+
 package onlineshoppingsystem;
 
 public class EasyPaisaPayment extends Payment {
     private String phoneNumber;
-    private static final double Transaction_Limit = 50000.0;
-    
+    private static final double TRANSACTION_LIMIT = 50000.0;
 
     public EasyPaisaPayment(int paymentId, double amount, String phoneNumber) {
         super(paymentId, amount);
-        this.phoneNumber = phoneNumber;
+
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Phone number cannot be null or empty.");
+        }
+        if (phoneNumber.length() != 11) {
+            throw new IllegalArgumentException("Phone number must be exactly 11 digits.");
+        }
+
+        this.phoneNumber = phoneNumber.trim();
     }
+
+    // ----------- Transaction Limit Check -----------
 
     public boolean isWithinTransactionLimit() {
-        return getAmount() <= Transaction_Limit;
+        if (getAmount() > TRANSACTION_LIMIT) {
+            throw new IllegalStateException("Transaction amount Rs." + getAmount() + 
+                                            " exceeds the limit of Rs." + TRANSACTION_LIMIT);
+        }
+        return true;
     }
+
+    // ----------- Send OTP -----------
 
     public void sendOTP() {
-        if (!isWithinTransactionLimit()) {
-            System.out.println("Cannot send OTP: Transaction exceeds limit of Rs. " + Transaction_Limit);
-            return;
-        }
-        else{
+    try {
+        if (isWithinTransactionLimit()) {
             System.out.println("OTP sent to phone number: " + phoneNumber);
         }
+    } catch (Exception e) {
+        System.out.println("OTP sending failed: " + e.getMessage());
     }
+}
 
+    // ----------- Validate Phone Number -----------
 
     public boolean validatePhoneNumber() {
-        if(phoneNumber == null || phoneNumber.isEmpty() || phoneNumber.length() < 11) {
-            System.out.println("Invalid phone number.");
-            return false;
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalStateException("Phone number is not set or empty.");
         }
-        else {
-            return true;
+        if (phoneNumber.length() != 11) {
+            throw new IllegalStateException("Phone number must be exactly 11 digits.");
         }
+        return true;
     }
 
-    public void processPayment() {
-        if (!validatePhoneNumber()) {
-            System.out.println("Invalid phone number. Payment cannot be processed.");
-            return;
+    // ----------- Process Payment -----------
+
+    @Override
+public void processPayment() {
+    try {
+        validatePaymentState();
+
+        if (validatePhoneNumber() && isWithinTransactionLimit()) {
+            sendOTP();
+            System.out.println("Processing EasyPaisa payment...");
+            System.out.println("Payment ID   : " + getPaymentId());
+            System.out.println("Amount       : Rs." + getAmount());
+            System.out.println("Phone Number : " + phoneNumber);
+            System.out.println("Payment processed successfully.");
         }
-        sendOTP();
-        System.out.println("Processing EasyPaisa payment of $" + getAmount());
+
+    } catch (Exception e) {
+        System.out.println("Payment processing failed: " + e.getMessage());
     }
+}
+
+    // ----------- Setter with Validation -----------
+
+    public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Phone number cannot be null or empty.");
+        }
+        if (phoneNumber.length() != 11) {
+            throw new IllegalArgumentException("Phone number must be exactly 11 digits.");
+        }
+        this.phoneNumber = phoneNumber.trim();
+    }
+
+    // ----------- Getter -----------
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
 }
 
