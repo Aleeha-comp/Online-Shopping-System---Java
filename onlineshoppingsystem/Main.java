@@ -183,4 +183,74 @@ public class Main {
         
         return categories; 
     }
+
+
+    //maheen's code ------------------------------
+
+    // ─── CURRENT USER ──────────────────────────────────────────────
+    public static void setCurrentUser(User u)  { 
+        currentUser = u;
+    }
+    public static User getCurrentUser() { 
+        return currentUser; 
+    }
+
+    public static Customer getCurrentCustomer() {
+        if (currentUser instanceof Customer)
+            return (Customer) currentUser;
+        return null;
+    }
+ 
+    public static Seller getCurrentSeller() {
+        if (currentUser instanceof Seller)
+            return (Seller) currentUser;
+        return null;
+    }
+ 
+    public static Admin getCurrentAdmin() {
+        if (currentUser instanceof Admin)
+            return (Admin) currentUser;
+        return null;
+    }
+ 
+    // ─── FIND / SEARCH ─────────────────────────────────────────────
+    public static Customer findCustomer(String email, String password) {
+        for (Customer c : customers) {
+            if (c.getEmail().equals(email) && c.getPassword().equals(password))
+                return c;
+        }
+        return null;
+    }
+ 
+    public static Seller findSeller(String email, String password) {
+        for (Seller s : sellers) {
+            if (s.getEmail().equals(email) && s.getPassword().equals(password))
+                return s;
+        }
+        return null;
+    }
+ 
+    public static Admin findAdmin(String email, String password) {
+        for (Admin a : admins) {
+            if (a.getEmail().equals(email) && a.getPassword().equals(password))
+                return a;
+        }
+        return null;
+    }
+ 
+    public static boolean emailExists(String email) {
+        for (Customer c : customers) {
+            if (c.getEmail().equals(email))
+                return true;
+        }
+        for (Seller s : sellers) {
+            if (s.getEmail().equals(email))
+                return true;
+        }
+        for (Admin a : admins) {
+            if (a.getEmail().equals(email))
+                return true;
+        }
+        return false;
+    }
 }
