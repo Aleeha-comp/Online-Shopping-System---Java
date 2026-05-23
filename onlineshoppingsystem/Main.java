@@ -185,8 +185,6 @@ public class Main {
     }
 
 
-    //maheen's code ------------------------------
-
     // ─── CURRENT USER ──────────────────────────────────────────────
     public static void setCurrentUser(User u)  { 
         currentUser = u;
@@ -268,4 +266,37 @@ public class Main {
         }
         return false;
     }
+
+    
+    public static void initializeData() {
+
+    // Only add data if shops list is empty
+    if (!shops.isEmpty()) {
+        return;
+    }
+
+    // Categories
+    ShopCategory electronics = new ShopCategory("Electronics");
+    ShopCategory clothes     = new ShopCategory("Clothes");
+    ShopCategory books       = new ShopCategory("Books");
+
+    categories.add(electronics);
+    categories.add(clothes);
+    categories.add(books);
+
+    // Shops
+    Shop techShop  = new Shop(1, "TechZone", electronics);
+    Shop styleShop = new Shop(2, "StyleHub", clothes);
+    Shop bookShop  = new Shop(3, "BookCorner", books);
+
+    shops.add(techShop);
+    shops.add(styleShop);
+    shops.add(bookShop);
+
+    // Products
+    Product p1 = new Product("Samsung A55", 85000, 10, techShop);
+    Product p2 = new Product("Wireless Earbuds", 3500, 25, techShop);
+    Product p3 = new Product("USB-C Charger", 1200, 50, techShop);
+
+}
 }
