@@ -8,7 +8,19 @@ public class Admin extends User {
 
     public Admin(String userId, String name, String email, String password, String department) {
         super(userId, name, email, password);
-        this.department = department;
+
+        try {
+            if (department == null || department.isEmpty()){
+                throw new Exception ("Department cannot be empty.");
+            }
+
+            this.department = department;
+        }
+
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            this.department = "Unknown";
+        }
     }
 
     // Accessor (Getter)
@@ -18,37 +30,59 @@ public class Admin extends User {
 
     // Mutator (Setter)
     public void setDepartment(String department) {
-        if (department == null || department.isEmpty()) {
-            System.out.println("Department cannot be empty.");
-            return;
+        try {
+            if (department == null || department.isEmpty()) {
+                throw new Exception("Department cannot be empty.");
+            }
+
+            this.department = department;
+            System.out.println("Department updated successfully!");
         }
-        this.department = department;
-        System.out.println("Department updated successfully!");
+
+        catch(Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
     
+    // Manege shops
     public void manageShops(List<Shop> shops) {
-        if (shops == null || shops.isEmpty()) {
-            System.out.println("No shops to manage.");
-            return;
+        try {
+            if (shops == null || shops.isEmpty()) {
+                throw new Exception("No shops to manage.");
+            }
+
+            System.out.println("Admin " + getName() + " is managing the following shops:");
+
+            for (Shop shop : shops) {
+                System.out.println("- " + shop.getShopName());
+            }
         }
 
-        System.out.println("Admin " + getName() + " is managing the following shops:");
-        for (Shop shop : shops) {
-            System.out.println("- " + shop.getShopName());
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
+    // Remove shop
     public void removeShop(Shop shop, List<Shop> shops) {
-        if (shops == null || shops.isEmpty()) {
-            System.out.println("No shops available to remove.");
-            return;
+        try{
+            if (shops == null || shops.isEmpty()) {
+                throw new Exception("No shops available to remove.");
+            }
+
+            if (shops.contains(shop)) {
+
+                shops.remove(shop);
+                System.out.println("Shop removed successfully!");
+            } 
+            
+            else {
+                throw new Exception("Shop not found.");
+            }
         }
 
-        if (shops.contains(shop)) {
-            shops.remove(shop);
-            System.out.println("Shop removed successfully!");
-        } else {
-            System.out.println("Shop not found.");
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

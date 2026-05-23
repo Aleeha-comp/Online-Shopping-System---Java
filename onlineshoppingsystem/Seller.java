@@ -8,17 +8,28 @@ public class Seller extends User {
     public Seller(String userId, String name, String email, String password, Shop shop, double rating) {
         super(userId, name, email, password);
 
-        // Validation checks
-        if (shop == null) {
-            throw new IllegalArgumentException("Shop cannot be null.");
+        try{
+            // Validation checks
+            if (shop == null) {
+                throw new IllegalArgumentException("Shop cannot be null.");
+            }
+
+            //Validation for rating
+            if (rating < 0 || rating > 5) {
+                throw new IllegalArgumentException("Rating must be between 0 and 5.");
+            }
+
+            this.shop = shop;
+            this.rating = rating;
         }
 
-        if (rating < 0 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 0 and 5.");
-        }
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
 
-        this.shop = shop;
-        this.rating = rating;
+            // Default values
+            this.shop = null;
+            this.rating = 0;
+        }
     }
     
     // Accessors (Getters)
@@ -32,49 +43,69 @@ public class Seller extends User {
 
     // Mutators (Setters)
     public void setRating(double rating) {
-        if (rating < 0 || rating > 5) {
-            System.out.println("Invalid rating! Rating must be between 0 and 5.");
-        }
-        else {
-            this.rating = rating;
-            System.out.println("Rating updated successfully!");
-        }
+
+        try {
+            if (rating < 0 || rating > 5) {
+                throw new Exception("Invalid rating! Rating must be between 0 and 5.");
+            }
             
+            else{
+                this.rating = rating;
+                System.out.println("Rating updated successfully!");
+            }
+        }
+
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }      
     }
+
+    // Add Product
     public void addProduct(Product product) {
-        if (product == null) {
-            System.out.println("Cannot add null product.");
-            return;
+
+        try {
+            if (product == null) {
+                throw new Exception("Cannot add null product.");
+            }
+
+            if (shop == null) {
+                throw new Exception("Shop does not exist.");
+            }
+
+            shop.addProduct(product);
+            System.out.println(product.getName() + " added to " + shop.getShopName());
         }
 
-        if (shop == null) {
-            System.out.println("Shop does not exist.");
-            return;
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        shop.addProduct(product);
-        System.out.println(product.getName() + " added to " + shop.getShopName());
     }
 
+    // Removing Product
     public void removeProduct(Product product) {
-        if (product == null) {
-            System.out.println("Cannot remove null product.");
-            return;
-        }
 
-        if (shop == null) {
-            System.out.println("Shop does not exist.");
-            return;
-        }
+        try {
+            if (product == null) {
+                throw new Exception("Cannot remove null product.");
+            }
 
-        // Check if product exists first
-        if (!shop.getProducts().contains(product)) {
-            System.out.println("Product not found in shop.");
-            return;
-        }
+            if (shop == null) {
+                throw new Exception("Shop does not exist.");
+            }
+
+            // Check if product exists first
+            if (!shop.getProducts().contains(product)) {
+                throw new Exception("Product not found in shop.");
+            }
         
-        shop.removeProduct(product);
-        System.out.println(product.getName() + " removed from " + shop.getShopName());
+            shop.removeProduct(product);
+
+            System.out.println(product.getName() + " removed from " + shop.getShopName());
+        }
+
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     @Override
