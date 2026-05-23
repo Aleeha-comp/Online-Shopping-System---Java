@@ -194,88 +194,152 @@ public class Main {
         return categories; 
     }
 
+// Current user ---------------------------------------------------
+    
+    public static void setCurrentUser(User u) {
 
-    // ─── CURRENT USER ──────────────────────────────────────────────
-    public static void setCurrentUser(User u)  { 
+        if (u == null) {
+        throw new IllegalArgumentException("User cannot be null.");
+        }
+
         currentUser = u;
     }
 
 
-    public static User getCurrentUser() { 
-        return currentUser; 
-    }
+    public static User getCurrentUser() {
 
+        if (currentUser == null) {
+            throw new IllegalStateException("No user is currently logged in.");
+        }
+        return currentUser;
+    }
 
     public static Customer getCurrentCustomer() {
-        if (currentUser instanceof Customer)
-            return (Customer) currentUser;
-        return null;
+
+        if (currentUser == null) {
+            throw new IllegalStateException("No user is currently logged in.");
+        }
+
+        if (!(currentUser instanceof Customer)) {
+            throw new IllegalStateException("Current user is not a Customer.");
+        }
+
+        return (Customer) currentUser;
     }
 
- 
     public static Seller getCurrentSeller() {
-        if (currentUser instanceof Seller)
-            return (Seller) currentUser;
-        return null;
+        
+        if (currentUser == null) {
+            throw new IllegalStateException("No user is currently logged in.");
+        }
+
+        if (!(currentUser instanceof Seller)) {
+            throw new IllegalStateException("Current user is not a Seller.");
+        }
+
+        return (Seller) currentUser;
     }
 
- 
+
     public static Admin getCurrentAdmin() {
-        if (currentUser instanceof Admin)
-            return (Admin) currentUser;
-        return null;
+    
+        if (currentUser == null) {
+            throw new IllegalStateException("No user is currently logged in.");
+        }
+        
+        if (!(currentUser instanceof Admin)) {
+            throw new IllegalStateException("Current user is not an Admin.");
+        }
+
+        return (Admin) currentUser;
     }
- 
-    // ─── FIND / SEARCH ─────────────────────────────────────────────
+
+
+
+// ─── FIND / SEARCH ─────────────────────────────────────────────
+
     public static Customer findCustomer(String email, String password) {
 
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty.");
+        }
+
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty.");
+        }
+    
         for (Customer c : customers) {
             if (c.getEmail().equals(email) && c.getPassword().equals(password))
-                return c;
+            return c;
         }
+
         return null;
     }
 
+
     public static Seller findSeller(String email, String password) {
-        
+
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty.");
+        }
+
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty.");
+        }
+
         for (Seller s : sellers) {
             if (s.getEmail().equals(email) && s.getPassword().equals(password))
                 return s;
         }
+
         return null;
     }
 
 
+public static Admin findAdmin(String email, String password) {
 
-    public static Admin findAdmin(String email, String password) {
-        for (Admin a : admins) {
-            if (a.getEmail().equals(email) && a.getPassword().equals(password))
-                return a;
-        }
-        return null;
+    if (email == null || email.trim().isEmpty()) {
+        throw new IllegalArgumentException("Email cannot be null or empty.");
     }
 
-
- 
-    public static boolean emailExists(String email) {
-        for (Customer c : customers) {
-            if (c.getEmail().equals(email))
-                return true;
-        }
-
-
-        for (Seller s : sellers) {
-            if (s.getEmail().equals(email))
-                return true;
-        }
-
-
-        for (Admin a : admins) {
-            if (a.getEmail().equals(email))
-                return true;
-        }
-        return false;
+    if (password == null || password.trim().isEmpty()) {
+        throw new IllegalArgumentException("Password cannot be null or empty.");
     }
+
+    for (Admin a : admins) {
+        if (a.getEmail().equals(email) && a.getPassword().equals(password))
+            return a;
+    }
+    
+    return null;
+}
+
+
+
+public static boolean emailExists(String email) {
+
+    if (email == null || email.trim().isEmpty()) {
+        throw new IllegalArgumentException("Email cannot be null or empty.");
+    }
+
+    for (Customer c : customers) {
+        if (c.getEmail().equals(email))
+            return true;
+    }
+
+    for (Seller s : sellers) {
+        if (s.getEmail().equals(email))
+            return true;
+    }
+
+    for (Admin a : admins) {
+        if (a.getEmail().equals(email))
+            return true;
+    }
+
+    return false;
+}
+
 
     
     public static void initializeData() {
