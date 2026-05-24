@@ -471,7 +471,6 @@ public static void saveAllData() {
 
 // Loading Data from file
 @SuppressWarnings("unchecked")
-
 public static void loadAllData() {
 
     try {
