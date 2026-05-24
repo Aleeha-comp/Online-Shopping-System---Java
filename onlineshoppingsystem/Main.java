@@ -25,6 +25,8 @@ public class Main {
         
         // Save before exiting
         saveAllData();
+
+         new LoginFrame().setVisible(true);
     }
 
     // Mutators (Setters)
