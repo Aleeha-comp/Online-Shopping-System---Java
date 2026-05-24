@@ -1,10 +1,10 @@
 package onlineshoppingsystem;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.io.*;
 
-public class Order {
+public class Order implements Serializable{
     private int orderId;
     private String status;
     private LocalDate orderDate;

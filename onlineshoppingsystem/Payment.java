@@ -1,7 +1,9 @@
 
 package onlineshoppingsystem;
 
-public abstract class Payment {
+import java.io.Serializable;
+
+public abstract class Payment implements Serializable {
     private int paymentId;
     private double amount;
 

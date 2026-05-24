@@ -1,9 +1,9 @@
 package onlineshoppingsystem;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-public class Cart {
+public class Cart implements Serializable{
     private int cartId;
     private List<CartItem> items;
 

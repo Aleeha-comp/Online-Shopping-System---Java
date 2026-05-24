@@ -1,6 +1,9 @@
 package onlineshoppingsystem;
 
-public class Review {
+import java.io.*;
+import java.util.*;
+
+public class Review implements Serializable{
     private int reviewId;
     private int rating;
     private String comment;
