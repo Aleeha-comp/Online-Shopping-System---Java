@@ -2,8 +2,9 @@ package onlineshoppingsystem;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.*;
 
-public class CustomerDashboard extends JFrame {
+public class CustomerDashboard extends JFrame implements Serializable{
 
     private Customer customer;
     private JTable productTable;
