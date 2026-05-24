@@ -142,6 +142,6 @@ public class LoginFrame extends JFrame {
 
     // Open the registration dialog
     private void openRegister() {
-        new RegisterFrame(this).setVisible(true);
+        new RegisterFrame().setVisible(true);
     }
 }
