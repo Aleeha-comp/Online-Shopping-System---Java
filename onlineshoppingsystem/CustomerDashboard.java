@@ -209,7 +209,7 @@ public class CustomerDashboard extends JFrame {
                 "Order Placed Successfully"
         );
 
-        customer.getCart().clearCart();
+         customer.getCart().getItems().clear();
 
         refreshCart();
     }
