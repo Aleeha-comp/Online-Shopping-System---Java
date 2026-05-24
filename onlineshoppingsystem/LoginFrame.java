@@ -3,14 +3,14 @@ package onlineshoppingsystem;
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginPanel extends JFrame {
+public class LoginFrame extends JFrame {
     
-    private JTextField     emailField;
+    private JTextField emailField;
     private JPasswordField passwordField;
     private JComboBox<String> roleBox;   // dropdown: Customer / Seller / Admin
 
     // Constructor
-    public LoginPanel() {
+    public LoginFrame() {
 
         //Creating Window
         setTitle("Online Shopping System Login");
@@ -67,7 +67,7 @@ public class LoginPanel extends JFrame {
         loginBtn.setFocusPainted(false);
         panel.add(loginBtn);
 
-        // ── Register button ────────────────────────────────────────
+        // Register button
         JButton registerBtn = new JButton("Register");
         registerBtn.setBounds(210, 195, 100, 35);
         registerBtn.setBackground(new Color(60, 179, 113));
@@ -75,21 +75,22 @@ public class LoginPanel extends JFrame {
         registerBtn.setFocusPainted(false);
         panel.add(registerBtn);
 
-        // ── Button actions ─────────────────────────────────────────
+        // Button actions
         loginBtn.addActionListener(e -> handleLogin());
         registerBtn.addActionListener(e -> openRegister());
     }
 
     // Called when Login button is clicked
     private void handleLogin() {
-        String email    = emailField.getText().trim();
+        String email = emailField.getText().trim();
         String password = new String(passwordField.getPassword());
-        String role     = (String) roleBox.getSelectedItem();
+        String role = (String) roleBox.getSelectedItem();
 
-        // Basic validation
+        // validation
         if (email.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Please enter email and password.", "Error", JOptionPane.ERROR_MESSAGE);
+                "Please enter email and password.", "Error", 
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -100,31 +101,41 @@ public class LoginPanel extends JFrame {
                 Main.setCurrentUser(c);
                 new CustomerDashboard().setVisible(true);   // open customer window
                 dispose();                                   // close login window
-            } else {
-                JOptionPane.showMessageDialog(this,
-                    "Invalid customer credentials.", "Error", JOptionPane.ERROR_MESSAGE);
+            } 
+            
+            else {
+                JOptionPane.showMessageDialog(this, "Invalid customer credentials.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-        } else if ("Seller".equals(role)) {
+        } 
+        
+        else if ("Seller".equals(role)) {
             Seller s = Main.findSeller(email, password);
             if (s != null) {
                 Main.setCurrentUser(s);
                 new SellerDashboard().setVisible(true);
                 dispose();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                    "Invalid seller credentials.", "Error", JOptionPane.ERROR_MESSAGE);
+            } 
+            
+            else {
+                JOptionPane.showMessageDialog(this,"Invalid seller credentials.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-        } else {   // Admin
+        } 
+        
+        else {   // Admin
             Admin a = Main.findAdmin(email, password);
             if (a != null) {
                 Main.setCurrentUser(a);
                 new AdminDashboard().setVisible(true);
                 dispose();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                    "Invalid admin credentials.", "Error", JOptionPane.ERROR_MESSAGE);
+            } 
+            
+            else {
+                JOptionPane.showMessageDialog(this, "Invalid admin credentials.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -133,5 +144,4 @@ public class LoginPanel extends JFrame {
     private void openRegister() {
         new RegisterFrame(this).setVisible(true);
     }
-}
 }
