@@ -371,10 +371,36 @@ public static boolean emailExists(String email) {
     Product p1 = new Product("Samsung A55", 85000, 10, techShop);
     Product p2 = new Product("Wireless Earbuds", 3500, 25, techShop);
     Product p3 = new Product("USB-C Charger", 1200, 50, techShop);
+    Product p4 = new Product("Casual T-Shirt", 900, 30, styleShop);
+    Product p5 = new Product("Denim Jeans", 2500, 15, styleShop);
+    Product p6 = new Product("Clean Code Book", 1800, 20, bookShop);
 
-}
+    techShop.addProduct(p1);
+    techShop.addProduct(p2);
+    techShop.addProduct(p3);
 
-// Saving data to sile
+    styleShop.addProduct(p4);
+    styleShop.addProduct(p5);
+
+    bookShop.addProduct(p6);
+
+// Sample users
+    customers.add(new Customer("C001", "Ali Khan", "ali@gmail.com", "1234"));
+    customers.add(new Customer("C002", "Sara Ahmed", "sara@gmail.com", "1234"));
+    admins.add(new Admin("A001", "Admin User", "admin@shop.com", "admin123", "Management"));
+    }
+
+// ─── CLEAR ALL (used on logout) ────────────────────────────────
+    public static void logout() {
+        try {
+            currentUser = null;
+        } catch (Exception e) {
+            System.out.println("Logout Error: " + e.getMessage());
+        }
+    }
+    
+
+// Saving data to file
 public static void saveAllData() {
 
     // Exception fo customer
