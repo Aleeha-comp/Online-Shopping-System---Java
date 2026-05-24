@@ -1,8 +1,8 @@
 package onlineshoppingsystem;
-
+import java.io.Serializable;
 
 // Product class implements Discountable interface
-public class Product implements Discountable {
+public class Product implements Serializable, Discountable{
 
     private int productId;
 

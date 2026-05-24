@@ -2,8 +2,9 @@ package onlineshoppingsystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class ShopCategory {
+public class ShopCategory implements Serializable {
 
     private int    categoryId;
     private String name;          // Electronics, Clothes, Makeup, Sports, Books

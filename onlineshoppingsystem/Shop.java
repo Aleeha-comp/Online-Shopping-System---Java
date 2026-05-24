@@ -1,9 +1,10 @@
 package onlineshoppingsystem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shop {
+public class Shop implements Serializable {
 
     private int shopId;
     private String shopName;
