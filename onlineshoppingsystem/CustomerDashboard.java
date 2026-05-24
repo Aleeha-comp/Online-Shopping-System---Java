@@ -154,3 +154,110 @@ public class CustomerDashboard extends JFrame {
 
         JOptionPane.showMessageDialog(this, "Added To Cart");
     }
+
+     // ================= REFRESH CART =================
+
+    private void refreshCart() {
+
+        cartModel.setRowCount(0);
+
+        for (CartItem item : customer.getCart().getItems()) {
+
+            cartModel.addRow(new Object[]{
+                    item.getProduct().getName(),
+                    item.getProduct().getPrice(),
+                    item.getQuantity()
+            });
+        }
+    }
+
+    // ================= REMOVE FROM CART =================
+
+    private void removeFromCart() {
+
+        int row = cartTable.getSelectedRow();
+
+        if (row == -1) {
+
+            JOptionPane.showMessageDialog(this, "Select item");
+
+            return;
+        }
+
+        String name = (String) cartModel.getValueAt(row, 0);
+
+        Product product = findProductByName(name);
+
+        customer.getCart().removeItem(product);
+
+        refreshCart();
+    }
+
+    // ================= CHECKOUT =================
+
+    private void checkout() {
+
+        if (customer.getCart().getItems().isEmpty()) {
+
+            JOptionPane.showMessageDialog(this, "Cart is empty");
+
+            return;
+        }
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Order Placed Successfully"
+        );
+
+        customer.getCart().clearCart();
+
+        refreshCart();
+    }
+
+    // ================= FIND PRODUCT =================
+
+    private Product findProductById(int id) {
+
+        for (Shop shop : Main.getShops()) {
+
+            for (Product p : shop.getProducts()) {
+
+                if (p.getProductId() == id) {
+
+                    return p;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Product findProductByName(String name) {
+
+        for (Shop shop : Main.getShops()) {
+
+            for (Product p : shop.getProducts()) {
+
+                if (p.getName().equals(name)) {
+
+                    return p;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    // ================= LOGOUT =================
+
+    private void logout() {
+
+        Main.saveAllData();
+
+        Main.setCurrentUser(null);
+
+        new LoginFrame().setVisible(true);
+
+        dispose();
+    }
+}

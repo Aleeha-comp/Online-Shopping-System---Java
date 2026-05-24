@@ -1,165 +1,129 @@
 package onlineshoppingsystem;
-
 import javax.swing.*;
 import java.awt.*;
 
-/*
- * RegisterFrame — lets new users create an account.
- *
- * Viva points:
- * - Extends JDialog (modal window, not a full JFrame)
- * - JDialog blocks the parent window until closed
- * - Validates all fields before creating a user object
- * - Calls Main.addCustomer() / Main.addSeller() to save the new user
- */
-public class RegisterFrame extends JDialog {
+public class RegisterFrame extends JFrame {
 
-    // ── Fields ─────────────────────────────────────────────────────
-    private JTextField     nameField;
-    private JTextField     emailField;
+    private JTextField nameField;
+    private JTextField emailField;
     private JPasswordField passwordField;
     private JComboBox<String> roleBox;
-    private JTextField     extraField;     // department (Admin) or rating (Seller)
-    private JLabel         extraLabel;
+    private JTextField shopField;
 
-    // ── Constructor ────────────────────────────────────────────────
-    public RegisterFrame(JFrame parent) {
-        super(parent, "Register New Account", true);   // true = modal
+    public RegisterFrame() {
 
-        setSize(420, 380);
-        setLocationRelativeTo(parent);
-        setResizable(false);
+        setTitle("Register");
+        setSize(400, 350);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
-        panel.setBackground(new Color(245, 245, 245));
         add(panel);
 
-        // ── Title ──────────────────────────────────────────────────
-        JLabel title = new JLabel("Create New Account");
-        title.setFont(new Font("Arial", Font.BOLD, 15));
-        title.setBounds(120, 15, 220, 25);
-        panel.add(title);
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setBounds(50, 40, 100, 25);
+        panel.add(nameLabel);
 
-        // ── Name ───────────────────────────────────────────────────
-        addLabel(panel, "Name:",     50, 60);
         nameField = new JTextField();
-        nameField.setBounds(160, 60, 200, 25);
+        nameField.setBounds(150, 40, 150, 25);
         panel.add(nameField);
 
-        // ── Email ──────────────────────────────────────────────────
-        addLabel(panel, "Email:",    50, 100);
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setBounds(50, 80, 100, 25);
+        panel.add(emailLabel);
+
         emailField = new JTextField();
-        emailField.setBounds(160, 100, 200, 25);
+        emailField.setBounds(150, 80, 150, 25);
         panel.add(emailField);
 
-        // ── Password ───────────────────────────────────────────────
-        addLabel(panel, "Password:", 50, 140);
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setBounds(50, 120, 100, 25);
+        panel.add(passwordLabel);
+
         passwordField = new JPasswordField();
-        passwordField.setBounds(160, 140, 200, 25);
+        passwordField.setBounds(150, 120, 150, 25);
         panel.add(passwordField);
 
-        // ── Role ───────────────────────────────────────────────────
-        addLabel(panel, "Role:", 50, 180);
-        roleBox = new JComboBox<>(new String[]{"Customer", "Seller"});
-        roleBox.setBounds(160, 180, 200, 25);
+        JLabel roleLabel = new JLabel("Role:");
+        roleLabel.setBounds(50, 160, 100, 25);
+        panel.add(roleLabel);
+
+        roleBox = new JComboBox<>();
+        roleBox.addItem("Customer");
+        roleBox.addItem("Seller");
+        roleBox.setBounds(150, 160, 150, 25);
         panel.add(roleBox);
 
-        // ── Extra field (changes based on role) ────────────────────
-        extraLabel = new JLabel("(extra)");
-        extraLabel.setBounds(50, 220, 100, 25);
-        panel.add(extraLabel);
+        JLabel shopLabel = new JLabel("Shop Name:");
+        shopLabel.setBounds(50, 200, 100, 25);
+        panel.add(shopLabel);
 
-        extraField = new JTextField();
-        extraField.setBounds(160, 220, 200, 25);
-        panel.add(extraField);
+        shopField = new JTextField();
+        shopField.setBounds(150, 200, 150, 25);
+        panel.add(shopField);
 
-        updateExtraField("Customer");   // set initial label
+        JButton registerButton = new JButton("Register");
+        registerButton.setBounds(120, 250, 120, 30);
+        panel.add(registerButton);
 
-        // When role changes, update the extra field label
-        roleBox.addActionListener(e -> updateExtraField((String) roleBox.getSelectedItem()));
-
-        // ── Register button ────────────────────────────────────────
-        JButton registerBtn = new JButton("Register");
-        registerBtn.setBounds(120, 280, 180, 35);
-        registerBtn.setBackground(new Color(60, 179, 113));
-        registerBtn.setForeground(Color.WHITE);
-        registerBtn.setFocusPainted(false);
-        panel.add(registerBtn);
-
-        registerBtn.addActionListener(e -> handleRegister());
+        registerButton.addActionListener(e -> registerUser());
     }
 
-    // Helper to add a JLabel quickly
-    private void addLabel(JPanel panel, String text, int x, int y) {
-        JLabel lbl = new JLabel(text);
-        lbl.setBounds(x, y, 100, 25);
-        panel.add(lbl);
-    }
+    private void registerUser() {
 
-    // Show the right label for the extra field
-    private void updateExtraField(String role) {
-        if ("Customer".equals(role)) {
-            extraLabel.setText("(not needed)");
-            extraField.setEnabled(false);
-            extraField.setText("");
-        } else if ("Seller".equals(role)) {
-            extraLabel.setText("Shop name:");
-            extraField.setEnabled(true);
-        }
-    }
-
-    // Called when Register button is clicked
-    private void handleRegister() {
-        String name     = nameField.getText().trim();
-        String email    = emailField.getText().trim();
+        String name = nameField.getText();
+        String email = emailField.getText();
         String password = new String(passwordField.getPassword());
-        String role     = (String) roleBox.getSelectedItem();
+        String role = (String) roleBox.getSelectedItem();
 
-        // ── Validation ─────────────────────────────────────────────
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (!email.contains("@")) {
-            JOptionPane.showMessageDialog(this, "Invalid email address.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (password.length() < 4) {
-            JOptionPane.showMessageDialog(this, "Password must be at least 4 characters.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (Main.emailExists(email)) {
-            JOptionPane.showMessageDialog(this, "Email already registered.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Fill all fields");
             return;
         }
 
-        // ── Create the user ────────────────────────────────────────
-        String userId = role.charAt(0) + String.valueOf(System.currentTimeMillis()).substring(8);
+        if (role.equals("Customer")) {
 
-        if ("Customer".equals(role)) {
-            Customer c = new Customer(userId, name, email, password);
-            Main.addCustomer(c);
+            String userId = "C" + (Main.getCustomers().size() + 1);
 
-        } else if ("Seller".equals(role)) {
-            String shopName = extraField.getText().trim();
+            Customer customer = new Customer(userId, name, email, password);
+
+            Main.addCustomer(customer);
+
+        } else {
+
+            String shopName = shopField.getText();
+
             if (shopName.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter a shop name.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Enter shop name");
                 return;
             }
-            // Create a default category and shop for the new seller
-            ShopCategory cat = new ShopCategory("General");
-            Main.addCategory(cat);
 
-            int shopId = Main.getShops().size() + 1;
-            Shop shop = new Shop(shopId, shopName, cat);
+            String userId = "S" + (Main.getSellers().size() + 1);
+
+            ShopCategory category = new ShopCategory("General");
+
+            Shop shop = new Shop(
+                    Main.getShops().size() + 1,
+                    shopName,
+                    category
+            );
+
+            Seller seller = new Seller(
+                    userId,
+                    name,
+                    email,
+                    password,
+                    shop,
+                    0.0
+            );
+
+            Main.addSeller(seller);
             Main.addShop(shop);
-
-            Seller s = new Seller(userId, name, email, password, shop, 0.0);
-            Main.addSeller(s);
         }
 
-        JOptionPane.showMessageDialog(this, "Account created! You can now log in.", "Success", JOptionPane.INFORMATION_MESSAGE);
-        dispose();   // close this dialog
+        JOptionPane.showMessageDialog(this, "Account Created");
+
+        dispose();
     }
 }
