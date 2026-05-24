@@ -1,3 +1,4 @@
+package onlineshoppingsystem;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -5,7 +6,6 @@ import java.awt.*;
 public class CustomerDashboard extends JFrame {
 
     private Customer customer;
-
     private JTable productTable;
     private DefaultTableModel productModel;
 
