@@ -401,7 +401,7 @@ public static boolean emailExists(String email) {
 // Sample users
     customers.add(new Customer("C001", "Ali Khan", "ali@gmail.com", "1234"));
     customers.add(new Customer("C002", "Sara Ahmed", "sara@gmail.com", "1234"));
-    admins.add(new Admin("A001", "Admin User", "admin@shop.com", "admin123", "Management"));
+    admins.add(new Admin("A001", "Admin User", "admin@shop.com", "admin123"));
     }
 
 // ─── CLEAR ALL (used on logout) ────────────────────────────────
