@@ -89,6 +89,9 @@ public class CustomerDashboard extends JFrame {
 
         JButton viewCartButton =
                 new JButton("View Cart");
+        
+        JButton removeButton =
+                new JButton("Remove Item");        
 
         JButton checkoutButton =
                 new JButton("Checkout");
@@ -100,6 +103,8 @@ public class CustomerDashboard extends JFrame {
 
         bottomPanel.add(viewCartButton);
 
+        bottomPanel.add(removeButton);
+
         bottomPanel.add(checkoutButton);
 
         bottomPanel.add(logoutButton);
@@ -110,6 +115,10 @@ public class CustomerDashboard extends JFrame {
 
         viewCartButton.addActionListener(
                 e -> viewCart()
+        );
+
+        removeButton.addActionListener(
+                e -> removeFromCart()
         );
 
         checkoutButton.addActionListener(
@@ -268,58 +277,61 @@ public class CustomerDashboard extends JFrame {
 
     // ================= VIEW CART =================
 
-    private void viewCart() {
+        private void viewCart() {
 
-         if (customer.getCart()
-                     .getItems()
-                     .isEmpty()) {
+            if (customer.getCart()
+                    .getItems()
+                    .isEmpty()) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Cart is empty"
+                );
+
+                return;
+            }
+
+            String cartText = "";
+
+            for (CartItem item :
+                    customer.getCart().getItems()) {
+
+                cartText += item.getProduct().getName()
+                        + " x "
+                        + item.getQuantity()
+                        + " = Rs. "
+                        + item.getSubtotal()
+                        + "\n";
+            }
+
+            cartText +=
+                    "\n--------------------------";
+
+            cartText +=
+            "\nCart Total: Rs. "
+                    + customer.getCart().getTotal();
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    cartText,
+                    "My Cart",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
+        // ================= REMOVE FROM CART =================
+
+            private void removeFromCart() {
+
+                if (customer.getCart()
+                        .getItems()
+                        .isEmpty()) {
 
                     JOptionPane.showMessageDialog(
                             this,
                             "Cart is empty"
                     );
 
-                    return;
-                }
-
-                String cartText = "";
-
-                for (CartItem item :
-                        customer.getCart().getItems()) {
-
-                    cartText += item.getProduct().getName()
-                            + " x "
-                            + item.getQuantity()
-                            + " = Rs. "
-                            + item.getSubtotal()
-                            + "\n";
-                }
-
-                cartText +=
-                        "\n--------------------------";
-
-                cartText +=
-                        "\nCart Total: Rs. "
-                                + customer.getCart().getTotal();
-
-                // ================= SHOW CART =================
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        cartText,
-                        "My Cart",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-
-                // ================= REMOVE OPTION =================
-
-                int choice =
-                        JOptionPane.showConfirmDialog(
-                                this,
-                                "Do you want to remove a product?"
-                        );
-
-                if (choice != JOptionPane.YES_OPTION) {
                     return;
                 }
 
@@ -344,8 +356,8 @@ public class CustomerDashboard extends JFrame {
                 String selected =
                         (String) JOptionPane.showInputDialog(
                                 this,
-                                "Select product:",
-                                "Remove Product",
+                                "Select product to remove:",
+                                "Remove Item",
                                 JOptionPane.INFORMATION_MESSAGE,
                                 null,
                                 productNames,
@@ -385,7 +397,6 @@ public class CustomerDashboard extends JFrame {
                     );
                 }
             }
-
                 // ================= CHECKOUT =================
 
                 private void checkout() {
