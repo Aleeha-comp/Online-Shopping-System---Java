@@ -1,140 +1,166 @@
+
 package onlineshoppingsystem;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.*;
 
-public class CustomerDashboard extends JFrame implements Serializable{
+public class CustomerDashboard extends JFrame {
 
     private Customer customer;
+
     private JTable productTable;
     private DefaultTableModel productModel;
 
     private JTable cartTable;
     private DefaultTableModel cartModel;
 
+    private JLabel totalLabel;
+    private JComboBox<String> categoryBox;
+
     public CustomerDashboard() {
 
         customer = Main.getCurrentCustomer();
 
         setTitle("Customer Dashboard");
-        setSize(700, 500);
+        setSize(800, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel(new GridLayout(2, 1));
+        JTabbedPane tabs = new JTabbedPane();
 
-        add(mainPanel);
+        tabs.addTab("Products", createProductPanel());
+        tabs.addTab("Cart", createCartPanel());
 
-        // ================= PRODUCTS =================
+        add(tabs);
 
-        JPanel productPanel = new JPanel(new BorderLayout());
+        loadCategories();
+        loadProducts("All");
+        refreshCart();
+    }
 
-        JLabel productLabel = new JLabel("Products");
-        productPanel.add(productLabel, BorderLayout.NORTH);
+    private JPanel createProductPanel() {
 
-        String[] productColumns = {
-                "ID",
-                "Name",
-                "Price",
-                "Stock"
-        };
+        JPanel panel = new JPanel(new BorderLayout());
 
-        productModel = new DefaultTableModel(productColumns, 0);
+        JPanel topPanel = new JPanel();
 
+        topPanel.add(new JLabel("Category:"));
+
+        categoryBox = new JComboBox<>();
+        topPanel.add(categoryBox);
+
+        JButton showButton = new JButton("Show Products");
+        topPanel.add(showButton);
+
+        panel.add(topPanel, BorderLayout.NORTH);
+
+        String[] columns = {"ID", "Name", "Category", "Shop", "Price", "Stock"};
+
+        productModel = new DefaultTableModel(columns, 0);
         productTable = new JTable(productModel);
 
-        JScrollPane productScroll = new JScrollPane(productTable);
+        panel.add(new JScrollPane(productTable), BorderLayout.CENTER);
 
-        productPanel.add(productScroll, BorderLayout.CENTER);
+        JPanel bottomPanel = new JPanel();
 
-        JButton addCartButton = new JButton("Add To Cart");
-
-        productPanel.add(addCartButton, BorderLayout.SOUTH);
-
-        mainPanel.add(productPanel);
-
-        // ================= CART =================
-
-        JPanel cartPanel = new JPanel(new BorderLayout());
-
-        JLabel cartLabel = new JLabel("My Cart");
-
-        cartPanel.add(cartLabel, BorderLayout.NORTH);
-
-        String[] cartColumns = {
-                "Product",
-                "Price",
-                "Quantity"
-        };
-
-        cartModel = new DefaultTableModel(cartColumns, 0);
-
-        cartTable = new JTable(cartModel);
-
-        JScrollPane cartScroll = new JScrollPane(cartTable);
-
-        cartPanel.add(cartScroll, BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel();
-
-        JButton removeButton = new JButton("Remove");
-
-        JButton checkoutButton = new JButton("Checkout");
-
+        JButton addButton = new JButton("Add To Cart");
         JButton logoutButton = new JButton("Logout");
 
-        buttonPanel.add(removeButton);
-        buttonPanel.add(checkoutButton);
-        buttonPanel.add(logoutButton);
+        bottomPanel.add(addButton);
+        bottomPanel.add(logoutButton);
 
-        cartPanel.add(buttonPanel, BorderLayout.SOUTH);
+        panel.add(bottomPanel, BorderLayout.SOUTH);
 
-        mainPanel.add(cartPanel);
+        showButton.addActionListener(e -> {
+            String category = (String) categoryBox.getSelectedItem();
+            loadProducts(category);
+        });
 
-        // ================= BUTTON ACTIONS =================
-
-        addCartButton.addActionListener(e -> addToCart());
-
-        removeButton.addActionListener(e -> removeFromCart());
-
-        checkoutButton.addActionListener(e -> checkout());
+        addButton.addActionListener(e -> addToCart());
 
         logoutButton.addActionListener(e -> logout());
 
-        loadProducts();
+        return panel;
     }
 
-    // ================= LOAD PRODUCTS =================
+    private JPanel createCartPanel() {
 
-    private void loadProducts() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        String[] columns = {"Product", "Price", "Quantity", "Subtotal"};
+
+        cartModel = new DefaultTableModel(columns, 0);
+        cartTable = new JTable(cartModel);
+
+        panel.add(new JScrollPane(cartTable), BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+
+        totalLabel = new JLabel("Total: Rs. 0.00");
+        bottomPanel.add(totalLabel, BorderLayout.WEST);
+
+        JPanel buttonPanel = new JPanel();
+
+        JButton removeButton = new JButton("Remove Item");
+        JButton checkoutButton = new JButton("Checkout");
+
+        buttonPanel.add(removeButton);
+        buttonPanel.add(checkoutButton);
+
+        bottomPanel.add(buttonPanel, BorderLayout.EAST);
+
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+
+        removeButton.addActionListener(e -> removeFromCart());
+
+        checkoutButton.addActionListener(e -> openCheckout());
+
+        return panel;
+    }
+
+    private void loadCategories() {
+
+        categoryBox.removeAllItems();
+
+        categoryBox.addItem("All");
+
+        for (ShopCategory category : Main.getCategories()) {
+            categoryBox.addItem(category.getName());
+        }
+    }
+
+    private void loadProducts(String selectedCategory) {
 
         productModel.setRowCount(0);
 
         for (Shop shop : Main.getShops()) {
 
-            for (Product p : shop.getProducts()) {
+            String categoryName = shop.getShopCategory().getName();
 
-                productModel.addRow(new Object[]{
-                        p.getProductId(),
-                        p.getName(),
-                        p.getPrice(),
-                        p.getStock()
-                });
+            if (selectedCategory.equals("All") || selectedCategory.equals(categoryName)) {
+
+                for (Product p : shop.getProducts()) {
+
+                    productModel.addRow(new Object[]{
+                            p.getProductId(),
+                            p.getName(),
+                            categoryName,
+                            shop.getShopName(),
+                            p.getDiscountedPrice(),
+                            p.getStock()
+                    });
+                }
             }
         }
     }
-
-    // ================= ADD TO CART =================
 
     private void addToCart() {
 
         int row = productTable.getSelectedRow();
 
         if (row == -1) {
-
-            JOptionPane.showMessageDialog(this, "Select a product");
-
+            JOptionPane.showMessageDialog(this, "Select a product first");
             return;
         }
 
@@ -142,21 +168,30 @@ public class CustomerDashboard extends JFrame implements Serializable{
 
         Product product = findProductById(id);
 
-        String input = JOptionPane.showInputDialog(
-                this,
-                "Enter quantity"
-        );
+        if (product == null) {
+            JOptionPane.showMessageDialog(this, "Product not found");
+            return;
+        }
+
+        String input = JOptionPane.showInputDialog(this, "Enter quantity:");
+
+        if (input == null || input.isEmpty()) {
+            return;
+        }
 
         int qty = Integer.parseInt(input);
+
+        if (!product.isInStock(qty)) {
+            JOptionPane.showMessageDialog(this, "Not enough stock");
+            return;
+        }
 
         customer.getCart().addItem(product, qty);
 
         refreshCart();
 
-        JOptionPane.showMessageDialog(this, "Added To Cart");
+        JOptionPane.showMessageDialog(this, "Product added to cart");
     }
-
-     // ================= REFRESH CART =================
 
     private void refreshCart() {
 
@@ -166,22 +201,23 @@ public class CustomerDashboard extends JFrame implements Serializable{
 
             cartModel.addRow(new Object[]{
                     item.getProduct().getName(),
-                    item.getProduct().getPrice(),
-                    item.getQuantity()
+                    item.getProduct().getDiscountedPrice(),
+                    item.getQuantity(),
+                    item.getSubtotal()
             });
         }
+
+        totalLabel.setText("Total: Rs. " + customer.getCart().getTotal());
     }
 
-    // ================= REMOVE FROM CART =================
+
 
     private void removeFromCart() {
 
         int row = cartTable.getSelectedRow();
 
         if (row == -1) {
-
-            JOptionPane.showMessageDialog(this, "Select item");
-
+            JOptionPane.showMessageDialog(this, "Select item first");
             return;
         }
 
@@ -189,76 +225,9 @@ public class CustomerDashboard extends JFrame implements Serializable{
 
         Product product = findProductByName(name);
 
-        customer.getCart().removeItem(product);
-
-        refreshCart();
-    }
-
-    // ================= CHECKOUT =================
-
-    private void checkout() {
-
-        if (customer.getCart().getItems().isEmpty()) {
-
-            JOptionPane.showMessageDialog(this, "Cart is empty");
-
-            return;
+        if (product != null) {
+            customer.getCart().removeItem(product);
+            refreshCart();
         }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Order Placed Successfully"
-        );
-
-         customer.getCart().getItems().clear();
-
-        refreshCart();
     }
 
-    // ================= FIND PRODUCT =================
-
-    private Product findProductById(int id) {
-
-        for (Shop shop : Main.getShops()) {
-
-            for (Product p : shop.getProducts()) {
-
-                if (p.getProductId() == id) {
-
-                    return p;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private Product findProductByName(String name) {
-
-        for (Shop shop : Main.getShops()) {
-
-            for (Product p : shop.getProducts()) {
-
-                if (p.getName().equals(name)) {
-
-                    return p;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    // ================= LOGOUT =================
-
-    private void logout() {
-
-        Main.saveAllData();
-
-        Main.setCurrentUser(null);
-
-        new LoginFrame().setVisible(true);
-
-        dispose();
-    }
-}
