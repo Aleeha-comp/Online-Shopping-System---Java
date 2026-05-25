@@ -170,16 +170,26 @@ public class AdminDashboard extends JFrame {
 
             // Remove shop from seller also
             Seller owner = findOwnerOfShop(shop);
+
             if (owner != null) {
+
                 Main.getSellers().remove(owner);
             }
 
             // Remove shop from main shop list
             Main.getShops().remove(shop);
 
+            // Save updated data
+            Main.saveAllData();
+
             loadShops();
 
-            JOptionPane.showMessageDialog(this, "Shop removed successfully!");
+            loadUsers();
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Shop removed successfully!"
+            );
         }
     }
 
@@ -195,19 +205,22 @@ public class AdminDashboard extends JFrame {
             return;
         }
 
-        String userEmail = (String) userModel.getValueAt(row, 1);
+        // Column 2 contains email
+        String userEmail = (String) userModel.getValueAt(row, 2);
+
         String userRole = (String) userModel.getValueAt(row, 3);
 
-        // Remove Customer 
-
+        // Remove Customer
         if ("Customer".equals(userRole)) {
 
             Customer customer = findCustomerByEmail(userEmail);
+
             if (customer != null) {
+
                 Main.getCustomers().remove(customer);
             }
-        } 
-        
+        }
+
         // Remove Seller
         else if ("Seller".equals(userRole)) {
 
@@ -215,28 +228,40 @@ public class AdminDashboard extends JFrame {
 
             if (seller != null) {
 
-                // Remove seller shops first
+                // Remove seller shop first
                 Shop sellerShop = seller.getShop();
+
                 if (sellerShop != null) {
+
                     Main.getShops().remove(sellerShop);
                 }
 
                 Main.getSellers().remove(seller);
             }
+        }
 
-        } 
-        
         // Admin cannot be removed , protecting admin
         else if ("Admin".equals(userRole)) {
 
-            JOptionPane.showMessageDialog(this,"Admin cannot be removed");
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Admin cannot be removed"
+            );
+
             return;
         }
 
+        // Save updated data
+        Main.saveAllData();
+
         loadUsers();
+
         loadShops();
 
-        JOptionPane.showMessageDialog(this, "User removed successfully!");
+        JOptionPane.showMessageDialog(
+                this,
+                "User removed successfully!"
+        );
     }
 
     // ================= FIND SHOP BY NAME ================
@@ -245,6 +270,7 @@ public class AdminDashboard extends JFrame {
         for (Shop shop : Main.getShops()) {
 
             if (shop.getShopName().equals(name)) {
+
                 return shop;
             }
         }
@@ -258,6 +284,7 @@ public class AdminDashboard extends JFrame {
         for (Customer customer : Main.getCustomers()) {
 
             if (customer.getEmail().equals(email)) {
+
                 return customer;
             }
         }
@@ -271,6 +298,7 @@ public class AdminDashboard extends JFrame {
         for (Seller seller : Main.getSellers()) {
 
             if (seller.getEmail().equals(email)) {
+
                 return seller;
             }
         }
@@ -283,7 +311,9 @@ public class AdminDashboard extends JFrame {
 
         for (Seller seller : Main.getSellers()) {
 
-            if (seller.getShop() != null && seller.getShop().equals(shop)) {
+            if (seller.getShop() != null
+                    && seller.getShop().equals(shop)) {
+
                 return seller;
             }
         }
@@ -296,7 +326,7 @@ public class AdminDashboard extends JFrame {
 
         Main.saveAllData();
 
-        Main.setCurrentUser(null);
+        Main.logout();
 
         new LoginFrame().setVisible(true);
 
