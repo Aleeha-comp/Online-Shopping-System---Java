@@ -596,7 +596,7 @@ paymentBox.addActionListener(e -> {
                                 extraField.getText(),
                                 cvvField.getText()
                         );
-
+        /* 
             } else if (method.equals("EasyPaisa")) {
 
                 payment =
@@ -607,6 +607,27 @@ paymentBox.addActionListener(e -> {
                         );
 
             } else {
+*/
+        } else if (method.equals("EasyPaisa")) {
+
+                if (amount > 50000) {
+
+                        JOptionPane.showMessageDialog(
+                                dialog,
+                        "EasyPaisa transaction cannot exceed Rs. 50,000"
+                        );
+
+                        return;
+        }
+
+    payment =
+            new EasyPaisaPayment(
+                    paymentId,
+                    amount,
+                    extraField.getText()
+            );
+
+        } else {
 
                 payment =
                         new CashOnDelivery(
