@@ -55,6 +55,7 @@ public class RegisterFrame extends JFrame {
         roleBox.setBounds(150, 160, 150, 25);
         panel.add(roleBox);
 
+
         JLabel shopLabel = new JLabel("Shop Name:");
         shopLabel.setBounds(50, 200, 100, 25);
         panel.add(shopLabel);
@@ -62,6 +63,33 @@ public class RegisterFrame extends JFrame {
         shopField = new JTextField();
         shopField.setBounds(150, 200, 150, 25);
         panel.add(shopField);
+
+// ================= HIDE INITIALLY =================
+
+        shopLabel.setVisible(false);
+
+        shopField.setVisible(false);
+
+// ================= ROLE CHANGE =================
+
+        roleBox.addActionListener(e -> {
+
+            String role =
+                (String) roleBox.getSelectedItem();
+
+            if (role.equals("Seller")) {
+
+                shopLabel.setVisible(true);
+
+                shopField.setVisible(true);
+
+            } else {
+
+                shopLabel.setVisible(false);
+
+                shopField.setVisible(false);
+            }
+        });
 
         JButton registerButton = new JButton("Register");
         registerButton.setBounds(120, 250, 120, 30);
