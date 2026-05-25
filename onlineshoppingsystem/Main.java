@@ -20,11 +20,11 @@ public class Main {
 
     // ONLY ADD SAMPLE DATA FIRST TIME
     if (shops.isEmpty()) {
-
         initializeData();
-
         saveAllData();
     }
+
+    admins.add(new Admin ("A1", "System Admin", "admin@gmail.com", "1234"));
 
     new LoginFrame().setVisible(true);
 }
