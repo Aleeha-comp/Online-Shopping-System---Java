@@ -8,6 +8,7 @@ public class LoginFrame extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JComboBox<String> roleBox;
+    private JButton registerButton;
 
     public LoginFrame() {
 
@@ -18,13 +19,14 @@ public class LoginFrame extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
-
         add(panel);
 
+        // Title
         JLabel title = new JLabel("Online Shopping System");
         title.setBounds(100, 20, 200, 30);
         panel.add(title);
 
+        // Email
         JLabel emailLabel = new JLabel("Email:");
         emailLabel.setBounds(50, 70, 100, 25);
         panel.add(emailLabel);
@@ -33,6 +35,7 @@ public class LoginFrame extends JFrame {
         emailField.setBounds(150, 70, 150, 25);
         panel.add(emailField);
 
+        // Password
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setBounds(50, 110, 100, 25);
         panel.add(passwordLabel);
@@ -41,6 +44,7 @@ public class LoginFrame extends JFrame {
         passwordField.setBounds(150, 110, 150, 25);
         panel.add(passwordField);
 
+        // Role
         JLabel roleLabel = new JLabel("Role:");
         roleLabel.setBounds(50, 150, 100, 25);
         panel.add(roleLabel);
@@ -55,19 +59,42 @@ public class LoginFrame extends JFrame {
 
         panel.add(roleBox);
 
+        // Login Button
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(80, 210, 100, 30);
         panel.add(loginButton);
 
-        JButton registerButton = new JButton("Register");
+        // Register Button
+        registerButton = new JButton("Register");
         registerButton.setBounds(200, 210, 100, 30);
         panel.add(registerButton);
 
-        loginButton.addActionListener(e -> login());
+        // Role change listener
+        roleBox.addActionListener(e -> updateRegisterButton());
+        updateRegisterButton();
 
+        // Button actions
+        loginButton.addActionListener(e -> login());
         registerButton.addActionListener(e -> openRegister());
     }
 
+
+    private void updateRegisterButton() {
+
+        String role = (String) roleBox.getSelectedItem();
+
+        if (role.equals("Admin")) {
+            registerButton.setEnabled(false);
+
+        } 
+        
+        else {
+            registerButton.setEnabled(true);
+        }
+    }
+
+
+    // login
     private void login() {
 
         String email = emailField.getText();
@@ -79,6 +106,7 @@ public class LoginFrame extends JFrame {
             return;
         }
 
+        // Customer Login
         if (role.equals("Customer")) {
             Customer customer = Main.findCustomer(email, password);
 
@@ -94,6 +122,7 @@ public class LoginFrame extends JFrame {
             }
         } 
         
+        // Seller Login
         else if (role.equals("Seller")) {
 
             Seller seller = Main.findSeller(email, password);
@@ -110,7 +139,8 @@ public class LoginFrame extends JFrame {
             }
         } 
         
-        else {
+        // Admin Login
+        else if (role.equals("Admin")) {
             Admin admin = Main.findAdmin(email, password);
 
             if (admin != null) {
@@ -124,9 +154,23 @@ public class LoginFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Invalid Login");
             }
         }
+
+        else {
+            JOptionPane.showMessageDialog(this, "Invalid Role");
+        }
     }
 
+    // open register frame
     private void openRegister() {
+
+        String role = (String) roleBox.getSelectedItem();
+
+        // does not allow admin registration (blocks admin)
+        if (role.equals("Admin")) {
+            JOptionPane.showMessageDialog(this, "Admin cannot register");
+            return;
+        }
+
         new RegisterFrame().setVisible(true);
     }
 }
