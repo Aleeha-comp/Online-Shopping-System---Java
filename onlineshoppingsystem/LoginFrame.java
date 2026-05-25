@@ -71,9 +71,7 @@ public class LoginFrame extends JFrame {
     private void login() {
 
         String email = emailField.getText();
-
         String password = new String(passwordField.getPassword());
-
         String role = (String) roleBox.getSelectedItem();
 
         if (email.isEmpty() || password.isEmpty()) {
@@ -87,17 +85,13 @@ public class LoginFrame extends JFrame {
             if (customer != null) {
 
                 Main.setCurrentUser(customer);
-
                 new CustomerDashboard().setVisible(true);
-
                 dispose();
-
             } 
             
             else {
                 JOptionPane.showMessageDialog(this, "Invalid Login");
             }
-
         } 
         
         else if (role.equals("Seller")) {
@@ -108,28 +102,22 @@ public class LoginFrame extends JFrame {
 
                 Main.setCurrentUser(seller);
                 new SellerDashboard().setVisible(true);
-
                 dispose();
-
             } 
             
             else {
                 JOptionPane.showMessageDialog(this, "Invalid Login");
             }
-
         } 
         
         else {
-
             Admin admin = Main.findAdmin(email, password);
 
             if (admin != null) {
 
                 Main.setCurrentUser(admin);
                 new AdminDashboard().setVisible(true);
-
                 dispose();
-
             } 
             
             else {

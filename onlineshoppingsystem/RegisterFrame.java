@@ -55,6 +55,7 @@ public class RegisterFrame extends JFrame {
         roleBox.setBounds(150, 160, 150, 25);
         panel.add(roleBox);
 
+
         JLabel shopLabel = new JLabel("Shop Name:");
         shopLabel.setBounds(50, 200, 100, 25);
         panel.add(shopLabel);
@@ -63,6 +64,33 @@ public class RegisterFrame extends JFrame {
         shopField.setBounds(150, 200, 150, 25);
         panel.add(shopField);
 
+// ================= HIDE INITIALLY =================
+
+        shopLabel.setVisible(false);
+
+        shopField.setVisible(false);
+
+// ================= ROLE CHANGE =================
+
+        roleBox.addActionListener(e -> {
+
+            String role =
+                (String) roleBox.getSelectedItem();
+
+            if (role.equals("Seller")) {
+
+                shopLabel.setVisible(true);
+
+                shopField.setVisible(true);
+
+            } else {
+
+                shopLabel.setVisible(false);
+
+                shopField.setVisible(false);
+            }
+        });
+
         JButton registerButton = new JButton("Register");
         registerButton.setBounds(120, 250, 120, 30);
         panel.add(registerButton);
@@ -70,60 +98,116 @@ public class RegisterFrame extends JFrame {
         registerButton.addActionListener(e -> registerUser());
     }
 
-    private void registerUser() {
+   private void registerUser() {
 
-        String name = nameField.getText();
-        String email = emailField.getText();
-        String password = new String(passwordField.getPassword());
-        String role = (String) roleBox.getSelectedItem();
+    String name = nameField.getText();
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Fill all fields");
+    String email = emailField.getText();
+
+    String password =
+            new String(passwordField.getPassword());
+
+    String role =
+            (String) roleBox.getSelectedItem();
+
+    // ================= EMPTY FIELD CHECK =================
+
+    if (name.isEmpty()
+            || email.isEmpty()
+            || password.isEmpty()) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Fill all fields"
+        );
+
+        return;
+    }
+
+    // ================= EMAIL ALREADY EXISTS =================
+
+    if (Main.emailExists(email)) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Account already exists.\nPlease login instead."
+        );
+
+        return;
+    }
+
+    // ================= CUSTOMER =================
+
+    if (role.equals("Customer")) {
+
+        String userId =
+                "C" + (Main.getCustomers().size() + 1);
+
+        Customer customer =
+                new Customer(
+                        userId,
+                        name,
+                        email,
+                        password
+                );
+
+        Main.addCustomer(customer);
+    }
+
+    // ================= SELLER =================
+
+    else {
+
+        String shopName =
+                shopField.getText();
+
+        if (shopName.isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Enter shop name"
+            );
+
             return;
         }
 
-        if (role.equals("Customer")) {
+        String userId =
+                "S" + (Main.getSellers().size() + 1);
 
-            String userId = "C" + (Main.getCustomers().size() + 1);
+        ShopCategory category =
+                new ShopCategory("General");
 
-            Customer customer = new Customer(userId, name, email, password);
+        Shop shop =
+                new Shop(
+                        Main.getShops().size() + 1,
+                        shopName,
+                        category
+                );
 
-            Main.addCustomer(customer);
+        Seller seller =
+                new Seller(
+                        userId,
+                        name,
+                        email,
+                        password,
+                        shop,
+                        0.0
+                );
 
-        } else {
+        Main.addSeller(seller);
 
-            String shopName = shopField.getText();
-
-            if (shopName.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Enter shop name");
-                return;
-            }
-
-            String userId = "S" + (Main.getSellers().size() + 1);
-
-            ShopCategory category = new ShopCategory("General");
-
-            Shop shop = new Shop(
-                    Main.getShops().size() + 1,
-                    shopName,
-                    category
-            );
-
-            Seller seller = new Seller(
-                    userId,
-                    name,
-                    email,
-                    password,
-                    shop,
-                    0.0
-            );
-
-            Main.addSeller(seller);
-            Main.addShop(shop);
-        }
-
-        JOptionPane.showMessageDialog(this, "Account Created");
-
-        dispose();
+        Main.addShop(shop);
     }
+
+    // ================= SAVE DATA =================
+
+    Main.saveAllData();
+
+    JOptionPane.showMessageDialog(
+            this,
+            "Account Created Successfully"
+    );
+
+    dispose();
+}
 }

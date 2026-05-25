@@ -1,3 +1,4 @@
+
 package onlineshoppingsystem;
 
 import java.io.*;
@@ -13,48 +14,54 @@ public class FileHandling {
             ObjectOutputStream out = new ObjectOutputStream(file);
 
             out.writeObject(list);
+
             out.close();
+
+            file.close();
+
             System.out.println("Saved successfully: " + fileName);
-        } 
-        
-        catch (FileNotFoundException fn) {
-            System.out.println("File not found.");
         }
 
         catch (IOException e) {
+
             System.out.println("Error saving " + fileName + ": " + e.getMessage());
         }
     }
 
     // ---------------- LOAD GENERIC DATA ----------------
+    @SuppressWarnings("unchecked")
+
     public static <T> ArrayList<T> loadData(String fileName) {
 
         try {
-            FileInputStream file = new FileInputStream(fileName);
-            ObjectInputStream in = new ObjectInputStream(file);
 
-            ArrayList<T> arraylist = (ArrayList<T>) in.readObject();
-            
+            File file = new File(fileName);
+
+            // FILE DOES NOT EXIST
+            if (!file.exists()) {
+                return new ArrayList<>();
+            }
+
+            FileInputStream fileInput = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileInput);
+
+            ArrayList<T> list = (ArrayList<T>) in.readObject();
+
             in.close();
-            return arraylist;
-        } 
-        
-        catch (FileNotFoundException e) {
-            System.out.println(fileName + " not found. Returning empty list.");
-        } 
 
-        catch (EOFException eof) {
-            System.out.println("End of File!");
+            fileInput.close();
+
+            return list;
         }
 
-        catch (IOException e) {
-            System.out.println("Error reading " + fileName + ": " + e.getMessage());
-        } 
-        
-        catch (ClassNotFoundException e) {
-            System.out.println("Class error: " + e.getMessage());
+        catch (EOFException e) {
+
+            return new ArrayList<>();
         }
 
-        return new ArrayList<>();
+        catch (Exception e) {
+            System.out.println("Error loading " + fileName + ": " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 }
