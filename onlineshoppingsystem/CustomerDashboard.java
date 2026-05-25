@@ -270,291 +270,367 @@ public class CustomerDashboard extends JFrame {
 
     private void viewCart() {
 
-        if (customer.getCart()
-                .getItems()
-                .isEmpty()) {
+         if (customer.getCart()
+                     .getItems()
+                     .isEmpty()) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Cart is empty"
-            );
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Cart is empty"
+                    );
 
-            return;
-        }
+                    return;
+                }
 
-        String cartText = "";
+                String cartText = "";
 
-        for (CartItem item :
-                customer.getCart().getItems()) {
+                for (CartItem item :
+                        customer.getCart().getItems()) {
 
-            cartText += item.getProduct().getName()
-                    + " x "
-                    + item.getQuantity()
-                    + " = Rs. "
-                    + item.getSubtotal()
-                    + "\n";
-        }
+                    cartText += item.getProduct().getName()
+                            + " x "
+                            + item.getQuantity()
+                            + " = Rs. "
+                            + item.getSubtotal()
+                            + "\n";
+                }
 
-        cartText +=
-                "\n--------------------------";
+                cartText +=
+                        "\n--------------------------";
 
-        cartText +=
-                "\nCart Total: Rs. "
-                        + customer.getCart().getTotal();
+                cartText +=
+                        "\nCart Total: Rs. "
+                                + customer.getCart().getTotal();
 
-        JOptionPane.showMessageDialog(
-                this,
-                cartText,
-                "My Cart",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
+                // ================= SHOW CART =================
 
-    // ================= CHECKOUT =================
-
-    private void checkout() {
-
-        if (customer.getCart()
-                .getItems()
-                .isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Cart is empty"
-            );
-
-            return;
-        }
-
-        JDialog dialog =
-                new JDialog(
+                JOptionPane.showMessageDialog(
                         this,
-                        "Checkout",
-                        true
+                        cartText,
+                        "My Cart",
+                        JOptionPane.INFORMATION_MESSAGE
                 );
 
-        dialog.setSize(400, 430);
+                // ================= REMOVE OPTION =================
+
+                int choice =
+                        JOptionPane.showConfirmDialog(
+                                this,
+                                "Do you want to remove a product?"
+                        );
 
-        dialog.setLocationRelativeTo(this);
+                if (choice != JOptionPane.YES_OPTION) {
+                    return;
+                }
 
-        JPanel panel = new JPanel();
+                String[] productNames =
+                        new String[
+                                customer.getCart()
+                                        .getItems()
+                                        .size()
+                        ];
 
-        panel.setLayout(null);
+                for (int i = 0;
+                    i < customer.getCart().getItems().size();
+                    i++) {
 
-        dialog.add(panel);
+                    CartItem item =
+                            customer.getCart().getItems().get(i);
 
-        JLabel total =
-                new JLabel(
-                        "Total Bill: Rs. "
-                                + customer.getCart().getTotal()
-                );
+                    productNames[i] =
+                            item.getProduct().getName();
+                }
 
-        total.setBounds(120, 10, 200, 25);
+                String selected =
+                        (String) JOptionPane.showInputDialog(
+                                this,
+                                "Select product:",
+                                "Remove Product",
+                                JOptionPane.INFORMATION_MESSAGE,
+                                null,
+                                productNames,
+                                productNames[0]
+                        );
 
-        panel.add(total);
+                if (selected == null) {
+                    return;
+                }
 
-        JLabel streetLabel =
-                new JLabel("Street:");
+                Product productToRemove = null;
 
-        streetLabel.setBounds(40, 50, 100, 25);
+                for (CartItem item :
+                        customer.getCart().getItems()) {
 
-        panel.add(streetLabel);
+                    if (item.getProduct()
+                            .getName()
+                            .equals(selected)) {
 
-        JTextField streetField =
-                new JTextField();
+                        productToRemove =
+                                item.getProduct();
 
-        streetField.setBounds(160, 50, 180, 25);
+                        break;
+                    }
+                }
 
-        panel.add(streetField);
+                if (productToRemove != null) {
 
-        JLabel cityLabel =
-                new JLabel("City:");
+                    customer.getCart()
+                            .removeItem(productToRemove);
 
-        cityLabel.setBounds(40, 90, 100, 25);
+                    updateTotal();
 
-        panel.add(cityLabel);
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Product removed from cart"
+                    );
+                }
+            }
 
-        JTextField cityField =
-                new JTextField();
+                // ================= CHECKOUT =================
 
-        cityField.setBounds(160, 90, 180, 25);
+                private void checkout() {
 
-        panel.add(cityField);
+                    if (customer.getCart()
+                            .getItems()
+                            .isEmpty()) {
 
-        JLabel provinceLabel =
-                new JLabel("Province:");
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "Cart is empty"
+                        );
 
-        provinceLabel.setBounds(40, 130, 100, 25);
+                        return;
+                    }
 
-        panel.add(provinceLabel);
+                    JDialog dialog =
+                            new JDialog(
+                                    this,
+                                    "Checkout",
+                                    true
+                            );
 
-        JTextField provinceField =
-                new JTextField();
+                    dialog.setSize(400, 430);
 
-        provinceField.setBounds(160, 130, 180, 25);
+                    dialog.setLocationRelativeTo(this);
 
-        panel.add(provinceField);
+                    JPanel panel = new JPanel();
 
-        JLabel countryLabel =
-                new JLabel("Country:");
+                    panel.setLayout(null);
 
-        countryLabel.setBounds(40, 170, 100, 25);
+                    dialog.add(panel);
 
-        panel.add(countryLabel);
+                    JLabel total =
+                            new JLabel(
+                                    "Total Bill: Rs. "
+                                            + customer.getCart().getTotal()
+                            );
 
-        JTextField countryField =
-                new JTextField();
+                    total.setBounds(120, 10, 200, 25);
 
-        countryField.setBounds(160, 170, 180, 25);
+                    panel.add(total);
 
-        panel.add(countryField);
+                    JLabel streetLabel =
+                            new JLabel("Street:");
 
-        JLabel zipLabel =
-                new JLabel("Zip Code:");
+                    streetLabel.setBounds(40, 50, 100, 25);
 
-        zipLabel.setBounds(40, 210, 100, 25);
+                    panel.add(streetLabel);
 
-        panel.add(zipLabel);
+                    JTextField streetField =
+                            new JTextField();
 
-        JTextField zipField =
-                new JTextField();
+                    streetField.setBounds(160, 50, 180, 25);
 
-        zipField.setBounds(160, 210, 180, 25);
+                    panel.add(streetField);
 
-        panel.add(zipField);
+                    JLabel cityLabel =
+                            new JLabel("City:");
 
-        JLabel paymentLabel =
-                new JLabel("Payment:");
+                    cityLabel.setBounds(40, 90, 100, 25);
 
-        paymentLabel.setBounds(40, 250, 100, 25);
+                    panel.add(cityLabel);
 
-        panel.add(paymentLabel);
+                    JTextField cityField =
+                            new JTextField();
 
-        JComboBox<String> paymentBox =
-                new JComboBox<>();
+                    cityField.setBounds(160, 90, 180, 25);
 
-        paymentBox.addItem("Cash on Delivery");
+                    panel.add(cityField);
 
-        paymentBox.addItem("Credit Card");
+                    JLabel provinceLabel =
+                            new JLabel("Province:");
 
-        paymentBox.addItem("EasyPaisa");
+                    provinceLabel.setBounds(40, 130, 100, 25);
 
-        paymentBox.setBounds(160, 250, 180, 25);
+                    panel.add(provinceLabel);
 
-        panel.add(paymentBox);
+                    JTextField provinceField =
+                            new JTextField();
 
-        /* 
+                    provinceField.setBounds(160, 130, 180, 25);
 
-        JLabel extraLabel =
-                new JLabel("Card/Phone:");
+                    panel.add(provinceField);
 
-        extraLabel.setBounds(40, 290, 100, 25);
+                    JLabel countryLabel =
+                            new JLabel("Country:");
 
-        panel.add(extraLabel);
+                    countryLabel.setBounds(40, 170, 100, 25);
 
-        JTextField extraField =
-                new JTextField();
+                    panel.add(countryLabel);
 
-        extraField.setBounds(160, 290, 180, 25);
+                    JTextField countryField =
+                            new JTextField();
 
-        panel.add(extraField);
+                    countryField.setBounds(160, 170, 180, 25);
 
-        JLabel cvvLabel =
-                new JLabel("CVV:");
+                    panel.add(countryField);
 
-        cvvLabel.setBounds(40, 320, 100, 25);
+                    JLabel zipLabel =
+                            new JLabel("Zip Code:");
 
-        panel.add(cvvLabel);
+                    zipLabel.setBounds(40, 210, 100, 25);
 
-        JTextField cvvField =
-                new JTextField();
+                    panel.add(zipLabel);
 
-        cvvField.setBounds(160, 320, 180, 25);
+                    JTextField zipField =
+                            new JTextField();
 
-        panel.add(cvvField);
-         */
-        JLabel extraLabel =
-        new JLabel();
+                    zipField.setBounds(160, 210, 180, 25);
 
-extraLabel.setBounds(40, 290, 100, 25);
+                    panel.add(zipField);
 
-panel.add(extraLabel);
+                    JLabel paymentLabel =
+                            new JLabel("Payment:");
 
-JTextField extraField =
-        new JTextField();
+                    paymentLabel.setBounds(40, 250, 100, 25);
 
-extraField.setBounds(160, 290, 180, 25);
+                    panel.add(paymentLabel);
 
-panel.add(extraField);
+                    JComboBox<String> paymentBox =
+                            new JComboBox<>();
 
-JLabel cvvLabel =
-        new JLabel("CVV:");
+                    paymentBox.addItem("Cash on Delivery");
 
-cvvLabel.setBounds(40, 320, 100, 25);
+                    paymentBox.addItem("Credit Card");
 
-panel.add(cvvLabel);
+                    paymentBox.addItem("EasyPaisa");
 
-JTextField cvvField =
-        new JTextField();
+                    paymentBox.setBounds(160, 250, 180, 25);
 
-cvvField.setBounds(160, 320, 180, 25);
+                    panel.add(paymentBox);
 
-panel.add(cvvField);
+                    /* 
 
-// ================= HIDE FIELDS INITIALLY =================
+                    JLabel extraLabel =
+                            new JLabel("Card/Phone:");
 
-extraLabel.setVisible(false);
+                    extraLabel.setBounds(40, 290, 100, 25);
 
-extraField.setVisible(false);
+                    panel.add(extraLabel);
 
-cvvLabel.setVisible(false);
+                    JTextField extraField =
+                            new JTextField();
 
-cvvField.setVisible(false);
+                    extraField.setBounds(160, 290, 180, 25);
 
-// ================= PAYMENT TYPE CHANGE =================
+                    panel.add(extraField);
 
-paymentBox.addActionListener(e -> {
+                    JLabel cvvLabel =
+                            new JLabel("CVV:");
 
-    String method =
-            (String) paymentBox.getSelectedItem();
+                    cvvLabel.setBounds(40, 320, 100, 25);
 
-    if (method.equals("Credit Card")) {
+                    panel.add(cvvLabel);
 
-        extraLabel.setText("Card Number:");
+                    JTextField cvvField =
+                            new JTextField();
 
-        extraLabel.setVisible(true);
+                    cvvField.setBounds(160, 320, 180, 25);
 
-        extraField.setVisible(true);
+                    panel.add(cvvField);
+                    */
+                    JLabel extraLabel =
+                    new JLabel();
 
-        cvvLabel.setVisible(true);
+            extraLabel.setBounds(40, 290, 100, 25);
 
-        cvvField.setVisible(true);
-    }
+            panel.add(extraLabel);
 
-    else if (method.equals("EasyPaisa")) {
+            JTextField extraField =
+                    new JTextField();
 
-        extraLabel.setText("Phone Number:");
+            extraField.setBounds(160, 290, 180, 25);
 
-        extraLabel.setVisible(true);
+            panel.add(extraField);
 
-        extraField.setVisible(true);
+            JLabel cvvLabel =
+                    new JLabel("CVV:");
 
-        cvvLabel.setVisible(false);
+            cvvLabel.setBounds(40, 320, 100, 25);
 
-        cvvField.setVisible(false);
-    }
+            panel.add(cvvLabel);
 
-    else {
+            JTextField cvvField =
+                    new JTextField();
 
-        extraLabel.setVisible(false);
+            cvvField.setBounds(160, 320, 180, 25);
 
-        extraField.setVisible(false);
+            panel.add(cvvField);
 
-        cvvLabel.setVisible(false);
+            // ================= HIDE FIELDS INITIALLY =================
 
-        cvvField.setVisible(false);
-    }
-});
+            extraLabel.setVisible(false);
+
+            extraField.setVisible(false);
+
+            cvvLabel.setVisible(false);
+
+            cvvField.setVisible(false);
+
+            // ================= PAYMENT TYPE CHANGE =================
+
+            paymentBox.addActionListener(e -> {
+
+                String method =
+                        (String) paymentBox.getSelectedItem();
+
+                if (method.equals("Credit Card")) {
+
+                    extraLabel.setText("Card Number:");
+
+                    extraLabel.setVisible(true);
+
+                    extraField.setVisible(true);
+
+                    cvvLabel.setVisible(true);
+
+                    cvvField.setVisible(true);
+                }
+
+                else if (method.equals("EasyPaisa")) {
+
+                    extraLabel.setText("Phone Number:");
+
+                    extraLabel.setVisible(true);
+
+                    extraField.setVisible(true);
+
+                    cvvLabel.setVisible(false);
+
+                    cvvField.setVisible(false);
+                }
+
+                else {
+
+                    extraLabel.setVisible(false);
+
+                    extraField.setVisible(false);
+
+                    cvvLabel.setVisible(false);
+
+                    cvvField.setVisible(false);
+                }
+            });
 
         JButton placeButton =
                 new JButton("Place Order");
