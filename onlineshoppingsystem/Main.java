@@ -13,58 +13,82 @@ public class Main {
     // Currently logged-in user
     private static User currentUser = null;
  
-    public static void main (String args[]){
-        
-        // Load previous data
-        loadAllData();
+    public static void main(String args[]) {
 
-        // If no data exists
-        if (shops.isEmpty()) {
-            initializeData();
-        }
-        
-        // Save before exiting
+    // LOAD SAVED DATA
+    loadAllData();
+
+    // ONLY ADD SAMPLE DATA FIRST TIME
+    if (shops.isEmpty()) {
+
+        initializeData();
+
         saveAllData();
-
-        admins.add(new Admin("A1","System Admin","admin@gmail.com","123456"));
-        
-        new LoginFrame().setVisible(true);
     }
+
+    new LoginFrame().setVisible(true);
+}
 
     // Mutators (Setters)
     // Adding Customer
     public static void addCustomer(Customer c) {
 
-        try {
-            if (c == null){
-                throw new Exception("Customer cannot be null.");
-            }
+    try {
 
-            customers.add(c); 
-            System.out.println("Customer added successfully!");
+        if (c == null) {
+
+            throw new Exception(
+                    "Customer cannot be null."
+            );
         }
 
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        customers.add(c);
+
+        // SAVE IMMEDIATELY
+        saveAllData();
+
+        System.out.println(
+                "Customer added successfully!"
+        );
     }
+
+    catch (Exception e) {
+
+        System.out.println(
+                "Error: " + e.getMessage()
+        );
+    }
+}
 
     // Adding Seller
-    public static void addSeller(Seller s) { 
+    public static void addSeller(Seller s) {
 
-        try {
-            if (s == null) {
-                throw new Exception("Seller cannot be null.");
-            }
+    try {
 
-            sellers.add(s); 
-            System.out.println("Seller added successfully!");
+        if (s == null) {
+
+            throw new Exception(
+                    "Seller cannot be null."
+            );
         }
 
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        sellers.add(s);
+
+        // SAVE IMMEDIATELY
+        saveAllData();
+
+        System.out.println(
+                "Seller added successfully!"
+        );
     }
+
+    catch (Exception e) {
+
+        System.out.println(
+                "Error: " + e.getMessage()
+        );
+    }
+}
 
     // Adding Admin
     public static void addAdmin(Admin a) { 
@@ -85,20 +109,33 @@ public class Main {
 
     // Adding Shop
     public static void addShop(Shop s) {
-        
-        try {
-            if (s == null) {
-                throw new Exception("Shop cannot be null.");
-            }
 
-            shops.add(s); 
-            System.out.println("Shop added successfully!");
+    try {
+
+        if (s == null) {
+
+            throw new Exception(
+                    "Shop cannot be null."
+            );
         }
 
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        shops.add(s);
+
+        // SAVE IMMEDIATELY
+        saveAllData();
+
+        System.out.println(
+                "Shop added successfully!"
+        );
     }
+
+    catch (Exception e) {
+
+        System.out.println(
+                "Error: " + e.getMessage()
+        );
+    }
+}
 
     // Adding ShopCategory
     public static void addCategory(ShopCategory sc) { 
@@ -485,80 +522,26 @@ public static void saveAllData() {
 
 // Loading Data from file
 @SuppressWarnings("unchecked")
+
 public static void loadAllData() {
 
-    try {
+    customers =
+            FileHandling.loadData("customers.dat");
 
-        // ---------- CUSTOMER ----------
-        Object c = FileHandling.loadData("customers.dat");
+    sellers =
+            FileHandling.loadData("sellers.dat");
 
-        if (c != null){
-            if (c instanceof ArrayList<?>) {         // ? means arraylist of any type. This is called wildcard in java generics.
-                customers = (ArrayList<Customer>) c;
-            }
-        }
+    admins =
+            FileHandling.loadData("admins.dat");
 
-        else {
-            throw new Exception("Data not found in customers.dat");
-        }
-    
-        // ---------- SELLERS ----------
-        Object s = FileHandling.loadData("sellers.dat");
+    shops =
+            FileHandling.loadData("shops.dat");
 
-        if (s != null){
-            if (s instanceof ArrayList<?>) {
-                sellers = (ArrayList<Seller>) s;
-            }
-        }
+    categories =
+            FileHandling.loadData("categories.dat");
 
-        else {
-            throw new Exception("Data not found in sellers.dat");
-        }
-
-        // ---------- ADMIN ----------
-        Object a = FileHandling.loadData("admins.dat");
-
-        if (a != null){
-            if (a instanceof ArrayList<?>) {
-                admins = (ArrayList<Admin>) a;
-            }
-        }
-
-        else {
-            throw new Exception("Data not found in admins.dat");
-        }
-
-        // ---------- SHOPS ----------
-        Object sh = FileHandling.loadData("shops.dat");
-
-        if (sh != null){
-            if (sh instanceof ArrayList<?>) {
-                shops = (ArrayList<Shop>) sh;
-            }
-        }
-
-        else {
-            throw new Exception("Data not found in shops.dat");
-        }
-
-        // ---------- CATEGORIES ----------
-        Object cat = FileHandling.loadData("categories.dat");
-
-        if (cat != null){
-            if (cat instanceof ArrayList<?>) {
-                categories = (ArrayList<ShopCategory>) cat;
-            }
-        }
-
-        System.out.println("All data loaded successfully!");
-    }
-
-    catch (ClassCastException e) {
-        System.out.println("Type casting error while loading data: " + e.getMessage());
-    }
-
-    catch (Exception e) {
-        System.out.println("Error while loading data: " + e.getMessage());
-    }
+    System.out.println(
+            "All data loaded successfully!"
+    );
 }
 }
