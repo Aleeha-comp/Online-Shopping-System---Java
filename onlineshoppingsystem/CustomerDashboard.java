@@ -231,3 +231,202 @@ public class CustomerDashboard extends JFrame {
         }
     }
 
+    private void openCheckout() {
+
+        if (customer.getCart().getItems().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Cart is empty");
+            return;
+        }
+
+        JDialog dialog = new JDialog(this, "Checkout", true);
+        dialog.setSize(400, 430);
+        dialog.setLocationRelativeTo(this);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        dialog.add(panel);
+
+        JLabel streetLabel = new JLabel("Street:");
+        streetLabel.setBounds(40, 30, 100, 25);
+        panel.add(streetLabel);
+
+        JTextField streetField = new JTextField();
+        streetField.setBounds(160, 30, 180, 25);
+        panel.add(streetField);
+
+        JLabel cityLabel = new JLabel("City:");
+        cityLabel.setBounds(40, 70, 100, 25);
+        panel.add(cityLabel);
+
+        JTextField cityField = new JTextField();
+        cityField.setBounds(160, 70, 180, 25);
+        panel.add(cityField);
+
+        JLabel provinceLabel = new JLabel("Province:");
+        provinceLabel.setBounds(40, 110, 100, 25);
+        panel.add(provinceLabel);
+
+        JTextField provinceField = new JTextField();
+        provinceField.setBounds(160, 110, 180, 25);
+        panel.add(provinceField);
+
+        JLabel countryLabel = new JLabel("Country:");
+        countryLabel.setBounds(40, 150, 100, 25);
+        panel.add(countryLabel);
+
+        JTextField countryField = new JTextField();
+        countryField.setBounds(160, 150, 180, 25);
+        panel.add(countryField);
+
+        JLabel zipLabel = new JLabel("Zip Code:");
+        zipLabel.setBounds(40, 190, 100, 25);
+        panel.add(zipLabel);
+
+        JTextField zipField = new JTextField();
+        zipField.setBounds(160, 190, 180, 25);
+        panel.add(zipField);
+
+        JLabel paymentLabel = new JLabel("Payment:");
+        paymentLabel.setBounds(40, 230, 100, 25);
+        panel.add(paymentLabel);
+
+        JComboBox<String> paymentBox = new JComboBox<>();
+        paymentBox.addItem("Cash on Delivery");
+        paymentBox.addItem("Credit Card");
+        paymentBox.addItem("EasyPaisa");
+        paymentBox.setBounds(160, 230, 180, 25);
+        panel.add(paymentBox);
+
+        JLabel extraLabel = new JLabel("Card/Phone:");
+        extraLabel.setBounds(40, 270, 100, 25);
+        panel.add(extraLabel);
+
+        JTextField extraField = new JTextField();
+        extraField.setBounds(160, 270, 180, 25);
+        panel.add(extraField);
+
+        JLabel cvvLabel = new JLabel("CVV:");
+        cvvLabel.setBounds(40, 310, 100, 25);
+        panel.add(cvvLabel);
+
+        JTextField cvvField = new JTextField();
+        cvvField.setBounds(160, 310, 180, 25);
+        panel.add(cvvField);
+
+        JButton placeButton = new JButton("Place Order");
+        placeButton.setBounds(120, 350, 150, 30);
+        panel.add(placeButton);
+
+        placeButton.addActionListener(e -> {
+
+            if (streetField.getText().isEmpty()
+                    || cityField.getText().isEmpty()
+                    || provinceField.getText().isEmpty()
+                    || countryField.getText().isEmpty()
+                    || zipField.getText().isEmpty()) {
+
+                JOptionPane.showMessageDialog(dialog, "Fill address fields");
+                return;
+            }
+
+            Address address = new Address(
+                    streetField.getText(),
+                    cityField.getText(),
+                    provinceField.getText(),
+                    countryField.getText(),
+                    zipField.getText(),
+                    "Home"
+            );
+
+            customer.addAddress(address);
+
+            double total = customer.getCart().getTotal();
+
+            Payment payment;
+
+            int paymentId = customer.getOrders().size() + 1;
+
+            String method = (String) paymentBox.getSelectedItem();
+
+            if (method.equals("Credit Card")) {
+
+                String cardNo = extraField.getText();
+                String cvv = cvvField.getText();
+
+                payment = new CreditCardPayment(paymentId, total, cardNo, cvv);
+
+            } else if (method.equals("EasyPaisa")) {
+
+                String phone = extraField.getText();
+
+                payment = new EasyPaisaPayment(paymentId, total, phone);
+
+            } else {
+
+                payment = new CashOnDelivery(paymentId, total, true);
+            }
+
+            Order order = customer.placeOrder(address, payment);
+
+            if (order != null) {
+
+                JOptionPane.showMessageDialog(
+                        dialog,
+                        "Order placed successfully\nTotal: Rs. " + order.getTotal()
+                );
+
+                dialog.dispose();
+
+                refreshCart();
+
+                loadProducts((String) categoryBox.getSelectedItem());
+
+                Main.saveAllData();
+            }
+        });
+
+        dialog.setVisible(true);
+    }
+
+    private Product findProductById(int id) {
+
+        for (Shop shop : Main.getShops()) {
+
+            for (Product p : shop.getProducts()) {
+
+                if (p.getProductId() == id) {
+                    return p;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Product findProductByName(String name) {
+
+        for (Shop shop : Main.getShops()) {
+
+            for (Product p : shop.getProducts()) {
+
+                if (p.getName().equals(name)) {
+                    return p;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private void logout() {
+
+        Main.saveAllData();
+
+        Main.logout();
+
+        new LoginFrame().setVisible(true);
+
+        dispose();
+    }
+}
+
