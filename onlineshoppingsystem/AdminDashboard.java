@@ -3,10 +3,10 @@ package onlineshoppingsystem;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminDashboard extends JFrame {
-
-    private Admin admin;
 
     private JTable shopTable;
     private DefaultTableModel shopModel;
@@ -15,8 +15,6 @@ public class AdminDashboard extends JFrame {
     private DefaultTableModel userModel;
 
     public AdminDashboard() {
-
-        admin = Main.getCurrentAdmin();
 
         setTitle("Admin Dashboard");
         setSize(700, 500);
@@ -71,9 +69,11 @@ public class AdminDashboard extends JFrame {
         JButton refreshUserButton = new JButton("Refresh Users");
         JButton removeUserButton = new JButton("Remove User");
         JButton logoutButton = new JButton("Logout");
+        JButton sellerDetailsButton = new JButton("Seller Details");
 
         userButtonPanel.add(refreshUserButton);
         userButtonPanel.add(removeUserButton);
+        userButtonPanel.add(sellerDetailsButton);
         userButtonPanel.add(logoutButton);
 
         userPanel.add(userButtonPanel, BorderLayout.SOUTH);
@@ -88,6 +88,8 @@ public class AdminDashboard extends JFrame {
         refreshUserButton.addActionListener(e -> loadUsers());
 
         removeUserButton.addActionListener(e -> removeUser());
+
+        sellerDetailsButton.addActionListener(e -> viewSellerDetails());
 
         logoutButton.addActionListener(e -> logout());
 
@@ -137,17 +139,6 @@ public class AdminDashboard extends JFrame {
                     "Seller"
             });
         }
-
-        // Admins
-        for (Admin admin : Main.getAdmins()) {
-
-            userModel.addRow(new Object[]{
-                    admin.getUserId(),
-                    admin.getName(),
-                    admin.getEmail(),
-                    "Admin"
-            });
-        }
     }
 
     // ================= REMOVE SHOP ================
@@ -172,8 +163,7 @@ public class AdminDashboard extends JFrame {
             Seller owner = findOwnerOfShop(shop);
 
             if (owner != null) {
-
-                Main.getSellers().remove(owner);
+                owner.getShop().getProducts().clear();
             }
 
             // Remove shop from main shop list
@@ -207,7 +197,6 @@ public class AdminDashboard extends JFrame {
 
         // Column 2 contains email
         String userEmail = (String) userModel.getValueAt(row, 2);
-
         String userRole = (String) userModel.getValueAt(row, 3);
 
         // Remove Customer
@@ -240,7 +229,6 @@ public class AdminDashboard extends JFrame {
             }
         }
 
-        // Admin cannot be removed , protecting admin
         else if ("Admin".equals(userRole)) {
 
             JOptionPane.showMessageDialog(
@@ -248,6 +236,11 @@ public class AdminDashboard extends JFrame {
                     "Admin cannot be removed"
             );
 
+            return;
+        }
+
+        else {
+            JOptionPane.showMessageDialog(this, "Invalid user role");
             return;
         }
 
@@ -321,7 +314,86 @@ public class AdminDashboard extends JFrame {
         return null;
     }
 
-    // ================= LOGOUT ================
+    // ================= VIEW SELLER DETAILS ================
+    private void viewSellerDetails() {
+        int row = userTable.getSelectedRow();
+
+        if (row == -1) {
+
+            JOptionPane.showMessageDialog(this, "Please select a user");
+            return;
+        }
+
+        String userRole = (String) userModel.getValueAt(row, 3);
+
+        if (!userRole.equals("Seller")){
+
+            JOptionPane.showMessageDialog(this, "Please select a seller");
+            return;
+        }
+
+        String userEmail = (String) userModel.getValueAt(row, 2);
+
+        Seller seller = findSellerByEmail(userEmail);
+
+        if (seller == null) {
+            JOptionPane.showMessageDialog(this, "Seller not found");
+            return;
+        }
+
+        String details = "";
+
+        // Adding sellers details
+        details += "Seller Name: " + seller.getName() + "\n";
+
+        // Adding shop details
+        if (seller.getShop() != null) {
+            details += "Shop Name: " + seller.getShop().getShopName() + "\n";
+        }
+
+        List<Product> products = new ArrayList<>();
+
+        if (seller.getShop() != null) {
+            products = seller.getShop().getProducts();
+        }
+
+        // Adding sales details
+        details += "Total Products: " + products.size() + "\n";
+        details += "Total Sales: $" + seller.getTotalSales() + "\n";
+
+        // Adding product details
+        details += "Products:\n";
+        
+        if (products.size() == 0) {
+            details += "No Products\n";
+        } 
+        
+        else {
+            for (Product product : products) {
+                details += "- " + product.getName() + "\n";
+            }
+        }
+
+        // adding customer details
+        details += "\nCustomers:\n";
+
+        List<Customer> customers = seller.getCustomers();
+
+        if (customers.size() == 0) {
+            details += "No Customers\n";
+        } 
+        
+        else {
+            for (Customer customer : customers) {
+                details += "- " + customer.getName() + "\n";
+            }
+        }
+
+        JOptionPane.showMessageDialog(this, details);
+    }
+    
+
+    // ================= LOGOUT ======
     private void logout() {
 
         Main.saveAllData();
