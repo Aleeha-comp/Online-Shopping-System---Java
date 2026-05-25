@@ -26,7 +26,9 @@ public class Main {
         // Save before exiting
         saveAllData();
 
-         new LoginFrame().setVisible(true);
+        admins.add(new Admin("A1","System Admin","admin@gmail.com","123"));
+        
+        new LoginFrame().setVisible(true);
     }
 
     // Mutators (Setters)
