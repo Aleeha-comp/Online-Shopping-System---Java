@@ -319,84 +319,127 @@ public class CustomerDashboard extends JFrame {
             );
         }
 
-        // ================= REMOVE FROM CART =================
+                  // ================= REMOVE FROM CART =================
 
-            private void removeFromCart() {
+                private void removeFromCart() {
 
-                if (customer.getCart()
-                        .getItems()
-                        .isEmpty()) {
+                        if (customer.getCart()
+                                .getItems()
+                                .isEmpty()) {
 
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Cart is empty"
-                    );
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "Cart is empty"
+                            );
 
-                    return;
-                }
+                            return;
+                        }
 
-                String[] productNames =
-                        new String[
+                        String[] productNames =
+                                new String[
+                                        customer.getCart()
+                                                .getItems()
+                                                .size()
+                                ];
+
+                        for (int i = 0;
+                            i < customer.getCart().getItems().size();
+                            i++) {
+
+                            CartItem item =
+                                    customer.getCart().getItems().get(i);
+
+                            productNames[i] =
+                                    item.getProduct().getName()
+                                    + " x "
+                                    + item.getQuantity();
+                        }
+
+                        String selected =
+                                (String) JOptionPane.showInputDialog(
+                                        this,
+                                        "Select product to remove:",
+                                        "Remove Item",
+                                        JOptionPane.INFORMATION_MESSAGE,
+                                        null,
+                                        productNames,
+                                        productNames[0]
+                                );
+
+                        if (selected == null) {
+                            return;
+                        }
+
+                        CartItem selectedItem = null;
+
+                        for (CartItem item :
+                                customer.getCart().getItems()) {
+
+                            String text =
+                                    item.getProduct().getName()
+                                    + " x "
+                                    + item.getQuantity();
+
+                            if (text.equals(selected)) {
+
+                                selectedItem = item;
+
+                                break;
+                            }
+                        }
+
+                        if (selectedItem != null) {
+
+                            String qtyText =
+                                    JOptionPane.showInputDialog(
+                                            this,
+                                            "Enter quantity to remove:"
+                                    );
+
+                            if (qtyText == null || qtyText.isEmpty()) {
+                                return;
+                            }
+
+                            int removeQty =
+                                    Integer.parseInt(qtyText);
+
+                            int currentQty =
+                                    selectedItem.getQuantity();
+
+                            if (removeQty <= 0) {
+
+                                JOptionPane.showMessageDialog(
+                                        this,
+                                        "Quantity must be greater than 0"
+                                );
+
+                                return;
+                            }
+
+                            if (removeQty >= currentQty) {
+
                                 customer.getCart()
-                                        .getItems()
-                                        .size()
-                        ];
+                                        .removeItem(
+                                                selectedItem.getProduct()
+                                        );
 
-                for (int i = 0;
-                    i < customer.getCart().getItems().size();
-                    i++) {
+                            } else {
 
-                    CartItem item =
-                            customer.getCart().getItems().get(i);
+                                selectedItem.updateQty(
+                                        currentQty - removeQty
+                                );
+                            }
 
-                    productNames[i] =
-                            item.getProduct().getName();
-                }
+                            updateTotal();
 
-                String selected =
-                        (String) JOptionPane.showInputDialog(
-                                this,
-                                "Select product to remove:",
-                                "Remove Item",
-                                JOptionPane.INFORMATION_MESSAGE,
-                                null,
-                                productNames,
-                                productNames[0]
-                        );
-
-                if (selected == null) {
-                    return;
-                }
-
-                Product productToRemove = null;
-
-                for (CartItem item :
-                        customer.getCart().getItems()) {
-
-                    if (item.getProduct()
-                            .getName()
-                            .equals(selected)) {
-
-                        productToRemove =
-                                item.getProduct();
-
-                        break;
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "Cart updated"
+                            );
+                        }
                     }
-                }
 
-                if (productToRemove != null) {
 
-                    customer.getCart()
-                            .removeItem(productToRemove);
-
-                    updateTotal();
-
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Product removed from cart"
-                    );
-                }
-            }
                 // ================= CHECKOUT =================
 
                 private void checkout() {
