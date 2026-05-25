@@ -26,7 +26,7 @@ public class Main {
         // Save before exiting
         saveAllData();
 
-        admins.add(new Admin("A1","System Admin","admin@gmail.com","123"));
+        admins.add(new Admin("A1","System Admin","admin@gmail.com","123456"));
         
         new LoginFrame().setVisible(true);
     }
