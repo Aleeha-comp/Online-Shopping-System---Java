@@ -384,11 +384,17 @@ public static boolean emailExists(String email) {
     techShop.addProduct(p1);
     techShop.addProduct(p2);
     techShop.addProduct(p3);
+    techShop.addProduct(p8);
+    techShop.addProduct(p9);
 
     styleShop.addProduct(p4);
     styleShop.addProduct(p5);
+    styleShop.addProduct(p10);
+
 
     bookShop.addProduct(p6);
+    bookShop.addProduct(p7);
+    
 
 // Sample users
     customers.add(new Customer("C001", "Ali Khan", "ali@gmail.com", "1234"));
