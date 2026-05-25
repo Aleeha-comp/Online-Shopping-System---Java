@@ -163,12 +163,7 @@ public class AdminDashboard extends JFrame {
             Seller owner = findOwnerOfShop(shop);
 
             if (owner != null) {
-<<<<<<< HEAD
                 owner.getShop().getProducts().clear();
-=======
-
-                Main.getSellers().remove(owner);
->>>>>>> 78c7320c8cbd2eeb74aae4b8bb79a3db5ebc6381
             }
 
             // Remove shop from main shop list
@@ -200,13 +195,8 @@ public class AdminDashboard extends JFrame {
             return;
         }
 
-<<<<<<< HEAD
-        String userEmail = (String) userModel.getValueAt(row, 2);
-=======
         // Column 2 contains email
         String userEmail = (String) userModel.getValueAt(row, 2);
-
->>>>>>> 78c7320c8cbd2eeb74aae4b8bb79a3db5ebc6381
         String userRole = (String) userModel.getValueAt(row, 3);
 
         // Remove Customer
@@ -239,13 +229,6 @@ public class AdminDashboard extends JFrame {
             }
         }
 
-<<<<<<< HEAD
-        } 
-
-        else {
-            JOptionPane.showMessageDialog(this, "Invalid user role");
-=======
-        // Admin cannot be removed , protecting admin
         else if ("Admin".equals(userRole)) {
 
             JOptionPane.showMessageDialog(
@@ -253,7 +236,11 @@ public class AdminDashboard extends JFrame {
                     "Admin cannot be removed"
             );
 
->>>>>>> 78c7320c8cbd2eeb74aae4b8bb79a3db5ebc6381
+            return;
+        }
+
+        else {
+            JOptionPane.showMessageDialog(this, "Invalid user role");
             return;
         }
 
