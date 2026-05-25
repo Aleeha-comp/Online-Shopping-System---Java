@@ -443,6 +443,8 @@ public class CustomerDashboard extends JFrame {
 
         panel.add(paymentBox);
 
+        /* 
+
         JLabel extraLabel =
                 new JLabel("Card/Phone:");
 
@@ -470,6 +472,89 @@ public class CustomerDashboard extends JFrame {
         cvvField.setBounds(160, 320, 180, 25);
 
         panel.add(cvvField);
+         */
+        JLabel extraLabel =
+        new JLabel();
+
+extraLabel.setBounds(40, 290, 100, 25);
+
+panel.add(extraLabel);
+
+JTextField extraField =
+        new JTextField();
+
+extraField.setBounds(160, 290, 180, 25);
+
+panel.add(extraField);
+
+JLabel cvvLabel =
+        new JLabel("CVV:");
+
+cvvLabel.setBounds(40, 320, 100, 25);
+
+panel.add(cvvLabel);
+
+JTextField cvvField =
+        new JTextField();
+
+cvvField.setBounds(160, 320, 180, 25);
+
+panel.add(cvvField);
+
+// ================= HIDE FIELDS INITIALLY =================
+
+extraLabel.setVisible(false);
+
+extraField.setVisible(false);
+
+cvvLabel.setVisible(false);
+
+cvvField.setVisible(false);
+
+// ================= PAYMENT TYPE CHANGE =================
+
+paymentBox.addActionListener(e -> {
+
+    String method =
+            (String) paymentBox.getSelectedItem();
+
+    if (method.equals("Credit Card")) {
+
+        extraLabel.setText("Card Number:");
+
+        extraLabel.setVisible(true);
+
+        extraField.setVisible(true);
+
+        cvvLabel.setVisible(true);
+
+        cvvField.setVisible(true);
+    }
+
+    else if (method.equals("EasyPaisa")) {
+
+        extraLabel.setText("Phone Number:");
+
+        extraLabel.setVisible(true);
+
+        extraField.setVisible(true);
+
+        cvvLabel.setVisible(false);
+
+        cvvField.setVisible(false);
+    }
+
+    else {
+
+        extraLabel.setVisible(false);
+
+        extraField.setVisible(false);
+
+        cvvLabel.setVisible(false);
+
+        cvvField.setVisible(false);
+    }
+});
 
         JButton placeButton =
                 new JButton("Place Order");
