@@ -376,6 +376,10 @@ public static boolean emailExists(String email) {
     Product p4 = new Product("Casual T-Shirt", 900, 30, styleShop);
     Product p5 = new Product("Denim Jeans", 2500, 15, styleShop);
     Product p6 = new Product("Clean Code Book", 1800, 20, bookShop);
+    Product p7 = new Product("Java Programming Book", 2200, 15, bookShop);
+    Product p8 = new Product("Noise Cancelling Headphones", 15000, 10, techShop);
+    Product p9 = new Product("Smartwatch", 12000, 20, techShop);
+    Product p10 = new Product("Graphic T-Shirt", 1200, 25, styleShop);
 
     techShop.addProduct(p1);
     techShop.addProduct(p2);
