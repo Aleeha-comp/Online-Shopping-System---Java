@@ -233,10 +233,10 @@ public class RegisterFrame extends JFrame {
 
         else {
 
-            String shopName =
-                    shopField.getText();
+        String shopName =
+                shopField.getText();
 
-            if (shopName.isEmpty()) {
+        if (shopName.isEmpty()) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -244,51 +244,67 @@ public class RegisterFrame extends JFrame {
                 );
 
                 return;
-            }
+        }
 
-            // ================= GET CATEGORY =================
+        // ================= SHOP NAME EXISTS CHECK =================
 
-            String selectedCategory =
-                    (String) categoryBox.getSelectedItem();
+        for (Shop existingShop : Main.getShops()) {
 
-            // ================= FIND CATEGORY =================
+                if (existingShop.getShopName()
+                        .equalsIgnoreCase(shopName)) {
 
-            ShopCategory category =
-                    findCategoryByName(selectedCategory);
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Shop name already exists"
+                );
 
-            // ================= CREATE IF NOT EXISTS =================
+                return;
+                }
+        }
 
-            if (category == null) {
+        // ================= GET CATEGORY =================
+
+        String selectedCategory =
+                (String) categoryBox.getSelectedItem();
+
+        // ================= FIND CATEGORY =================
+
+        ShopCategory category =
+                findCategoryByName(selectedCategory);
+
+        // ================= CREATE IF NOT EXISTS =================
+
+        if (category == null) {
 
                 category =
                         new ShopCategory(selectedCategory);
 
                 Main.addCategory(category);
-            }
+        }
 
-            String userId =
-                    "S" + (Main.getSellers().size() + 1);
+        String userId =
+                "S" + (Main.getSellers().size() + 1);
 
-            Shop shop =
-                    new Shop(
-                            Main.getShops().size() + 1,
-                            shopName,
-                            category
-                    );
+        Shop shop =
+                new Shop(
+                        Main.getShops().size() + 1,
+                        shopName,
+                        category
+                );
 
-            Seller seller =
-                    new Seller(
-                            userId,
-                            name,
-                            email,
-                            password,
-                            shop,
-                            0.0
-                    );
+        Seller seller =
+                new Seller(
+                        userId,
+                        name,
+                        email,
+                        password,
+                        shop,
+                        0.0
+                );
 
-            Main.addSeller(seller);
+        Main.addSeller(seller);
 
-            Main.addShop(shop);
+        Main.addShop(shop);
         }
 
         // ================= SAVE DATA =================

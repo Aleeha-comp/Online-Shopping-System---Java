@@ -143,6 +143,10 @@ public class SellerDashboard extends JFrame {
 
         seller.addProduct(product);
 
+        if (!Main.getShops().contains(seller.getShop())) {
+            Main.getShops().add(seller.getShop());
+        }
+
         Main.saveAllData();
         loadProducts();
 
