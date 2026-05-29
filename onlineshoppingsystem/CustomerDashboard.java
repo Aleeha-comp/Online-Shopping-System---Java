@@ -138,104 +138,151 @@ public class CustomerDashboard extends JFrame {
 
     // ================= SHOW PRODUCTS =================
 
-    private void showProducts(String selectedCategory) {
+        private void showProducts(String selectedCategory) {
 
         productPanel.removeAll();
 
         for (Shop shop : Main.getShops()) {
 
-            String categoryName =
-                    shop.getShopCategory().getName();
+                String categoryName =
+                        shop.getShopCategory().getName();
 
-            if (selectedCategory.equals("All")
-                    || selectedCategory.equals(categoryName)) {
+                if (selectedCategory.equals("All")
+                        || selectedCategory.equals(categoryName)) {
 
                 for (Product product : shop.getProducts()) {
 
-                    JPanel card = new JPanel();
+                        JPanel card = new JPanel();
 
-                    card.setLayout(
-                            new GridLayout(6, 1)
-                    );
+                        card.setLayout(
+                                new GridLayout(7, 1) // ⬅ increased from 6 to 7
+                        );
 
-                    card.setBorder(
-                            BorderFactory.createLineBorder(
-                                    Color.GRAY,
-                                    1
-                            )
-                    );
+                        card.setBorder(
+                                BorderFactory.createLineBorder(
+                                        Color.GRAY,
+                                        1
+                                )
+                        );
 
-                    JLabel nameLabel =
-                            new JLabel(
-                                    product.getName(),
-                                    JLabel.CENTER
-                            );
+                        JLabel nameLabel =
+                                new JLabel(
+                                        product.getName(),
+                                        JLabel.CENTER
+                                );
 
-                    nameLabel.setFont(
-                            new Font(
-                                    "Arial",
-                                    Font.BOLD,
-                                    16
-                            )
-                    );
+                        nameLabel.setFont(
+                                new Font(
+                                        "Arial",
+                                        Font.BOLD,
+                                        16
+                                )
+                        );
 
-                    JLabel categoryLabel =
-                            new JLabel(
-                                    "Category: "
-                                            + categoryName,
-                                    JLabel.CENTER
-                            );
+                        JLabel categoryLabel =
+                                new JLabel(
+                                        "Category: "
+                                                + categoryName,
+                                        JLabel.CENTER
+                                );
 
-                    JLabel shopLabel =
-                            new JLabel(
-                                    "Shop: "
-                                            + shop.getShopName(),
-                                    JLabel.CENTER
-                            );
+                        JLabel shopLabel =
+                                new JLabel(
+                                        "Shop: "
+                                                + shop.getShopName(),
+                                        JLabel.CENTER
+                                );
 
-                    JLabel priceLabel =
-                            new JLabel(
-                                    "Rs. "
-                                            + product.getDiscountedPrice(),
-                                    JLabel.CENTER
-                            );
+                        JLabel priceLabel =
+                                new JLabel(
+                                        "Rs. "
+                                                + product.getDiscountedPrice(),
+                                        JLabel.CENTER
+                                );
 
-                    JLabel stockLabel =
-                            new JLabel(
-                                    "Stock: "
-                                            + product.getStock(),
-                                    JLabel.CENTER
-                            );
+                        JLabel stockLabel =
+                                new JLabel(
+                                        "Stock: "
+                                                + product.getStock(),
+                                        JLabel.CENTER
+                                );
 
-                    JButton addButton =
-                            new JButton("Add To Cart");
+                        // ✅ NEW: Rating label added
+                        JLabel ratingLabel =
+                                new JLabel(
+                                        "Rating: "
+                                                + String.format("%.1f", product.getAverageRating())
+                                                + "/5",
+                                        JLabel.CENTER
+                                );
 
-                    card.add(nameLabel);
+                        JButton addButton =
+                                new JButton("Add To Cart");
+                        JButton rateButton = new JButton("Rate Product");
 
-                    card.add(categoryLabel);
+                        card.add(nameLabel);
+                        card.add(categoryLabel);
+                        card.add(shopLabel);
+                        card.add(priceLabel);
+                        card.add(stockLabel);
 
-                    card.add(shopLabel);
+                        // ✅ add rating BEFORE button
+                        card.add(ratingLabel);
+                        card.add(addButton);
+                        card.add(rateButton);
 
-                    card.add(priceLabel);
+                        addButton.addActionListener(
+                                e -> addToCart(product)
+                        );
 
-                    card.add(stockLabel);
+                        rateButton.addActionListener(e -> {
 
-                    card.add(addButton);
+    String input = JOptionPane.showInputDialog(
+            this,
+            "Enter rating (1 to 5):"
+    );
 
-                    addButton.addActionListener(
-                            e -> addToCart(product)
-                    );
+    if (input == null || input.isEmpty()) return;
 
-                    productPanel.add(card);
+    try {
+        int rating = Integer.parseInt(input);
+
+        if (rating < 1 || rating > 5) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Rating must be between 1 and 5"
+            );
+            return;
+        }
+
+        // ⭐ IMPORTANT: update product rating
+        product.addRating(rating);
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Thank you for your rating!"
+        );
+
+        // refresh UI to update average rating label
+        showProducts(selectedCategory);
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Please enter a valid number"
+        );
+    }
+});
+                        productPanel.add(card);
                 }
-            }
+                }
         }
 
         productPanel.revalidate();
-
         productPanel.repaint();
-    }
+        }
 
+        
     // ================= ADD TO CART =================
 
     private void addToCart(Product product) {
@@ -854,4 +901,7 @@ public class CustomerDashboard extends JFrame {
 
         dispose();
     }
+
+
+     
 }
