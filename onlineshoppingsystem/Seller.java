@@ -40,7 +40,7 @@ public class Seller extends User implements Serializable {
         }
     }
     
-    // Accessors (Getters)
+    // Getters
     public Shop getShop() {
         return shop;
     }
@@ -57,7 +57,7 @@ public class Seller extends User implements Serializable {
         return customers;
     }
 
-    // Mutators (Setters)
+    // Setters
     public void setRating(double rating) {
 
         try {

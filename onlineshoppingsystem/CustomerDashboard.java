@@ -256,7 +256,7 @@ public class CustomerDashboard extends JFrame {
         }
 
         // ⭐ IMPORTANT: update product rating
-        product.addRating(rating);
+        product.addRating( rating, customer.getName());
 
         JOptionPane.showMessageDialog(
                 this,

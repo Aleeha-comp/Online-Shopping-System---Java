@@ -170,6 +170,18 @@ public class Product implements Serializable, Discountable {
         return (double) sum / reviews.size();
     }
 
+    // ================= ADD RATING =================
+
+    public void addRating(int rating, String reviewerName) {
+
+        Review review = new Review( reviews.size() + 1,
+                rating,
+                reviewerName
+        );
+
+        reviews.add(review);
+    }
+
     // ================= DETAILS =================
 
     public String getDetails() {
