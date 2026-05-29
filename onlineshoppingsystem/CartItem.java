@@ -1,7 +1,6 @@
 package onlineshoppingsystem;
 
 import java.io.*;
-import java.util.*;
 
 public class CartItem implements Serializable{
     //data members
