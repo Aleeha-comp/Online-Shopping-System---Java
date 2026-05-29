@@ -97,6 +97,7 @@ public class CustomerDashboard extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
 
+
         // ----------------- BUTTON ACTIONS ----------------
 
         viewCartButton.addActionListener( e -> viewCart());
@@ -107,14 +108,15 @@ public class CustomerDashboard extends JFrame {
 
         logoutButton.addActionListener( e -> logout());
 
-        // ================= LOAD PRODUCTS =================
+
+        // ------------------ LOAD PRODUCTS ----------------
 
         showProducts("All");
 
         updateTotal();
     }
 
-    // ================= SHOW PRODUCTS =================
+    // ------------------ SHOW PRODUCTS ----------------
 
         private void showProducts(String selectedCategory) {
 
@@ -122,68 +124,29 @@ public class CustomerDashboard extends JFrame {
 
         for (Shop shop : Main.getShops()) {
 
-                String categoryName =
-                        shop.getShopCategory().getName();
+                String categoryName = shop.getShopCategory().getName();
 
-                if (selectedCategory.equals("All")
-                        || selectedCategory.equals(categoryName)) {
+                if (selectedCategory.equals("All") || selectedCategory.equals(categoryName)) {
 
                 for (Product product : shop.getProducts()) {
 
                         JPanel card = new JPanel();
 
-                        card.setLayout(
-                                new GridLayout(7, 1) // ⬅ increased from 6 to 7
-                        );
+                        card.setLayout(new GridLayout(7, 1));  //  increased from 6 to 7
 
-                        card.setBorder(
-                                BorderFactory.createLineBorder(
-                                        Color.GRAY,
-                                        1
-                                )
-                        );
+                        card.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
-                        JLabel nameLabel =
-                                new JLabel(
-                                        product.getName(),
-                                        JLabel.CENTER
-                                );
+                        JLabel nameLabel = new JLabel(product.getName(), JLabel.CENTER);
 
-                        nameLabel.setFont(
-                                new Font(
-                                        "Arial",
-                                        Font.BOLD,
-                                        16
-                                )
-                        );
+                        nameLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-                        JLabel categoryLabel =
-                                new JLabel(
-                                        "Category: "
-                                                + categoryName,
-                                        JLabel.CENTER
-                                );
+                        JLabel categoryLabel = new JLabel( "Category: " + categoryName, JLabel.CENTER );
 
-                        JLabel shopLabel =
-                                new JLabel(
-                                        "Shop: "
-                                                + shop.getShopName(),
-                                        JLabel.CENTER
-                                );
+                        JLabel shopLabel = new JLabel( "Shop: " + shop.getShopName(), JLabel.CENTER );
 
-                        JLabel priceLabel =
-                                new JLabel(
-                                        "Rs. "
-                                                + product.getDiscountedPrice(),
-                                        JLabel.CENTER
-                                );
+                        JLabel priceLabel = new JLabel( "Rs. " + product.getDiscountedPrice(), JLabel.CENTER );
 
-                        JLabel stockLabel =
-                                new JLabel(
-                                        "Stock: "
-                                                + product.getStock(),
-                                        JLabel.CENTER
-                                );
+                        JLabel stockLabel =new JLabel("Stock: " + product.getStock(), JLabel.CENTER );
 
                         //  NEW: Rating label added
                         JLabel ratingLabel =
