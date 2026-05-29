@@ -63,7 +63,7 @@ public class CustomerDashboard extends JFrame {
 
         productPanel = new JPanel();
 
-        productPanel.setLayout(new GridLayout(0, 2, 15, 15));
+        productPanel.setLayout(new GridLayout(0, 2, 10, 10));
 
         JScrollPane scrollPane = new JScrollPane(productPanel);
 
@@ -132,13 +132,13 @@ public class CustomerDashboard extends JFrame {
 
                         JPanel card = new JPanel();
 
-                        card.setLayout(new GridLayout(7, 1));  //  increased from 6 to 7
+                        card.setLayout(new GridLayout(7, 1));  
 
                         card.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
                         JLabel nameLabel = new JLabel(product.getName(), JLabel.CENTER);
 
-                        nameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                        nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
                         JLabel categoryLabel = new JLabel( "Category: " + categoryName, JLabel.CENTER );
 
@@ -165,8 +165,12 @@ public class CustomerDashboard extends JFrame {
 
                         //  add rating BEFORE button
                         card.add(ratingLabel);
-                        card.add(addButton);
-                        card.add(rateButton);
+                        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
+
+                        buttonPanel.add(addButton);
+                        buttonPanel.add(rateButton);
+
+                        card.add(buttonPanel);
 
                         addButton.addActionListener( e -> addToCart(product));
 
