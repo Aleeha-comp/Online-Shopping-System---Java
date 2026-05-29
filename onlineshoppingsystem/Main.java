@@ -36,10 +36,7 @@ public class Main {
     try {
 
         if (c == null) {
-
-            throw new Exception(
-                    "Customer cannot be null."
-            );
+            throw new Exception("Customer cannot be null.");
         }
 
         customers.add(c);
@@ -47,16 +44,11 @@ public class Main {
         // SAVE IMMEDIATELY
         saveAllData();
 
-        System.out.println(
-                "Customer added successfully!"
-        );
+        System.out.println("Customer added successfully!");
     }
 
     catch (Exception e) {
-
-        System.out.println(
-                "Error: " + e.getMessage()
-        );
+        System.out.println("Error: " + e.getMessage());
     }
 }
 
@@ -64,12 +56,8 @@ public class Main {
     public static void addSeller(Seller s) {
 
     try {
-
         if (s == null) {
-
-            throw new Exception(
-                    "Seller cannot be null."
-            );
+            throw new Exception("Seller cannot be null.");
         }
 
         sellers.add(s);
@@ -77,16 +65,11 @@ public class Main {
         // SAVE IMMEDIATELY
         saveAllData();
 
-        System.out.println(
-                "Seller added successfully!"
-        );
+        System.out.println("Seller added successfully!");
     }
 
     catch (Exception e) {
-
-        System.out.println(
-                "Error: " + e.getMessage()
-        );
+        System.out.println("Error: " + e.getMessage());
     }
 }
 
@@ -111,12 +94,8 @@ public class Main {
     public static void addShop(Shop s) {
 
     try {
-
         if (s == null) {
-
-            throw new Exception(
-                    "Shop cannot be null."
-            );
+            throw new Exception("Shop cannot be null.");
         }
 
         shops.add(s);
@@ -130,10 +109,7 @@ public class Main {
     }
 
     catch (Exception e) {
-
-        System.out.println(
-                "Error: " + e.getMessage()
-        );
+        System.out.println("Error: " + e.getMessage());
     }
 }
 
@@ -430,16 +406,19 @@ public static boolean emailExists(String email) {
     Product p15 = new Product("Bracelet", 2000, 15, accessoryShop);
     Product p16 = new Product("Earrings", 1500, 25, accessoryShop);
     Product p17 = new Product("Handbag", 5000, 10, accessoryShop);
+    Product p18 = new Product("Baggy jeans ", 4500, 25, styleShop);
 
     techShop.addProduct(p1);
     techShop.addProduct(p2);
     techShop.addProduct(p3);
-    techShop.addProduct(p8);
-    techShop.addProduct(p9);
+    techShop.addProduct(p10);
+    techShop.addProduct(p11);
 
     styleShop.addProduct(p4);
     styleShop.addProduct(p5);
-    styleShop.addProduct(p10);
+    styleShop.addProduct(p12);
+    styleShop.addProduct(p18);
+
 
 
     bookShop.addProduct(p6);
