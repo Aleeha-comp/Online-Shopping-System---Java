@@ -405,10 +405,12 @@ public static boolean emailExists(String email) {
     Shop techShop  = new Shop(1, "TechZone", electronics);
     Shop styleShop = new Shop(2, "StyleHub", clothes);
     Shop bookShop  = new Shop(3, "BookCorner", books);
+    Shop accessoryShop = new Shop(4, "AccessoryHub", accessories);
 
     shops.add(techShop);
     shops.add(styleShop);
     shops.add(bookShop);
+    shops.add(accessoryShop);
 
     // Products
     Product p1 = new Product("Samsung A55", 85000, 10, techShop);
@@ -417,10 +419,17 @@ public static boolean emailExists(String email) {
     Product p4 = new Product("Casual T-Shirt", 900, 30, styleShop);
     Product p5 = new Product("Denim Jeans", 2500, 15, styleShop);
     Product p6 = new Product("Clean Code Book", 1800, 20, bookShop);
-    Product p7 = new Product("Java Programming Book", 2200, 15, bookShop);
-    Product p8 = new Product("Noise Cancelling Headphones", 15000, 10, techShop);
-    Product p9 = new Product("Smartwatch", 12000, 20, techShop);
-    Product p10 = new Product("Graphic T-Shirt", 1200, 25, styleShop);
+    Product p7 = new Product("Hunger Games", 700, 20, bookShop);
+    Product p8 = new Product("Java Programming Book", 2200, 15, bookShop);
+    Product p9 = new Product("Atomic Habits", 1100, 10, bookShop);
+    Product p10 = new Product("Noise Cancelling Headphones", 15000, 10, techShop);
+    Product p11 = new Product("Smartwatch", 12000, 20, techShop);
+    Product p12 = new Product("Graphic T-Shirt", 1200, 25, styleShop);
+    Product p13 = new Product("Necklace", 2500, 30, accessoryShop);
+    Product p14 = new Product("Sunglasses", 3000, 20, accessoryShop);
+    Product p15 = new Product("Bracelet", 2000, 15, accessoryShop);
+    Product p16 = new Product("Earrings", 1500, 25, accessoryShop);
+    Product p17 = new Product("Handbag", 5000, 10, accessoryShop);
 
     techShop.addProduct(p1);
     techShop.addProduct(p2);
@@ -435,7 +444,15 @@ public static boolean emailExists(String email) {
 
     bookShop.addProduct(p6);
     bookShop.addProduct(p7);
-    
+    bookShop.addProduct(p8);
+    bookShop.addProduct(p9);
+
+    accessoryShop.addProduct(p13);
+    accessoryShop.addProduct(p14);
+    accessoryShop.addProduct(p15);
+    accessoryShop.addProduct(p16);
+    accessoryShop.addProduct(p17);
+
 
 // Sample users
     customers.add(new Customer("C001", "Ali Khan", "ali@gmail.com", "1234"));
