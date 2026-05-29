@@ -1,7 +1,6 @@
 package onlineshoppingsystem;
 
 import java.io.*;
-import java.util.*;
 
 public class Review implements Serializable{
     private int reviewId;
