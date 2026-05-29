@@ -244,6 +244,18 @@ public class RegisterFrame extends JFrame {
                 );
 
                 return;
+                // CHECK DUPLICATE SHOP NAME
+        for (Shop shop : Main.getShops()) {
+
+                if (shop.getShopName().equalsIgnoreCase(shopName)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Shop name already exists"
+                );
+
+                return;
+                }
             }
 
             // ================= GET CATEGORY =================
