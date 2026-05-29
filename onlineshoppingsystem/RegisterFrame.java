@@ -113,7 +113,11 @@ public class RegisterFrame extends JFrame {
 
         categoryBox.addItem("Books");
 
-        categoryBox.setBounds(150, 240, 150, 25);
+        categoryBox.addItem("Makeup");
+
+        categoryBox.addItem("Accessories");
+
+        categoryBox.setBounds(150, 240, 170, 25);
 
         panel.add(categoryBox);
 

@@ -392,12 +392,14 @@ public static boolean emailExists(String email) {
 
     // Categories
     ShopCategory electronics = new ShopCategory("Electronics");
-    ShopCategory clothes     = new ShopCategory("Clothes");
-    ShopCategory books       = new ShopCategory("Books");
+    ShopCategory clothes = new ShopCategory("Clothes");
+    ShopCategory books = new ShopCategory("Books");
+    ShopCategory accessories = new ShopCategory("Accessories");
 
     categories.add(electronics);
     categories.add(clothes);
     categories.add(books);
+    categories.add(accessories);
 
     // Shops
     Shop techShop  = new Shop(1, "TechZone", electronics);

@@ -24,7 +24,7 @@ public class CustomerDashboard extends JFrame {
 
         setLayout(new BorderLayout());
 
-        // ================= TITLE =================
+        // ------------------ TITLE ------------------
 
         JLabel title = new JLabel(
                 "Online Shopping System",
@@ -39,6 +39,10 @@ public class CustomerDashboard extends JFrame {
 
         JPanel categoryPanel = new JPanel();
 
+        categoryPanel.setLayout(new GridLayout(0, 1, 5, 5));
+
+        categoryPanel.setPreferredSize(new Dimension(140, 0));
+
         JButton allButton = new JButton("All");
 
         categoryPanel.add(allButton);
@@ -51,14 +55,10 @@ public class CustomerDashboard extends JFrame {
 
             categoryPanel.add(button);
 
-            button.addActionListener(e ->
-                    showProducts(category.getName())
-            );
+            button.addActionListener(e -> showProducts(category.getName()));
         }
-
-        allButton.addActionListener(e ->
-                showProducts("All")
-        );
+        
+        allButton.addActionListener(e -> showProducts("All"));
 
         add(categoryPanel, BorderLayout.WEST);
 
@@ -207,7 +207,7 @@ public class CustomerDashboard extends JFrame {
                                         JLabel.CENTER
                                 );
 
-                        // ✅ NEW: Rating label added
+                        //  NEW: Rating label added
                         JLabel ratingLabel =
                                 new JLabel(
                                         "Rating: "
@@ -226,7 +226,7 @@ public class CustomerDashboard extends JFrame {
                         card.add(priceLabel);
                         card.add(stockLabel);
 
-                        // ✅ add rating BEFORE button
+                        //  add rating BEFORE button
                         card.add(ratingLabel);
                         card.add(addButton);
                         card.add(rateButton);
