@@ -523,24 +523,17 @@ public static void saveAllData() {
 }
 
 // Loading Data from file
-@SuppressWarnings("unchecked")
-
 public static void loadAllData() {
 
-    customers =
-            FileHandling.loadData("customers.dat");
+    customers = FileHandling.loadData("customers.dat");
 
-    sellers =
-            FileHandling.loadData("sellers.dat");
+    sellers = FileHandling.loadData("sellers.dat");
 
-    admins =
-            FileHandling.loadData("admins.dat");
+    admins = FileHandling.loadData("admins.dat");
 
-    shops =
-            FileHandling.loadData("shops.dat");
+    shops = FileHandling.loadData("shops.dat");
 
-    categories =
-            FileHandling.loadData("categories.dat");
+    categories = FileHandling.loadData("categories.dat");
 
     System.out.println(
             "All data loaded successfully!"
