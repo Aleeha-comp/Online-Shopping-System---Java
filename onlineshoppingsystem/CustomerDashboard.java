@@ -148,17 +148,12 @@ public class CustomerDashboard extends JFrame {
 
                         JLabel stockLabel =new JLabel("Stock: " + product.getStock(), JLabel.CENTER );
 
-                        //  NEW: Rating label added
-                        JLabel ratingLabel =
-                                new JLabel(
-                                        "Rating: "
-                                                + String.format("%.1f", product.getAverageRating())
-                                                + "/5",
-                                        JLabel.CENTER
-                                );
 
-                        JButton addButton =
-                                new JButton("Add To Cart");
+                        //  NEW: Rating label added
+                        JLabel ratingLabel = new JLabel( "Rating: " + String.format("%.1f", product.getAverageRating()) + "/5", JLabel.CENTER );
+
+                        JButton addButton = new JButton("Add To Cart");
+
                         JButton rateButton = new JButton("Rate Product");
 
                         card.add(nameLabel);
@@ -167,36 +162,28 @@ public class CustomerDashboard extends JFrame {
                         card.add(priceLabel);
                         card.add(stockLabel);
 
+
                         //  add rating BEFORE button
                         card.add(ratingLabel);
                         card.add(addButton);
                         card.add(rateButton);
 
-                        addButton.addActionListener(
-                                e -> addToCart(product)
-                        );
+                        addButton.addActionListener( e -> addToCart(product));
 
-                        rateButton.addActionListener(e -> {
+                        rateButton.addActionListener(e -> { String input = JOptionPane.showInputDialog( this, "Enter rating (1 to 5):" );
 
-    String input = JOptionPane.showInputDialog(
-            this,
-            "Enter rating (1 to 5):"
-    );
+                        if (input == null || input.isEmpty()) return;
 
-    if (input == null || input.isEmpty()) return;
+                        try {
+                        int rating = Integer.parseInt(input);
 
-    try {
-        int rating = Integer.parseInt(input);
+                        if (rating < 1 || rating > 5) {
+                        JOptionPane.showMessageDialog( this, "Rating must be between 1 and 5" );
+                        
+                        return;
+                 }
 
-        if (rating < 1 || rating > 5) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Rating must be between 1 and 5"
-            );
-            return;
-        }
-
-        // ⭐ IMPORTANT: update product rating
+        //  IMPORTANT: update product rating
         product.addRating( rating, customer.getName());
 
         JOptionPane.showMessageDialog(
