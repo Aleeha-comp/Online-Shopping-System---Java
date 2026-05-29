@@ -139,18 +139,6 @@ public class AdminDashboard extends JFrame {
                     "Seller"
             });
         }
-    
-
-     // Admins
-        for (Admin admin : Main.getAdmins()) {
-
-            userModel.addRow(new Object[]{
-                    admin.getUserId(),
-                    admin.getName(),
-                    admin.getEmail(),
-                    "Admin"
-            });
-        }
     }
 
     // ================= REMOVE SHOP ================
