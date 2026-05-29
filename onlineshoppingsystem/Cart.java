@@ -3,37 +3,51 @@ package onlineshoppingsystem;
 import java.io.*;
 import java.util.*;
 
-public class Cart implements Serializable{
+public class Cart implements Serializable {
+
     private int cartId;
+    private String customerId;   // NEW
     private List<CartItem> items;
 
-    //constructors
+    // Default constructor
     public Cart() {
         this.cartId = 1;
+        this.customerId = "";
         this.items = new ArrayList<>();
     }
 
-    public Cart(int cartId) {
+    // Parameterized constructor
+    public Cart(int cartId, String customerId) {
+
         if (cartId <= 0) {
             throw new IllegalArgumentException("Cart ID must be greater than 0.");
         }
+
+        if (customerId == null || customerId.isEmpty()) {
+            throw new IllegalArgumentException("Customer ID cannot be empty.");
+        }
+
         this.cartId = cartId;
+        this.customerId = customerId;
         this.items = new ArrayList<>();
     }
 
-
-    //getters 
-    public List<CartItem> getItems() {
-        return items;
-    }
-
+    // GETTERS
     public int getCartId() {
         return cartId;
     }
 
+    public String getCustomerId() {
+        return customerId;
+    }
 
-    //adding item in the cart
+    public List<CartItem> getItems() {
+        return items;
+    }
+
+    // adding item in the cart
     public void addItem(Product product, int qty) {
+
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null.");
         }
@@ -43,26 +57,31 @@ public class Cart implements Serializable{
         }
 
         for (CartItem item : items) {
+
             if (item.getProduct().getProductId() == product.getProductId()) {
+
                 item.updateQty(item.getQuantity() + qty);
 
-                System.out.println("Updated quantity for: " + product.getName() );
+                System.out.println("Updated quantity for: " + product.getName());
+
                 return;
             }
         }
 
         items.add(new CartItem(product, qty));
 
-        System.out.println( "Added to cart: " + product.getName() + " x" + qty);
+        System.out.println("Added to cart: " + product.getName() + " x" + qty);
     }
 
     public void removeItem(Product product) {
+
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null.");
         }
 
         boolean removed = items.removeIf(
-            item -> item.getProduct().getProductId()== product.getProductId());
+            item -> item.getProduct().getProductId() == product.getProductId()
+        );
 
         if (!removed) {
             throw new IllegalArgumentException("Product not found in cart.");
@@ -72,6 +91,7 @@ public class Cart implements Serializable{
     }
 
     public double getTotal() {
+
         double total = 0;
 
         for (CartItem item : items) {
@@ -89,11 +109,12 @@ public class Cart implements Serializable{
 
         System.out.println("--- Cart Contents ---");
 
+        System.out.println("Customer ID: " + customerId);
+
         for (CartItem item : items) {
-             System.out.println("  " + item);
+            System.out.println(item);
         }
 
-        System.out.println("  Total: Rs." + String.format("%.2f", getTotal()));
+        System.out.println("Total: Rs." + String.format("%.2f", getTotal()));
     }
-    
 }
