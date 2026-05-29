@@ -26,16 +26,13 @@ public class CustomerDashboard extends JFrame {
 
         // ------------------ TITLE ------------------
 
-        JLabel title = new JLabel(
-                "Online Shopping System",
-                JLabel.CENTER
-        );
+        JLabel title = new JLabel("Online Shopping System", JLabel.CENTER);
 
         title.setFont(new Font("Arial", Font.BOLD, 24));
 
         add(title, BorderLayout.NORTH);
 
-        // ================= CATEGORY PANEL =================
+        // ------------------ CATEGORY PANEL -------------
 
         JPanel categoryPanel = new JPanel();
 
@@ -50,7 +47,7 @@ public class CustomerDashboard extends JFrame {
         for (ShopCategory category : Main.getCategories()) {
 
             JButton button = new JButton(
-                    category.getName()
+                 category.getName()
             );
 
             categoryPanel.add(button);
@@ -62,42 +59,31 @@ public class CustomerDashboard extends JFrame {
 
         add(categoryPanel, BorderLayout.WEST);
 
-        // ================= PRODUCT PANEL =================
+        // ------------------ PRODUCT PANEL -------------------
 
         productPanel = new JPanel();
 
-        productPanel.setLayout(
-                new GridLayout(0, 2, 15, 15)
-        );
+        productPanel.setLayout(new GridLayout(0, 2, 15, 15));
 
-        JScrollPane scrollPane =
-                new JScrollPane(productPanel);
+        JScrollPane scrollPane = new JScrollPane(productPanel);
 
         add(scrollPane, BorderLayout.CENTER);
 
-        // ================= BOTTOM PANEL =================
+        // ------------------ BOTTOM PANEL -------------------
 
         JPanel bottomPanel = new JPanel();
 
-        totalLabel = new JLabel(
-                "Cart Total: Rs. 0.00"
-        );
+        totalLabel = new JLabel("Cart Total: Rs. 0.00");
 
-        totalLabel.setFont(
-                new Font("Arial", Font.BOLD, 16)
-        );
+        totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-        JButton viewCartButton =
-                new JButton("View Cart");
-        
-        JButton removeButton =
-                new JButton("Remove Item");        
+        JButton viewCartButton = new JButton("View Cart");
 
-        JButton checkoutButton =
-                new JButton("Checkout");
+        JButton removeButton = new JButton("Remove Item");
 
-        JButton logoutButton =
-                new JButton("Logout");
+        JButton checkoutButton = new JButton("Checkout");
+
+        JButton logoutButton = new JButton("Logout");
 
         bottomPanel.add(totalLabel);
 
@@ -111,23 +97,15 @@ public class CustomerDashboard extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // ================= BUTTON ACTIONS =================
+        // ----------------- BUTTON ACTIONS ----------------
 
-        viewCartButton.addActionListener(
-                e -> viewCart()
-        );
+        viewCartButton.addActionListener( e -> viewCart());
 
-        removeButton.addActionListener(
-                e -> removeFromCart()
-        );
+        removeButton.addActionListener( e -> removeFromCart());
 
-        checkoutButton.addActionListener(
-                e -> checkout()
-        );
+        checkoutButton.addActionListener( e -> checkout());
 
-        logoutButton.addActionListener(
-                e -> logout()
-        );
+        logoutButton.addActionListener( e -> logout());
 
         // ================= LOAD PRODUCTS =================
 
