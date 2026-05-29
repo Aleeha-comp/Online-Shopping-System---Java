@@ -233,10 +233,10 @@ public class RegisterFrame extends JFrame {
 
         else {
 
-            String shopName =
-                    shopField.getText();
+        String shopName =
+                shopField.getText();
 
-            if (shopName.isEmpty()) {
+        if (shopName.isEmpty()) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -244,10 +244,14 @@ public class RegisterFrame extends JFrame {
                 );
 
                 return;
-                // CHECK DUPLICATE SHOP NAME
-        for (Shop shop : Main.getShops()) {
+        }
 
-                if (shop.getShopName().equalsIgnoreCase(shopName)) {
+        // ================= SHOP NAME EXISTS CHECK =================
+
+        for (Shop existingShop : Main.getShops()) {
+
+                if (existingShop.getShopName()
+                        .equalsIgnoreCase(shopName)) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -256,51 +260,51 @@ public class RegisterFrame extends JFrame {
 
                 return;
                 }
-            }
+        }
 
-            // ================= GET CATEGORY =================
+        // ================= GET CATEGORY =================
 
-            String selectedCategory =
-                    (String) categoryBox.getSelectedItem();
+        String selectedCategory =
+                (String) categoryBox.getSelectedItem();
 
-            // ================= FIND CATEGORY =================
+        // ================= FIND CATEGORY =================
 
-            ShopCategory category =
-                    findCategoryByName(selectedCategory);
+        ShopCategory category =
+                findCategoryByName(selectedCategory);
 
-            // ================= CREATE IF NOT EXISTS =================
+        // ================= CREATE IF NOT EXISTS =================
 
-            if (category == null) {
+        if (category == null) {
 
                 category =
                         new ShopCategory(selectedCategory);
 
                 Main.addCategory(category);
-            }
+        }
 
-            String userId =
-                    "S" + (Main.getSellers().size() + 1);
+        String userId =
+                "S" + (Main.getSellers().size() + 1);
 
-            Shop shop =
-                    new Shop(
-                            Main.getShops().size() + 1,
-                            shopName,
-                            category
-                    );
+        Shop shop =
+                new Shop(
+                        Main.getShops().size() + 1,
+                        shopName,
+                        category
+                );
 
-            Seller seller =
-                    new Seller(
-                            userId,
-                            name,
-                            email,
-                            password,
-                            shop,
-                            0.0
-                    );
+        Seller seller =
+                new Seller(
+                        userId,
+                        name,
+                        email,
+                        password,
+                        shop,
+                        0.0
+                );
 
-            Main.addSeller(seller);
+        Main.addSeller(seller);
 
-            Main.addShop(shop);
+        Main.addShop(shop);
         }
 
         // ================= SAVE DATA =================
