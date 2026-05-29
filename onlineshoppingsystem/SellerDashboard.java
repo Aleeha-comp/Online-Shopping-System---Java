@@ -81,32 +81,66 @@ public class SellerDashboard extends JFrame {
 
     private void addProduct() {
 
-        if (seller.getShop() == null) {
-            JOptionPane.showMessageDialog(this, "You do not have a shop.");
+    if (seller.getShop() == null) {
+        JOptionPane.showMessageDialog(this, "You do not have a shop.");
+        return;
+    }
+
+    String name = JOptionPane.showInputDialog(this, "Enter product name:");
+
+    if (name == null) {
+        return;
+    }
+
+    if (name.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Product name cannot be empty.");
+        return;
+    }
+
+    String priceText = JOptionPane.showInputDialog(this, "Enter price:");
+
+    if (priceText == null) {
+        return;
+    }
+
+    String stockText = JOptionPane.showInputDialog(this, "Enter stock:");
+
+    if (stockText == null) {
+        return;
+    }
+
+    try {
+        if (priceText.trim().isEmpty() || stockText.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Price and stock cannot be empty.");
             return;
         }
 
-        String name = JOptionPane.showInputDialog(this, "Enter product name:");
-        String priceText = JOptionPane.showInputDialog(this, "Enter price:");
-        String stockText = JOptionPane.showInputDialog(this, "Enter stock:");
+        double price = Double.parseDouble(priceText.trim());
+        int stock = Integer.parseInt(stockText.trim());
 
-        if (name == null || priceText == null || stockText == null) {
+        if (price <= 0) {
+            JOptionPane.showMessageDialog(this, "Price must be greater than 0.");
             return;
         }
 
-        double price = Double.parseDouble(priceText);
-        int stock = Integer.parseInt(stockText);
+        if (stock < 0) {
+            JOptionPane.showMessageDialog(this, "Stock cannot be negative.");
+            return;
+        }
 
-        Product product = new Product(name, price, stock, seller.getShop());
+        Product product = new Product(name.trim(), price, stock, seller.getShop());
 
         seller.addProduct(product);
 
         Main.saveAllData();
-
         loadProducts();
 
         JOptionPane.showMessageDialog(this, "Product added successfully.");
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Invalid input. Price and stock must be numbers.");
     }
+}
 
     private void removeProduct() {
 
@@ -133,28 +167,43 @@ public class SellerDashboard extends JFrame {
         }
     }
 
-    private void applyDiscount() {
+  private void applyDiscount() {
 
-        int row = table.getSelectedRow();
+    int row = table.getSelectedRow();
 
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Select a product first.");
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Select a product first.");
+        return;
+    }
+
+    String name = (String) model.getValueAt(row, 1);
+
+    Product product = findProductByName(name);
+
+    if (product != null) {
+
+        String discountText = JOptionPane.showInputDialog(this, "Enter discount percentage:" );
+
+        if (discountText == null) {
             return;
         }
 
-        String name = (String) model.getValueAt(row, 1);
+        try {
 
-        Product product = findProductByName(name);
-
-        if (product != null) {
-
-            String discountText = JOptionPane.showInputDialog(this, "Enter discount percentage:");
-
-            if (discountText == null) {
+            if (discountText.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Discount cannot be empty.");
                 return;
             }
 
-            double discount = Double.parseDouble(discountText);
+            double discount = Double.parseDouble(
+                    discountText.trim()
+            );
+
+            if (discount < 0 || discount > 100) {
+                JOptionPane.showMessageDialog(this, "Discount must be between 0 and 100."
+                );
+                return;
+            }
 
             product.applyDiscount(discount);
 
@@ -162,9 +211,15 @@ public class SellerDashboard extends JFrame {
 
             loadProducts();
 
-            JOptionPane.showMessageDialog(this, "Discount applied.");
+            JOptionPane.showMessageDialog( this, "Discount applied." );
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog( this, "Invalid input. Enter numbers only."
+            );
         }
     }
+}
 
     private Product findProductByName(String name) {
 
