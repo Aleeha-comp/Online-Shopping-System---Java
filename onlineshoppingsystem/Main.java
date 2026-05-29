@@ -355,6 +355,8 @@ public static Admin findAdmin(String email, String password) {
     return null;
 }
 
+
+
 public static boolean emailExists(String email) {
 
     if (email == null || email.trim().isEmpty()) {
@@ -538,7 +540,7 @@ public static void loadAllData() {
             FileHandling.loadData("shops.dat");
 
     categories =
-            FileHandling.loadData("categories.dat");       
+            FileHandling.loadData("categories.dat");
 
     System.out.println(
             "All data loaded successfully!"
