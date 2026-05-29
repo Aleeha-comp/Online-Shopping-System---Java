@@ -15,7 +15,7 @@ public class SellerDashboard extends JFrame {
         seller = Main.getCurrentSeller();
 
         setTitle("Seller Dashboard");
-        setSize(650, 450);
+        setSize(750, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
