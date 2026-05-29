@@ -1,27 +1,31 @@
 package onlineshoppingsystem;
-import java.io.Serializable;
 
-// Product class implements Discountable interface
-public class Product implements Serializable, Discountable{
+import java.io.Serializable;
+import java.util.*;
+
+public class Product implements Serializable, Discountable {
 
     private int productId;
 
     private String name;
 
     private double price;
+
     private int stock;
 
-    private Shop shop;                    // Association
+    private Shop shop;
 
     private double discountPct;
 
-    // Automatic ID generator
+    private List<Review> reviews;
+
     private static int idCounter = 1;
 
     // Constructor
-    public Product(String name,double price,int stock,Shop shop) {
+    public Product(String name, double price, int stock, Shop shop) {
 
-          try {
+        try {
+
             if (name == null || name.trim().isEmpty()) {
                 throw new IllegalArgumentException("Product name cannot be empty!");
             }
@@ -38,116 +42,159 @@ public class Product implements Serializable, Discountable{
                 throw new NullPointerException("Shop cannot be null!");
             }
 
-        this.productId = idCounter++;
+            this.productId = idCounter++;
+            this.name = name;
+            this.price = price;
+            this.stock = stock;
+            this.shop = shop;
+            this.discountPct = 0.0;
+            this.reviews = new ArrayList<>();
 
-        this.name = name;
-
-        this.price = price;
-        this.stock = stock;
-
-        this.shop = shop;
-        this.discountPct = 0.0;
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    // Apply discount
+    // ================= DISCOUNT =================
+
     @Override
     public void applyDiscount(double percentage) {
-         try {
+
+        try {
+
             if (percentage < 0 || percentage > 100) {
                 throw new IllegalArgumentException(
-                    "Discount must be between 0% and 100%!"
+                        "Discount must be between 0 and 100!"
                 );
             }
 
             this.discountPct = percentage;
 
-            System.out.println("Discount of " + percentage +"% applied to: " + name );
-
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    // Get discounted price
     @Override
     public double getDiscountedPrice() {
 
         return price - (price * discountPct / 100.0);
     }
 
-    // Check stock
+    // ================= STOCK =================
+
     public boolean isInStock() {
 
         return stock > 0;
     }
 
-    // Check stock for quantity
     public boolean isInStock(int qty) {
 
-       try {
+        try {
+
             if (qty <= 0) {
                 throw new IllegalArgumentException("Quantity must be greater than 0!");
             }
 
             return stock >= qty;
 
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
             return false;
         }
     }
 
-    // Reduce stock
     public void reduceStock(int qty) {
 
-            try {
+        try {
+
             if (qty <= 0) {
                 throw new IllegalArgumentException("Quantity must be greater than 0!");
             }
 
             if (qty > stock) {
-                throw new IllegalArgumentException( "Not enough stock available!");
+                throw new IllegalArgumentException("Not enough stock!");
             }
 
             stock -= qty;
 
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    // Increase stock
     public void increaseStock(int qty) {
 
-            try {
+        try {
+
             if (qty <= 0) {
                 throw new IllegalArgumentException("Quantity must be greater than 0!");
             }
 
             stock += qty;
 
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
+    // ================= REVIEWS =================
 
-    // Product details
+    public void addReview(Review review) {
+
+        if (review != null) {
+
+            reviews.add(review);
+        }
+    }
+
+    public List<Review> getReviews() {
+
+        return reviews;
+    }
+
+    public double getAverageRating() {
+
+        if (reviews.isEmpty()) {
+
+            return 0.0;
+        }
+
+        int sum = 0;
+
+        for (Review review : reviews) {
+
+            sum += review.getRating();
+        }
+
+        return (double) sum / reviews.size();
+    }
+
+    // ================= ADD RATING =================
+
+    public void addRating(int rating, String reviewerName) {
+
+        Review review = new Review( reviews.size() + 1,
+                rating,
+                reviewerName
+        );
+
+        reviews.add(review);
+    }
+
+    // ================= DETAILS =================
+
     public String getDetails() {
 
-    return "Product[" + productId + "] " + name
-        + " | Price: Rs." + String.format("%.2f", getDiscountedPrice())
-        + " | Stock: " + stock
-        + " | Shop: " + shop.getShopName();
-}
-    // Getters
+        return "Product[" + productId + "] " + name
+                + " | Price: Rs. " + String.format("%.2f", getDiscountedPrice())
+                + " | Stock: " + stock
+                + " | Shop: " + shop.getShopName()
+                + " | Rating: " + String.format("%.1f", getAverageRating()) + "/5";
+    }
+
+    // ================= GETTERS =================
+
     public int getProductId() {
 
         return productId;
@@ -157,7 +204,6 @@ public class Product implements Serializable, Discountable{
 
         return name;
     }
-
 
     public double getPrice() {
 
@@ -179,71 +225,52 @@ public class Product implements Serializable, Discountable{
         return discountPct;
     }
 
-    // Setters
+    // ================= SETTERS =================
+
     public void setName(String name) {
 
-        try {
-            if (name == null || name.trim().isEmpty()) {
-                throw new IllegalArgumentException("Product name cannot be empty!");
-            }
+        if (name != null && !name.trim().isEmpty()) {
 
             this.name = name;
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
     public void setPrice(double price) {
 
-          try {
-            if (price < 0) {
-                throw new IllegalArgumentException("Price cannot be negative!");
-            }
+        if (price >= 0) {
 
             this.price = price;
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
     public void setStock(int stock) {
 
-          try {
-            if (stock < 0) {
-                throw new IllegalArgumentException("Stock cannot be negative!");
-            }
+        if (stock >= 0) {
 
             this.stock = stock;
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
     public void setShop(Shop shop) {
 
-        try {
-            if (shop == null) {
-                throw new NullPointerException("Shop cannot be null!");
-            }
+        if (shop != null) {
 
             this.shop = shop;
-
-        } catch (NullPointerException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
-    // toString method
+    // ================= STRING =================
+
     @Override
     public String toString() {
 
         return name + " - Rs. "
-                    + String.format("%.2f", getDiscountedPrice())
-                    + (discountPct > 0
-                        ? " (" + (int) discountPct + "% off)"
-                        : "");
+                + String.format("%.2f", getDiscountedPrice())
+                + (discountPct > 0
+                ? " (" + (int) discountPct + "% off)"
+                : "")
+                + " | Rating: "
+                + String.format("%.1f", getAverageRating())
+                + "/5";
     }
 }

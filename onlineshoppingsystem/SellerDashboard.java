@@ -15,14 +15,17 @@ public class SellerDashboard extends JFrame {
         seller = Main.getCurrentSeller();
 
         setTitle("Seller Dashboard");
-        setSize(600, 400);
+        setSize(750, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JLabel heading = new JLabel("Welcome " + seller.getName());
+        heading.setFont(new Font("Arial", Font.BOLD, 22));
+        heading.setHorizontalAlignment(JLabel.CENTER);
         add(heading, BorderLayout.NORTH);
 
-        String[] columns = {"ID", "Name", "Price", "Discount", "Stock"};
+        String[] columns = {"ID", "Name", "Price", "Discount", "Stock", "Rating"};
+
         model = new DefaultTableModel(columns, 0);
         table = new JTable(model);
 
@@ -34,6 +37,11 @@ public class SellerDashboard extends JFrame {
         JButton removeButton = new JButton("Remove Product");
         JButton discountButton = new JButton("Apply Discount");
         JButton logoutButton = new JButton("Logout");
+
+        addButton.setPreferredSize(new Dimension(140, 35));
+        removeButton.setPreferredSize(new Dimension(150, 35));
+        discountButton.setPreferredSize(new Dimension(150, 35));
+        logoutButton.setPreferredSize(new Dimension(100, 35));
 
         panel.add(addButton);
         panel.add(removeButton);
@@ -59,12 +67,14 @@ public class SellerDashboard extends JFrame {
         }
 
         for (Product p : seller.getShop().getProducts()) {
+
             model.addRow(new Object[]{
                     p.getProductId(),
                     p.getName(),
                     p.getPrice(),
                     p.getDiscountPct(),
-                    p.getStock()
+                    p.getStock(),
+                    String.format("%.1f", p.getAverageRating()) + "/5"
             });
         }
     }
@@ -91,6 +101,8 @@ public class SellerDashboard extends JFrame {
 
         seller.addProduct(product);
 
+        Main.saveAllData();
+
         loadProducts();
 
         JOptionPane.showMessageDialog(this, "Product added successfully.");
@@ -110,8 +122,13 @@ public class SellerDashboard extends JFrame {
         Product product = findProductByName(name);
 
         if (product != null) {
+
             seller.removeProduct(product);
+
+            Main.saveAllData();
+
             loadProducts();
+
             JOptionPane.showMessageDialog(this, "Product removed.");
         }
     }
@@ -130,6 +147,7 @@ public class SellerDashboard extends JFrame {
         Product product = findProductByName(name);
 
         if (product != null) {
+
             String discountText = JOptionPane.showInputDialog(this, "Enter discount percentage:");
 
             if (discountText == null) {
@@ -140,6 +158,8 @@ public class SellerDashboard extends JFrame {
 
             product.applyDiscount(discount);
 
+            Main.saveAllData();
+
             loadProducts();
 
             JOptionPane.showMessageDialog(this, "Discount applied.");
@@ -148,7 +168,12 @@ public class SellerDashboard extends JFrame {
 
     private Product findProductByName(String name) {
 
+        if (seller.getShop() == null) {
+            return null;
+        }
+
         for (Product p : seller.getShop().getProducts()) {
+
             if (p.getName().equals(name)) {
                 return p;
             }
@@ -160,9 +185,11 @@ public class SellerDashboard extends JFrame {
     private void logout() {
 
         Main.saveAllData();
-        Main.setCurrentUser(null);
+
+        Main.logout();
 
         new LoginFrame().setVisible(true);
+
         dispose();
     }
 }

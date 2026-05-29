@@ -1,252 +1,824 @@
 package onlineshoppingsystem;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.io.*;
 
-public class CustomerDashboard extends JFrame implements Serializable{
+import javax.swing.*;
+import java.awt.*;
+
+public class CustomerDashboard extends JFrame {
 
     private Customer customer;
-    private JTable productTable;
-    private DefaultTableModel productModel;
 
-    private JTable cartTable;
-    private DefaultTableModel cartModel;
+    private JPanel productPanel;
+
+    private JLabel totalLabel;
 
     public CustomerDashboard() {
 
         customer = Main.getCurrentCustomer();
 
-        setTitle("Customer Dashboard");
-        setSize(700, 500);
+        setTitle("Online Shopping System");
+        setSize(900, 600);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel(new GridLayout(2, 1));
+        setLayout(new BorderLayout());
 
-        add(mainPanel);
+        // ------------------ TITLE ------------------
 
-        // ================= PRODUCTS =================
+        JLabel title = new JLabel("Online Shopping System", JLabel.CENTER);
 
-        JPanel productPanel = new JPanel(new BorderLayout());
+        title.setFont(new Font("Arial", Font.BOLD, 24));
 
-        JLabel productLabel = new JLabel("Products");
-        productPanel.add(productLabel, BorderLayout.NORTH);
+        add(title, BorderLayout.NORTH);
 
-        String[] productColumns = {
-                "ID",
-                "Name",
-                "Price",
-                "Stock"
-        };
+        // ------------------ CATEGORY PANEL -------------
 
-        productModel = new DefaultTableModel(productColumns, 0);
+        JPanel categoryPanel = new JPanel();
 
-        productTable = new JTable(productModel);
+        categoryPanel.setLayout(new GridLayout(0, 1, 5, 5));
 
-        JScrollPane productScroll = new JScrollPane(productTable);
+        categoryPanel.setPreferredSize(new Dimension(140, 0));
 
-        productPanel.add(productScroll, BorderLayout.CENTER);
+        JButton allButton = new JButton("All");
 
-        JButton addCartButton = new JButton("Add To Cart");
+        categoryPanel.add(allButton);
 
-        productPanel.add(addCartButton, BorderLayout.SOUTH);
+        for (ShopCategory category : Main.getCategories()) {
 
-        mainPanel.add(productPanel);
+            JButton button = new JButton(
+                 category.getName()
+            );
 
-        // ================= CART =================
+            categoryPanel.add(button);
 
-        JPanel cartPanel = new JPanel(new BorderLayout());
+            button.addActionListener(e -> showProducts(category.getName()));
+        }
+        
+        allButton.addActionListener(e -> showProducts("All"));
 
-        JLabel cartLabel = new JLabel("My Cart");
+        add(categoryPanel, BorderLayout.WEST);
 
-        cartPanel.add(cartLabel, BorderLayout.NORTH);
+        // ------------------ PRODUCT PANEL -------------------
 
-        String[] cartColumns = {
-                "Product",
-                "Price",
-                "Quantity"
-        };
+        productPanel = new JPanel();
 
-        cartModel = new DefaultTableModel(cartColumns, 0);
+        productPanel.setLayout(new GridLayout(0, 2, 10, 10));
 
-        cartTable = new JTable(cartModel);
+        JScrollPane scrollPane = new JScrollPane(productPanel);
 
-        JScrollPane cartScroll = new JScrollPane(cartTable);
+        add(scrollPane, BorderLayout.CENTER);
 
-        cartPanel.add(cartScroll, BorderLayout.CENTER);
+        // ------------------ BOTTOM PANEL -------------------
 
-        JPanel buttonPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
 
-        JButton removeButton = new JButton("Remove");
+        totalLabel = new JLabel("Cart Total: Rs. 0.00");
+
+        totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+        JButton viewCartButton = new JButton("View Cart");
+
+        JButton removeButton = new JButton("Remove Item");
 
         JButton checkoutButton = new JButton("Checkout");
 
         JButton logoutButton = new JButton("Logout");
 
-        buttonPanel.add(removeButton);
-        buttonPanel.add(checkoutButton);
-        buttonPanel.add(logoutButton);
+        bottomPanel.add(totalLabel);
 
-        cartPanel.add(buttonPanel, BorderLayout.SOUTH);
+        bottomPanel.add(viewCartButton);
 
-        mainPanel.add(cartPanel);
+        bottomPanel.add(removeButton);
 
-        // ================= BUTTON ACTIONS =================
+        bottomPanel.add(checkoutButton);
 
-        addCartButton.addActionListener(e -> addToCart());
+        bottomPanel.add(logoutButton);
 
-        removeButton.addActionListener(e -> removeFromCart());
+        add(bottomPanel, BorderLayout.SOUTH);
 
-        checkoutButton.addActionListener(e -> checkout());
 
-        logoutButton.addActionListener(e -> logout());
+        // ----------------- BUTTON ACTIONS ----------------
 
-        loadProducts();
+        viewCartButton.addActionListener( e -> viewCart());
+
+        removeButton.addActionListener( e -> removeFromCart());
+
+        checkoutButton.addActionListener( e -> checkout());
+
+        logoutButton.addActionListener( e -> logout());
+
+
+        // ------------------ LOAD PRODUCTS ----------------
+
+        showProducts("All");
+
+        updateTotal();
     }
 
-    // ================= LOAD PRODUCTS =================
+    // ------------------ SHOW PRODUCTS ----------------
 
-    private void loadProducts() {
+        private void showProducts(String selectedCategory) {
 
-        productModel.setRowCount(0);
+        productPanel.removeAll();
 
         for (Shop shop : Main.getShops()) {
 
-            for (Product p : shop.getProducts()) {
+                String categoryName = shop.getShopCategory().getName();
 
-                productModel.addRow(new Object[]{
-                        p.getProductId(),
-                        p.getName(),
-                        p.getPrice(),
-                        p.getStock()
-                });
-            }
-        }
-    }
+                if (selectedCategory.equals("All") || selectedCategory.equals(categoryName)) {
 
-    // ================= ADD TO CART =================
+                for (Product product : shop.getProducts()) {
 
-    private void addToCart() {
+                        JPanel card = new JPanel();
 
-        int row = productTable.getSelectedRow();
+                        card.setLayout(new GridLayout(7, 1));  
 
-        if (row == -1) {
+                        card.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
-            JOptionPane.showMessageDialog(this, "Select a product");
+                        JLabel nameLabel = new JLabel(product.getName(), JLabel.CENTER);
 
-            return;
-        }
+                        nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
-        int id = (int) productModel.getValueAt(row, 0);
+                        JLabel categoryLabel = new JLabel( "Category: " + categoryName, JLabel.CENTER );
 
-        Product product = findProductById(id);
+                        JLabel shopLabel = new JLabel( "Shop: " + shop.getShopName(), JLabel.CENTER );
 
-        String input = JOptionPane.showInputDialog(
-                this,
-                "Enter quantity"
-        );
+                        JLabel priceLabel = new JLabel( "Rs. " + product.getDiscountedPrice(), JLabel.CENTER );
 
-        int qty = Integer.parseInt(input);
+                        JLabel stockLabel =new JLabel("Stock: " + product.getStock(), JLabel.CENTER );
 
-        customer.getCart().addItem(product, qty);
 
-        refreshCart();
+                        //  NEW: Rating label added
+                        JLabel ratingLabel = new JLabel( "Rating: " + String.format("%.1f", product.getAverageRating()) + "/5", JLabel.CENTER );
 
-        JOptionPane.showMessageDialog(this, "Added To Cart");
-    }
+                        JButton addButton = new JButton("Add To Cart");
 
-     // ================= REFRESH CART =================
+                        JButton rateButton = new JButton("Rate Product");
 
-    private void refreshCart() {
+                        card.add(nameLabel);
+                        card.add(categoryLabel);
+                        card.add(shopLabel);
+                        card.add(priceLabel);
+                        card.add(stockLabel);
 
-        cartModel.setRowCount(0);
 
-        for (CartItem item : customer.getCart().getItems()) {
+                        //  add rating BEFORE button
+                        card.add(ratingLabel);
+                        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
 
-            cartModel.addRow(new Object[]{
-                    item.getProduct().getName(),
-                    item.getProduct().getPrice(),
-                    item.getQuantity()
-            });
-        }
-    }
+                        buttonPanel.add(addButton);
+                        buttonPanel.add(rateButton);
 
-    // ================= REMOVE FROM CART =================
+                        card.add(buttonPanel);
 
-    private void removeFromCart() {
+                        addButton.addActionListener( e -> addToCart(product));
 
-        int row = cartTable.getSelectedRow();
+                        rateButton.addActionListener(e -> { String input = JOptionPane.showInputDialog( this, "Enter rating (1 to 5):" );
 
-        if (row == -1) {
+                        if (input == null || input.isEmpty()) return;
 
-            JOptionPane.showMessageDialog(this, "Select item");
+                        try {
+                        int rating = Integer.parseInt(input);
 
-            return;
-        }
+                        if (rating < 1 || rating > 5) {
+                        JOptionPane.showMessageDialog( this, "Rating must be between 1 and 5" );
+                        
+                        return;
+                 }
 
-        String name = (String) cartModel.getValueAt(row, 0);
-
-        Product product = findProductByName(name);
-
-        customer.getCart().removeItem(product);
-
-        refreshCart();
-    }
-
-    // ================= CHECKOUT =================
-
-    private void checkout() {
-
-        if (customer.getCart().getItems().isEmpty()) {
-
-            JOptionPane.showMessageDialog(this, "Cart is empty");
-
-            return;
-        }
+        //  IMPORTANT: update product rating
+        product.addRating( rating, customer.getName());
 
         JOptionPane.showMessageDialog(
                 this,
-                "Order Placed Successfully"
+                "Thank you for your rating!"
         );
 
-         customer.getCart().getItems().clear();
+        // refresh UI to update average rating label
+        showProducts(selectedCategory);
 
-        refreshCart();
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Please enter a valid number"
+        );
     }
-
-    // ================= FIND PRODUCT =================
-
-    private Product findProductById(int id) {
-
-        for (Shop shop : Main.getShops()) {
-
-            for (Product p : shop.getProducts()) {
-
-                if (p.getProductId() == id) {
-
-                    return p;
+});
+                        productPanel.add(card);
                 }
-            }
+                }
         }
 
-        return null;
-    }
-
-    private Product findProductByName(String name) {
-
-        for (Shop shop : Main.getShops()) {
-
-            for (Product p : shop.getProducts()) {
-
-                if (p.getName().equals(name)) {
-
-                    return p;
-                }
-            }
+        productPanel.revalidate();
+        productPanel.repaint();
         }
 
-        return null;
+        
+    // ================= ADD TO CART =================
+
+    private void addToCart(Product product) {
+
+        String input =
+                JOptionPane.showInputDialog(
+                        this,
+                        "Enter quantity:"
+                );
+
+        if (input == null || input.isEmpty()) {
+            return;
+        }
+
+        int quantity = Integer.parseInt(input);
+
+        if (!product.isInStock(quantity)) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Not enough stock available"
+            );
+
+            return;
+        }
+
+        customer.getCart().addItem(
+                product,
+                quantity
+        );
+
+        updateTotal();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Added to cart"
+        );
+    }
+
+    // ================= VIEW CART =================
+
+        private void viewCart() {
+
+            if (customer.getCart()
+                    .getItems()
+                    .isEmpty()) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Cart is empty"
+                );
+
+                return;
+            }
+
+            String cartText = "";
+
+            for (CartItem item :
+                    customer.getCart().getItems()) {
+
+                cartText += item.getProduct().getName()
+                        + " x "
+                        + item.getQuantity()
+                        + " = Rs. "
+                        + item.getSubtotal()
+                        + "\n";
+            }
+
+            cartText +=
+                    "\n--------------------------";
+
+            cartText +=
+            "\nCart Total: Rs. "
+                    + customer.getCart().getTotal();
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    cartText,
+                    "My Cart",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
+                  // ================= REMOVE FROM CART =================
+
+                private void removeFromCart() {
+
+                        if (customer.getCart()
+                                .getItems()
+                                .isEmpty()) {
+
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "Cart is empty"
+                            );
+
+                            return;
+                        }
+
+                        String[] productNames =
+                                new String[
+                                        customer.getCart()
+                                                .getItems()
+                                                .size()
+                                ];
+
+                        for (int i = 0;
+                            i < customer.getCart().getItems().size();
+                            i++) {
+
+                            CartItem item =
+                                    customer.getCart().getItems().get(i);
+
+                            productNames[i] =
+                                    item.getProduct().getName()
+                                    + " x "
+                                    + item.getQuantity();
+                        }
+
+                        String selected =
+                                (String) JOptionPane.showInputDialog(
+                                        this,
+                                        "Select product to remove:",
+                                        "Remove Item",
+                                        JOptionPane.INFORMATION_MESSAGE,
+                                        null,
+                                        productNames,
+                                        productNames[0]
+                                );
+
+                        if (selected == null) {
+                            return;
+                        }
+
+                        CartItem selectedItem = null;
+
+                        for (CartItem item :
+                                customer.getCart().getItems()) {
+
+                            String text =
+                                    item.getProduct().getName()
+                                    + " x "
+                                    + item.getQuantity();
+
+                            if (text.equals(selected)) {
+
+                                selectedItem = item;
+
+                                break;
+                            }
+                        }
+
+                        if (selectedItem != null) {
+
+                            String qtyText =
+                                    JOptionPane.showInputDialog(
+                                            this,
+                                            "Enter quantity to remove:"
+                                    );
+
+                            if (qtyText == null || qtyText.isEmpty()) {
+                                return;
+                            }
+
+                            int removeQty =
+                                    Integer.parseInt(qtyText);
+
+                            int currentQty =
+                                    selectedItem.getQuantity();
+
+                            if (removeQty <= 0) {
+
+                                JOptionPane.showMessageDialog(
+                                        this,
+                                        "Quantity must be greater than 0"
+                                );
+
+                                return;
+                            }
+
+                            if (removeQty >= currentQty) {
+
+                                customer.getCart()
+                                        .removeItem(
+                                                selectedItem.getProduct()
+                                        );
+
+                            } else {
+
+                                selectedItem.updateQty(
+                                        currentQty - removeQty
+                                );
+                            }
+
+                            updateTotal();
+
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "Cart updated"
+                            );
+                        }
+                    }
+
+
+                // ================= CHECKOUT =================
+
+                private void checkout() {
+
+                    if (customer.getCart()
+                            .getItems()
+                            .isEmpty()) {
+
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "Cart is empty"
+                        );
+
+                        return;
+                    }
+
+                    JDialog dialog =
+                            new JDialog(
+                                    this,
+                                    "Checkout",
+                                    true
+                            );
+
+                    dialog.setSize(400, 430);
+
+                    dialog.setLocationRelativeTo(this);
+
+                    JPanel panel = new JPanel();
+
+                    panel.setLayout(null);
+
+                    dialog.add(panel);
+
+                    JLabel total =
+                            new JLabel(
+                                    "Total Bill: Rs. "
+                                            + customer.getCart().getTotal()
+                            );
+
+                    total.setBounds(120, 10, 200, 25);
+
+                    panel.add(total);
+
+                    JLabel streetLabel =
+                            new JLabel("Street:");
+
+                    streetLabel.setBounds(40, 50, 100, 25);
+
+                    panel.add(streetLabel);
+
+                    JTextField streetField =
+                            new JTextField();
+
+                    streetField.setBounds(160, 50, 180, 25);
+
+                    panel.add(streetField);
+
+                    JLabel cityLabel =
+                            new JLabel("City:");
+
+                    cityLabel.setBounds(40, 90, 100, 25);
+
+                    panel.add(cityLabel);
+
+                    JTextField cityField =
+                            new JTextField();
+
+                    cityField.setBounds(160, 90, 180, 25);
+
+                    panel.add(cityField);
+
+                    JLabel provinceLabel =
+                            new JLabel("Province:");
+
+                    provinceLabel.setBounds(40, 130, 100, 25);
+
+                    panel.add(provinceLabel);
+
+                    JTextField provinceField =
+                            new JTextField();
+
+                    provinceField.setBounds(160, 130, 180, 25);
+
+                    panel.add(provinceField);
+
+                    JLabel countryLabel =
+                            new JLabel("Country:");
+
+                    countryLabel.setBounds(40, 170, 100, 25);
+
+                    panel.add(countryLabel);
+
+                    JTextField countryField =
+                            new JTextField();
+
+                    countryField.setBounds(160, 170, 180, 25);
+
+                    panel.add(countryField);
+
+                    JLabel zipLabel =
+                            new JLabel("Zip Code:");
+
+                    zipLabel.setBounds(40, 210, 100, 25);
+
+                    panel.add(zipLabel);
+
+                    JTextField zipField =
+                            new JTextField();
+
+                    zipField.setBounds(160, 210, 180, 25);
+
+                    panel.add(zipField);
+
+                    JLabel paymentLabel =
+                            new JLabel("Payment:");
+
+                    paymentLabel.setBounds(40, 250, 100, 25);
+
+                    panel.add(paymentLabel);
+
+                    JComboBox<String> paymentBox =
+                            new JComboBox<>();
+
+                    paymentBox.addItem("Cash on Delivery");
+
+                    paymentBox.addItem("Credit Card");
+
+                    paymentBox.addItem("EasyPaisa");
+
+                    paymentBox.setBounds(160, 250, 180, 25);
+
+                    panel.add(paymentBox);
+
+                    /* 
+
+                    JLabel extraLabel =
+                            new JLabel("Card/Phone:");
+
+                    extraLabel.setBounds(40, 290, 100, 25);
+
+                    panel.add(extraLabel);
+
+                    JTextField extraField =
+                            new JTextField();
+
+                    extraField.setBounds(160, 290, 180, 25);
+
+                    panel.add(extraField);
+
+                    JLabel cvvLabel =
+                            new JLabel("CVV:");
+
+                    cvvLabel.setBounds(40, 320, 100, 25);
+
+                    panel.add(cvvLabel);
+
+                    JTextField cvvField =
+                            new JTextField();
+
+                    cvvField.setBounds(160, 320, 180, 25);
+
+                    panel.add(cvvField);
+                    */
+                    JLabel extraLabel =
+                    new JLabel();
+
+            extraLabel.setBounds(40, 290, 100, 25);
+
+            panel.add(extraLabel);
+
+            JTextField extraField =
+                    new JTextField();
+
+            extraField.setBounds(160, 290, 180, 25);
+
+            panel.add(extraField);
+
+            JLabel cvvLabel =
+                    new JLabel("CVV:");
+
+            cvvLabel.setBounds(40, 320, 100, 25);
+
+            panel.add(cvvLabel);
+
+            JTextField cvvField =
+                    new JTextField();
+
+            cvvField.setBounds(160, 320, 180, 25);
+
+            panel.add(cvvField);
+
+            // ================= HIDE FIELDS INITIALLY =================
+
+            extraLabel.setVisible(false);
+
+            extraField.setVisible(false);
+
+            cvvLabel.setVisible(false);
+
+            cvvField.setVisible(false);
+
+            // ================= PAYMENT TYPE CHANGE =================
+
+            paymentBox.addActionListener(e -> {
+
+                String method =
+                        (String) paymentBox.getSelectedItem();
+
+                if (method.equals("Credit Card")) {
+
+                    extraLabel.setText("Card Number:");
+
+                    extraLabel.setVisible(true);
+
+                    extraField.setVisible(true);
+
+                    cvvLabel.setVisible(true);
+
+                    cvvField.setVisible(true);
+                }
+
+                else if (method.equals("EasyPaisa")) {
+
+                    extraLabel.setText("Phone Number:");
+
+                    extraLabel.setVisible(true);
+
+                    extraField.setVisible(true);
+
+                    cvvLabel.setVisible(false);
+
+                    cvvField.setVisible(false);
+                }
+
+                else {
+
+                    extraLabel.setVisible(false);
+
+                    extraField.setVisible(false);
+
+                    cvvLabel.setVisible(false);
+
+                    cvvField.setVisible(false);
+                }
+            });
+
+        JButton placeButton =
+                new JButton("Place Order");
+
+        placeButton.setBounds(120, 360, 150, 30);
+
+        panel.add(placeButton);
+
+        placeButton.addActionListener(e -> {
+
+            Address address = new Address(
+                    streetField.getText(),
+                    cityField.getText(),
+                    provinceField.getText(),
+                    countryField.getText(),
+                    zipField.getText(),
+                    "Home"
+            );
+
+            customer.addAddress(address);
+
+            double amount =
+                    customer.getCart().getTotal();
+
+            int paymentId =
+                    customer.getOrders().size() + 1;
+
+            Payment payment;
+
+            String method =
+                    (String) paymentBox.getSelectedItem();
+
+            if (method.equals("Credit Card")) {
+
+                payment =
+                        new CreditCardPayment(
+                                paymentId,
+                                amount,
+                                extraField.getText(),
+                                cvvField.getText()
+                        );
+        /* 
+            } else if (method.equals("EasyPaisa")) {
+
+                payment =
+                        new EasyPaisaPayment(
+                                paymentId,
+                                amount,
+                                extraField.getText()
+                        );
+
+            } else {
+*/
+        } else if (method.equals("EasyPaisa")) {
+
+                if (amount > 50000) {
+
+                        JOptionPane.showMessageDialog(
+                                dialog,
+                        "EasyPaisa transaction cannot exceed Rs. 50,000"
+                        );
+
+                        return;
+        }
+
+    payment =
+            new EasyPaisaPayment(
+                    paymentId,
+                    amount,
+                    extraField.getText()
+            );
+
+        } else {
+
+                payment =
+                        new CashOnDelivery(
+                                paymentId,
+                                amount,
+                                true
+                        );
+            }
+
+            Order order =
+                    customer.placeOrder(
+                            address,
+                            payment
+                    );
+
+            if (order != null) {
+
+                String receipt = "========== ORDER RECEIPT ==========\n\n";
+
+                receipt += "Customer: "
+                        + customer.getName()
+                        + "\n";
+
+                receipt += "Order ID: "
+                        + order.getOrderId()
+                        + "\n\n";
+
+                receipt += "Items:\n";
+
+                for (CartItem item : order.getItems()) {
+
+                    receipt += item.getProduct().getName()
+                            + " x "
+                            + item.getQuantity()
+                            + " = Rs. "
+                            + item.getSubtotal()
+                            + "\n";
+                }
+
+                receipt += "\n----------------------------\n";
+
+                receipt += "Total Bill: Rs. "
+                        + order.getTotal()
+                        + "\n\n";
+
+                receipt += "Address:\n"
+                        + address.getFullAddress()
+                        + "\n\n";
+
+                receipt += "Payment Method: "
+                                + method
+                                + "\n";
+
+                        receipt += "Order Status: Confirmed";
+
+                        JOptionPane.showMessageDialog(
+                                dialog,
+                                receipt,
+                                "Order Receipt",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                dialog.dispose();
+
+                updateTotal();
+
+                showProducts("All");
+
+                Main.saveAllData();
+            }
+        });
+
+        dialog.setVisible(true);
+    }
+
+    // ================= UPDATE TOTAL =================
+
+    private void updateTotal() {
+
+        totalLabel.setText(
+                "Cart Total: Rs. "
+                        + customer.getCart().getTotal()
+        );
     }
 
     // ================= LOGOUT =================
@@ -255,10 +827,13 @@ public class CustomerDashboard extends JFrame implements Serializable{
 
         Main.saveAllData();
 
-        Main.setCurrentUser(null);
+        Main.logout();
 
         new LoginFrame().setVisible(true);
 
         dispose();
     }
+
+
+     
 }

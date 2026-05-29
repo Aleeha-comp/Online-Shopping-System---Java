@@ -13,54 +13,82 @@ public class Main {
     // Currently logged-in user
     private static User currentUser = null;
  
-    public static void main (String args[]){
-        
-        // Load previous data
-        loadAllData();
+    public static void main(String args[]) {
 
-        // If no data exists
-        if (shops.isEmpty()) {
-            initializeData();
-        }
-        
-        // Save before exiting
+    // LOAD SAVED DATA
+    loadAllData();
+
+    // ONLY ADD SAMPLE DATA FIRST TIME
+    if (shops.isEmpty()) {
+        initializeData();
         saveAllData();
     }
+
+    admins.add(new Admin ("A1", "System Admin", "admin@gmail.com", "1234"));
+
+    new LoginFrame().setVisible(true);
+}
 
     // Mutators (Setters)
     // Adding Customer
     public static void addCustomer(Customer c) {
 
-        try {
-            if (c == null){
-                throw new Exception("Customer cannot be null.");
-            }
+    try {
 
-            customers.add(c); 
-            System.out.println("Customer added successfully!");
+        if (c == null) {
+
+            throw new Exception(
+                    "Customer cannot be null."
+            );
         }
 
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        customers.add(c);
+
+        // SAVE IMMEDIATELY
+        saveAllData();
+
+        System.out.println(
+                "Customer added successfully!"
+        );
     }
+
+    catch (Exception e) {
+
+        System.out.println(
+                "Error: " + e.getMessage()
+        );
+    }
+}
 
     // Adding Seller
-    public static void addSeller(Seller s) { 
+    public static void addSeller(Seller s) {
 
-        try {
-            if (s == null) {
-                throw new Exception("Seller cannot be null.");
-            }
+    try {
 
-            sellers.add(s); 
-            System.out.println("Seller added successfully!");
+        if (s == null) {
+
+            throw new Exception(
+                    "Seller cannot be null."
+            );
         }
 
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        sellers.add(s);
+
+        // SAVE IMMEDIATELY
+        saveAllData();
+
+        System.out.println(
+                "Seller added successfully!"
+        );
     }
+
+    catch (Exception e) {
+
+        System.out.println(
+                "Error: " + e.getMessage()
+        );
+    }
+}
 
     // Adding Admin
     public static void addAdmin(Admin a) { 
@@ -81,20 +109,33 @@ public class Main {
 
     // Adding Shop
     public static void addShop(Shop s) {
-        
-        try {
-            if (s == null) {
-                throw new Exception("Shop cannot be null.");
-            }
 
-            shops.add(s); 
-            System.out.println("Shop added successfully!");
+    try {
+
+        if (s == null) {
+
+            throw new Exception(
+                    "Shop cannot be null."
+            );
         }
 
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        shops.add(s);
+
+        // SAVE IMMEDIATELY
+        saveAllData();
+
+        System.out.println(
+                "Shop added successfully!"
+        );
     }
+
+    catch (Exception e) {
+
+        System.out.println(
+                "Error: " + e.getMessage()
+        );
+    }
+}
 
     // Adding ShopCategory
     public static void addCategory(ShopCategory sc) { 
@@ -314,7 +355,33 @@ public static Admin findAdmin(String email, String password) {
     return null;
 }
 
+public static Shop findShopById(int id) {
 
+    for (Shop shop : shops) {
+
+        if (shop.getShopId() == id) {
+            return shop;
+        }
+    }
+
+    return null;
+}
+public static void connectSellerShops() {
+
+    for (Seller seller : sellers) {
+
+        if (seller.getShop() != null) {
+
+            Shop mainShop = findShopById(
+                    seller.getShop().getShopId()
+            );
+
+            if (mainShop != null) {
+                seller.setShop(mainShop);
+            }
+        }
+    }
+}
 
 public static boolean emailExists(String email) {
 
@@ -351,12 +418,14 @@ public static boolean emailExists(String email) {
 
     // Categories
     ShopCategory electronics = new ShopCategory("Electronics");
-    ShopCategory clothes     = new ShopCategory("Clothes");
-    ShopCategory books       = new ShopCategory("Books");
+    ShopCategory clothes = new ShopCategory("Clothes");
+    ShopCategory books = new ShopCategory("Books");
+    ShopCategory accessories = new ShopCategory("Accessories");
 
     categories.add(electronics);
     categories.add(clothes);
     categories.add(books);
+    categories.add(accessories);
 
     // Shops
     Shop techShop  = new Shop(1, "TechZone", electronics);
@@ -374,20 +443,30 @@ public static boolean emailExists(String email) {
     Product p4 = new Product("Casual T-Shirt", 900, 30, styleShop);
     Product p5 = new Product("Denim Jeans", 2500, 15, styleShop);
     Product p6 = new Product("Clean Code Book", 1800, 20, bookShop);
+    Product p7 = new Product("Java Programming Book", 2200, 15, bookShop);
+    Product p8 = new Product("Noise Cancelling Headphones", 15000, 10, techShop);
+    Product p9 = new Product("Smartwatch", 12000, 20, techShop);
+    Product p10 = new Product("Graphic T-Shirt", 1200, 25, styleShop);
 
     techShop.addProduct(p1);
     techShop.addProduct(p2);
     techShop.addProduct(p3);
+    techShop.addProduct(p8);
+    techShop.addProduct(p9);
 
     styleShop.addProduct(p4);
     styleShop.addProduct(p5);
+    styleShop.addProduct(p10);
+
 
     bookShop.addProduct(p6);
+    bookShop.addProduct(p7);
+    
 
 // Sample users
     customers.add(new Customer("C001", "Ali Khan", "ali@gmail.com", "1234"));
     customers.add(new Customer("C002", "Sara Ahmed", "sara@gmail.com", "1234"));
-    admins.add(new Admin("A001", "Admin User", "admin@shop.com", "admin123", "Management"));
+    admins.add(new Admin("A001", "Admin User", "admin@shop.com", "admin123"));
     }
 
 // ─── CLEAR ALL (used on logout) ────────────────────────────────
@@ -471,80 +550,27 @@ public static void saveAllData() {
 
 // Loading Data from file
 @SuppressWarnings("unchecked")
+
 public static void loadAllData() {
 
-    try {
+    customers =
+            FileHandling.loadData("customers.dat");
 
-        // ---------- CUSTOMER ----------
-        Object c = FileHandling.loadData("customers.dat");
+    sellers =
+            FileHandling.loadData("sellers.dat");
 
-        if (c != null){
-            if (c instanceof ArrayList<?>) {         // ? means arraylist of any type. This is called wildcard in java generics.
-                customers = (ArrayList<Customer>) c;
-            }
-        }
+    admins =
+            FileHandling.loadData("admins.dat");
 
-        else {
-            throw new Exception("Data not found in customers.dat");
-        }
-    
-        // ---------- SELLERS ----------
-        Object s = FileHandling.loadData("sellers.dat");
+    shops =
+            FileHandling.loadData("shops.dat");
 
-        if (s != null){
-            if (s instanceof ArrayList<?>) {
-                sellers = (ArrayList<Seller>) s;
-            }
-        }
+    categories =
+            FileHandling.loadData("categories.dat");
+    connectSellerShops();        
 
-        else {
-            throw new Exception("Data not found in sellers.dat");
-        }
-
-        // ---------- ADMIN ----------
-        Object a = FileHandling.loadData("admins.dat");
-
-        if (a != null){
-            if (a instanceof ArrayList<?>) {
-                admins = (ArrayList<Admin>) a;
-            }
-        }
-
-        else {
-            throw new Exception("Data not found in admins.dat");
-        }
-
-        // ---------- SHOPS ----------
-        Object sh = FileHandling.loadData("shops.dat");
-
-        if (sh != null){
-            if (sh instanceof ArrayList<?>) {
-                shops = (ArrayList<Shop>) sh;
-            }
-        }
-
-        else {
-            throw new Exception("Data not found in shops.dat");
-        }
-
-        // ---------- CATEGORIES ----------
-        Object cat = FileHandling.loadData("categories.dat");
-
-        if (cat != null){
-            if (cat instanceof ArrayList<?>) {
-                categories = (ArrayList<ShopCategory>) cat;
-            }
-        }
-
-        System.out.println("All data loaded successfully!");
-    }
-
-    catch (ClassCastException e) {
-        System.out.println("Type casting error while loading data: " + e.getMessage());
-    }
-
-    catch (Exception e) {
-        System.out.println("Error while loading data: " + e.getMessage());
-    }
+    System.out.println(
+            "All data loaded successfully!"
+    );
 }
 }

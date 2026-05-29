@@ -1,11 +1,15 @@
 package onlineshoppingsystem;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Seller extends User implements Serializable {
     
     private Shop shop;
     private double rating;
+    private double totalSales;
+
+    private ArrayList<Customer> customers;
 
     public Seller(String userId, String name, String email, String password, Shop shop, double rating) {
         super(userId, name, email, password);
@@ -23,6 +27,8 @@ public class Seller extends User implements Serializable {
 
             this.shop = shop;
             this.rating = rating;
+            this.totalSales = 0;
+            this.customers = new ArrayList<>();
         }
 
         catch (Exception e) {
@@ -34,7 +40,7 @@ public class Seller extends User implements Serializable {
         }
     }
     
-    // Accessors (Getters)
+    // Getters
     public Shop getShop() {
         return shop;
     }
@@ -43,7 +49,18 @@ public class Seller extends User implements Serializable {
         return rating;
     }
 
-    // Mutators (Setters)
+    public double getTotalSales() {
+        return totalSales;
+    }
+
+    public ArrayList<Customer> getCustomers() {
+        return customers;
+    }
+
+    // Setters
+    public void setShop(Shop shop) {
+    this.shop = shop;
+}
     public void setRating(double rating) {
 
         try {
@@ -110,6 +127,18 @@ public class Seller extends User implements Serializable {
         }
     }
 
+    // calculation total sales of the seller
+    public void addSale(double amount) {
+        totalSales += amount;
+    }
+
+    // Add customer to seller's list
+    public void addCustomer(Customer customer) {
+        if (!customers.contains(customer)) {
+            customers.add(customer);
+        }
+    }
+    
     @Override
     public String displayRole() {
         return "Seller";
