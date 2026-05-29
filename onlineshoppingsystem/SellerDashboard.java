@@ -24,7 +24,7 @@ public class SellerDashboard extends JFrame {
         heading.setHorizontalAlignment(JLabel.CENTER);
         add(heading, BorderLayout.NORTH);
 
-        String[] columns = {"ID", "Name", "Price", "Discount", "Stock"};
+        String[] columns = {"ID", "Name", "Price", "Discount", "Stock", "Rating"};
 
         model = new DefaultTableModel(columns, 0);
         table = new JTable(model);
@@ -73,7 +73,8 @@ public class SellerDashboard extends JFrame {
                     p.getName(),
                     p.getPrice(),
                     p.getDiscountPct(),
-                    p.getStock()
+                    p.getStock(),
+                    String.format("%.1f", p.getAverageRating()) + "/5"
             });
         }
     }
