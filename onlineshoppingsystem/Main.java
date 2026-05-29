@@ -355,34 +355,6 @@ public static Admin findAdmin(String email, String password) {
     return null;
 }
 
-public static Shop findShopById(int id) {
-
-    for (Shop shop : shops) {
-
-        if (shop.getShopId() == id) {
-            return shop;
-        }
-    }
-
-    return null;
-}
-public static void connectSellerShops() {
-
-    for (Seller seller : sellers) {
-
-        if (seller.getShop() != null) {
-
-            Shop mainShop = findShopById(
-                    seller.getShop().getShopId()
-            );
-
-            if (mainShop != null) {
-                seller.setShop(mainShop);
-            }
-        }
-    }
-}
-
 public static boolean emailExists(String email) {
 
     if (email == null || email.trim().isEmpty()) {
@@ -566,8 +538,7 @@ public static void loadAllData() {
             FileHandling.loadData("shops.dat");
 
     categories =
-            FileHandling.loadData("categories.dat");
-    connectSellerShops();        
+            FileHandling.loadData("categories.dat");       
 
     System.out.println(
             "All data loaded successfully!"
