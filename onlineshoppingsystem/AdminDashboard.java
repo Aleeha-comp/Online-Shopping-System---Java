@@ -163,7 +163,7 @@ public class AdminDashboard extends JFrame {
             Seller owner = findOwnerOfShop(shop);
 
             if (owner != null) {
-                owner.getShop().getProducts().clear();
+                owner.getShop().clearProducts();
             }
 
             // Remove shop from main shop list

@@ -103,6 +103,10 @@ public class Shop implements Serializable {
             System.out.println("Error: " + e.getMessage());
         }
     }
+    
+    public void clearProducts() {
+    products.clear();
+}
 
 
     // Return copy of products list

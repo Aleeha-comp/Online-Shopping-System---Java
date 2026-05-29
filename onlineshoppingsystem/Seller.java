@@ -58,6 +58,9 @@ public class Seller extends User implements Serializable {
     }
 
     // Setters
+    public void setShop(Shop shop) {
+    this.shop = shop;
+}
     public void setRating(double rating) {
 
         try {
