@@ -11,68 +11,32 @@ public abstract class User implements Serializable{
     public User(String userId, String name, String email, String password) {
 
         // User ID Validation
-        while (true) {
-            try {
-                if (userId == null || userId.isEmpty()) {
-                    throw new Exception("User ID cannot be empty");
-                }
-
-                this.userId = userId;
-                break;
-            } 
-            
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("User ID cannot be empty");
         }
+        
+        this.userId = userId;
 
         // Name Validation
-        while (true) {
-            try {
-                if (name == null || name.isEmpty()) {
-                    throw new Exception("Name cannot be empty");
-                }
-
-                this.name = name;
-                break;
-            } 
-            
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
         }
+
+        this.name = name;
 
         // Email Validation
-        while (true) {
-            try {
-                if (email == null || !email.contains("@")) {
-                    throw new Exception("Invalid Email");
-                }
-
-                this.email = email;
-                break;
-            } 
-
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("Invalid Email");
         }
+
+        this.email = email;
 
         // Password Validation
-        while (true) {
-            try {
-                if (password == null || password.length() < 4) {
-                    throw new Exception("Password must contain at least 4 characters");
-                }
-
-                this.password = password;
-                break;
-            } 
-            
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+        if (password == null || password.length() < 4) {
+            throw new IllegalArgumentException("Password must contain at least 4 characters");
         }
+
+        this.password = password;
     }
 
     // Accessors(Getters)
@@ -94,72 +58,35 @@ public abstract class User implements Serializable{
 
     // Mutators (Setters)
     public void setUserId(String userId) {
-        while (true) {
-            try {
-                if (userId == null || userId.isEmpty()) {
-                    throw new Exception("Invalid User ID");
-                }
-
-                this.userId = userId;
-                break;
-
-            } 
-            
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("Invalid User ID");
         }
+
+        this.userId = userId;
     }
 
     public void setName(String name) {
-        while (true) {
-            try {
-                if (name == null || name.isEmpty()) {
-                    throw new Exception("Invalid Name");
-                }
-
-                this.name = name;
-                break;
-            } 
-            
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Invalid Name");
         }
+
+        this.name = name;
     }
 
     public void setEmail(String email) {
-        while (true) {
-            try {
-                if (email == null || !email.contains("@")) {
-                    throw new Exception("Invalid Email");
-                }
-
-                this.email = email;
-                break;
-            } 
-            
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("Invalid Email");
         }
+
+        this.email = email;
     }
 
     public void setPassword(String password) {
-        while (true) {
-            try {
-                if (password == null || password.length() < 4) {
-                    throw new Exception("Password must contain at least 4 characters");
-                }
+        if (password == null || password.length() < 4) {
+            throw new IllegalArgumentException("Password must contain at least 4 characters");
+        }
 
                 this.password = password;
-                break;
-            } 
-            
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-        }
     }
 
     public void display() {
