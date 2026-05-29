@@ -15,7 +15,7 @@ public class Customer extends User implements Serializable {
         try {
             this.addresses = new ArrayList<>();
 
-            this.cart = new Cart();           // cart tied to customer // should not ye pass userID??????
+            this.cart = new Cart(1, userId);           // cart tied to customer // should not ye pass userID??????
             
             if (this.cart == null) {
                 throw new Exception("Cart could not be created.");
