@@ -173,85 +173,85 @@ public class RegisterFrame extends JFrame {
         );
     }
 
-    private void registerUser() {
 
-        String name = nameField.getText();
+     private void registerUser() {
 
-        String email = emailField.getText();
+    String name = nameField.getText();
 
-        String password =
-                new String(passwordField.getPassword());
+    String email = emailField.getText();
 
-        String role =
-                (String) roleBox.getSelectedItem();
+    String password =
+            new String(passwordField.getPassword());
 
-        // ================= EMPTY FIELD CHECK =================
+    String role =
+            (String) roleBox.getSelectedItem();
 
-        if (name.isEmpty()
-                || email.isEmpty()
-                || password.isEmpty()) {
+    // ================= EMPTY FIELD CHECK =================
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Fill all fields"
-            );
+    if (name.isEmpty()
+            || email.isEmpty()
+            || password.isEmpty()) {
 
-            return;
-        }
+        JOptionPane.showMessageDialog(
+                this,
+                "Fill all fields"
+        );
 
-        // ================= EMAIL ALREADY EXISTS =================
+        return;
+    }
 
-        if (Main.emailExists(email)) {
+    // ================= EMAIL EXISTS CHECK =================
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Account already exists.\nPlease login instead."
-            );
+    if (Main.emailExists(email)) {
 
-            return;
-        }
+        JOptionPane.showMessageDialog(
+                this,
+                "This email is already registered.\nPlease login instead."
+        );
 
-        // ================= CUSTOMER =================
+        return;
+    }
 
-        if (role.equals("Customer")) {
+    // ================= CUSTOMER =================
 
-            String userId =
-                    "C" + (Main.getCustomers().size() + 1);
+    if (role.equals("Customer")) {
 
-            Customer customer =
-                    new Customer(
-                            userId,
-                            name,
-                            email,
-                            password
-                    );
+        String userId =
+                "C" + (Main.getCustomers().size() + 1);
 
-            Main.addCustomer(customer);
-        }
-
-        // ================= SELLER =================
-
-        else {
-
-        String shopName =
-                shopField.getText();
-
-        if (shopName.isEmpty()) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Enter shop name"
+        Customer customer =
+                new Customer(
+                        userId,
+                        name,
+                        email,
+                        password
                 );
 
-                return;
+        Main.addCustomer(customer);
+    }
+
+    // ================= SELLER =================
+
+    else {
+
+        String shopName = shopField.getText();
+
+        // SHOP NAME EMPTY CHECK
+        if (shopName.isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Enter shop name"
+            );
+
+            return;
         }
 
-        // ================= SHOP NAME EXISTS CHECK =================
+        // DUPLICATE SHOP NAME CHECK
+        for (Shop shop : Main.getShops()) {
 
-        for (Shop existingShop : Main.getShops()) {
-
-                if (existingShop.getShopName()
-                        .equalsIgnoreCase(shopName)) {
+            if (shop.getShopName()
+                    .equalsIgnoreCase(shopName)) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -259,27 +259,23 @@ public class RegisterFrame extends JFrame {
                 );
 
                 return;
-                }
+            }
         }
 
-        // ================= GET CATEGORY =================
+        // ================= CATEGORY =================
 
         String selectedCategory =
                 (String) categoryBox.getSelectedItem();
 
-        // ================= FIND CATEGORY =================
-
         ShopCategory category =
                 findCategoryByName(selectedCategory);
 
-        // ================= CREATE IF NOT EXISTS =================
-
         if (category == null) {
 
-                category =
-                        new ShopCategory(selectedCategory);
+            category =
+                    new ShopCategory(selectedCategory);
 
-                Main.addCategory(category);
+            Main.addCategory(category);
         }
 
         String userId =
@@ -305,19 +301,20 @@ public class RegisterFrame extends JFrame {
         Main.addSeller(seller);
 
         Main.addShop(shop);
-        }
-
-        // ================= SAVE DATA =================
-
-        Main.saveAllData();
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Account Created Successfully"
-        );
-
-        dispose();
     }
+
+    // ================= SAVE =================
+
+    Main.saveAllData();
+
+    JOptionPane.showMessageDialog(
+            this,
+            "Account Created Successfully"
+    );
+
+    dispose();
+}
+
 
     // ================= FIND CATEGORY METHOD =================
 
