@@ -22,23 +22,11 @@ public class EasyPaisaPayment extends Payment {
 
     public boolean isWithinTransactionLimit() {
         if (getAmount() > TRANSACTION_LIMIT) {
-            throw new IllegalStateException("Transaction amount Rs." + getAmount() + 
-                                            " exceeds the limit of Rs." + TRANSACTION_LIMIT);
+            throw new IllegalStateException("Transaction amount Rs." + getAmount() + " exceeds the limit of Rs." + TRANSACTION_LIMIT);
         }
         return true;
     }
-
-    // ----------- Send OTP -----------
-
-    public void sendOTP() {
-    try {
-        if (isWithinTransactionLimit()) {
-            System.out.println("OTP sent to phone number: " + phoneNumber);
-        }
-    } catch (Exception e) {
-        System.out.println("OTP sending failed: " + e.getMessage());
-    }
-}
+    
 
     // ----------- Validate Phone Number -----------
 
@@ -54,13 +42,13 @@ public class EasyPaisaPayment extends Payment {
 
     // ----------- Process Payment -----------
 
-    @Override
-public void processPayment() {
+    
+    public void processPayment() {
     try {
         validatePaymentState();
 
         if (validatePhoneNumber() && isWithinTransactionLimit()) {
-            sendOTP();
+
             System.out.println("Processing EasyPaisa payment...");
             System.out.println("Payment ID   : " + getPaymentId());
             System.out.println("Amount       : Rs." + getAmount());

@@ -2,23 +2,22 @@ package onlineshoppingsystem;
 
 import java.io.*;
 import java.util.*;
-
 public class Cart implements Serializable {
 
     private int cartId;
-    private String customerId;   // NEW
+    private String customerId;
     private List<CartItem> items;
 
-    // Default constructor
+
+    // constructors
     public Cart() {
         this.cartId = 1;
         this.customerId = "";
         this.items = new ArrayList<>();
     }
 
-    // Parameterized constructor
-    public Cart(int cartId, String customerId) {
 
+    public Cart(int cartId, String customerId) {
         if (cartId <= 0) {
             throw new IllegalArgumentException("Cart ID must be greater than 0.");
         }
@@ -32,7 +31,8 @@ public class Cart implements Serializable {
         this.items = new ArrayList<>();
     }
 
-    // GETTERS
+
+    // getters
     public int getCartId() {
         return cartId;
     }
@@ -44,6 +44,7 @@ public class Cart implements Serializable {
     public List<CartItem> getItems() {
         return items;
     }
+
 
     // adding item in the cart
     public void addItem(Product product, int qty) {
@@ -73,15 +74,14 @@ public class Cart implements Serializable {
         System.out.println("Added to cart: " + product.getName() + " x" + qty);
     }
 
+    // removing item from the cart
     public void removeItem(Product product) {
-
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null.");
         }
 
         boolean removed = items.removeIf(
-            item -> item.getProduct().getProductId() == product.getProductId()
-        );
+            item -> item.getProduct().getProductId() == product.getProductId());
 
         if (!removed) {
             throw new IllegalArgumentException("Product not found in cart.");
@@ -90,10 +90,10 @@ public class Cart implements Serializable {
         System.out.println("Removed from cart: " + product.getName());
     }
 
+
+    // calculating total price of the cart
     public double getTotal() {
-
         double total = 0;
-
         for (CartItem item : items) {
             total += item.getSubtotal();
         }
@@ -101,6 +101,9 @@ public class Cart implements Serializable {
         return total;
     }
 
+
+    
+    // displaying cart details
     public void displayCart() {
 
         if (items.isEmpty()) {

@@ -106,10 +106,10 @@ public class AdminDashboard extends JFrame {
         for (Shop shop : Main.getShops()) {
 
             shopModel.addRow(new Object[]{
-                    shop.getShopId(),
-                    shop.getShopName(),
-                    shop.getShopCategory().getName(),
-                    shop.getProducts().size()
+                shop.getShopId(),
+                shop.getShopName(),
+                shop.getShopCategory().getName(),
+                shop.getProducts().size()
             });
         }
     }
@@ -122,10 +122,10 @@ public class AdminDashboard extends JFrame {
         for (Customer customer : Main.getCustomers()) {
 
             userModel.addRow(new Object[]{
-                    customer.getUserId(),
-                    customer.getName(),
-                    customer.getEmail(),
-                    "Customer"
+                customer.getUserId(),
+                customer.getName(),
+                customer.getEmail(),
+                "Customer"
             });
         }
 
@@ -133,23 +133,20 @@ public class AdminDashboard extends JFrame {
         for (Seller seller : Main.getSellers()) {
 
             userModel.addRow(new Object[]{
-                    seller.getUserId(),
-                    seller.getName(),
-                    seller.getEmail(),
-                    "Seller"
+                seller.getUserId(),
+                seller.getName(),
+                seller.getEmail(),
+                "Seller"
             });
         }
     }
 
     // ================= REMOVE SHOP ================
     private void removeShop() {
-
         int row = shopTable.getSelectedRow();
 
         if (row == -1) {
-
             JOptionPane.showMessageDialog(this, "Please select a shop");
-
             return;
         }
 
@@ -158,14 +155,14 @@ public class AdminDashboard extends JFrame {
         Shop shop = findShopByName(shopName);
 
         if (shop != null) {
-
             // Remove shop from seller also
             Seller owner = findOwnerOfShop(shop);
 
             if (owner != null) {
-                owner.getShop().getProducts().clear();
+                owner.setShop(null);
             }
 
+            shop.getShopCategory().removeShop(shop);
             // Remove shop from main shop list
             Main.getShops().remove(shop);
 
@@ -173,25 +170,18 @@ public class AdminDashboard extends JFrame {
             Main.saveAllData();
 
             loadShops();
-
             loadUsers();
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Shop removed successfully!"
-            );
+            JOptionPane.showMessageDialog(this, "Shop removed successfully!");
         }
     }
 
     // ================= REMOVE USER ================
     private void removeUser() {
-
         int row = userTable.getSelectedRow();
 
         if (row == -1) {
-
             JOptionPane.showMessageDialog(this, "Please select a user");
-
             return;
         }
 
@@ -201,18 +191,15 @@ public class AdminDashboard extends JFrame {
 
         // Remove Customer
         if ("Customer".equals(userRole)) {
-
             Customer customer = findCustomerByEmail(userEmail);
 
             if (customer != null) {
-
                 Main.getCustomers().remove(customer);
             }
         }
 
         // Remove Seller
         else if ("Seller".equals(userRole)) {
-
             Seller seller = findSellerByEmail(userEmail);
 
             if (seller != null) {
@@ -221,7 +208,6 @@ public class AdminDashboard extends JFrame {
                 Shop sellerShop = seller.getShop();
 
                 if (sellerShop != null) {
-
                     Main.getShops().remove(sellerShop);
                 }
 
@@ -231,11 +217,7 @@ public class AdminDashboard extends JFrame {
 
         else if ("Admin".equals(userRole)) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Admin cannot be removed"
-            );
-
+            JOptionPane.showMessageDialog(this, "Admin cannot be removed");
             return;
         }
 
@@ -248,22 +230,16 @@ public class AdminDashboard extends JFrame {
         Main.saveAllData();
 
         loadUsers();
-
         loadShops();
 
-        JOptionPane.showMessageDialog(
-                this,
-                "User removed successfully!"
-        );
+        JOptionPane.showMessageDialog(this, "User removed successfully!");
     }
 
     // ================= FIND SHOP BY NAME ================
     private Shop findShopByName(String name) {
-
         for (Shop shop : Main.getShops()) {
 
             if (shop.getShopName().equals(name)) {
-
                 return shop;
             }
         }
@@ -277,7 +253,6 @@ public class AdminDashboard extends JFrame {
         for (Customer customer : Main.getCustomers()) {
 
             if (customer.getEmail().equals(email)) {
-
                 return customer;
             }
         }
@@ -291,7 +266,6 @@ public class AdminDashboard extends JFrame {
         for (Seller seller : Main.getSellers()) {
 
             if (seller.getEmail().equals(email)) {
-
                 return seller;
             }
         }
@@ -304,9 +278,7 @@ public class AdminDashboard extends JFrame {
 
         for (Seller seller : Main.getSellers()) {
 
-            if (seller.getShop() != null
-                    && seller.getShop().equals(shop)) {
-
+            if (seller.getShop() != null && seller.getShop().equals(shop)) {
                 return seller;
             }
         }
@@ -319,7 +291,6 @@ public class AdminDashboard extends JFrame {
         int row = userTable.getSelectedRow();
 
         if (row == -1) {
-
             JOptionPane.showMessageDialog(this, "Please select a user");
             return;
         }
@@ -327,7 +298,6 @@ public class AdminDashboard extends JFrame {
         String userRole = (String) userModel.getValueAt(row, 3);
 
         if (!userRole.equals("Seller")){
-
             JOptionPane.showMessageDialog(this, "Please select a seller");
             return;
         }
@@ -397,11 +367,9 @@ public class AdminDashboard extends JFrame {
     private void logout() {
 
         Main.saveAllData();
-
         Main.logout();
 
         new LoginFrame().setVisible(true);
-
         dispose();
     }
 }
