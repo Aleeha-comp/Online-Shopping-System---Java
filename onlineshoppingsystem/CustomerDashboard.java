@@ -280,8 +280,7 @@ public class CustomerDashboard extends JFrame {
 
                         String[] productNames =new String[customer.getCart().getItems().size()];
 
-                        for (int i = 0;
-                            i < customer.getCart().getItems().size();i++) {
+                        for (int i = 0; i < customer.getCart().getItems().size();i++) {
 
                             CartItem item =customer.getCart().getItems().get(i);
 
@@ -313,8 +312,7 @@ public class CustomerDashboard extends JFrame {
                         }
 
                         if (selectedItem != null) {
-                            String qtyText =
-                                    JOptionPane.showInputDialog(this,"Enter quantity to remove:");
+                            String qtyText =JOptionPane.showInputDialog(this,"Enter quantity to remove:");
 
                             if (qtyText == null || qtyText.isEmpty()) {
                                 return;
@@ -324,8 +322,13 @@ public class CustomerDashboard extends JFrame {
 
                             int currentQty = selectedItem.getQuantity();
 
-                            if (removeQty <= 0) {
+                            if (removeQty <= 0 ) {
                                 JOptionPane.showMessageDialog(this, "Quantity must be greater than 0");
+                                return;
+                            }
+
+                            if (removeQty > currentQty) {
+                                JOptionPane.showMessageDialog(this,"You only have " + currentQty + " in cart");
                                 return;
                             }
 
