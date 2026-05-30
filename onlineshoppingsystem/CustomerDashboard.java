@@ -540,16 +540,20 @@ public class CustomerDashboard extends JFrame {
 
         placeButton.addActionListener(e -> {
 
-            Address address = new Address(
-                    streetField.getText(),
-                    cityField.getText(),
-                    provinceField.getText(),
-                    countryField.getText(),
-                    zipField.getText(),
-                    "Home"
-            );
+           String zipCode = zipField.getText().trim();
+
+            // ZIP CODE VALIDATION
+            if (!zipCode.matches("\\d{5}")) {
+
+                JOptionPane.showMessageDialog(dialog, "Zip Code must contain exactly 5 digits");
+
+            return;
+            }
+            
+            Address address = new Address(streetField.getText(), cityField.getText(), provinceField.getText(), countryField.getText(), zipCode, "Home");
 
             customer.addAddress(address);
+            
 
             double amount = customer.getCart().getTotal();
 

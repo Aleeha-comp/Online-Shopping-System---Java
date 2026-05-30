@@ -176,6 +176,12 @@ public class RegisterFrame extends JFrame {
 
         String password = new String(passwordField.getPassword());
 
+        if (password.length() != 6) {
+            JOptionPane.showMessageDialog(this, "Password must be exactly 6 characters long");
+
+            return;
+        }
+
         String role = (String) roleBox.getSelectedItem();
 
     // -------------------- EMPTY FIELD CHECK ------------------
