@@ -17,6 +17,7 @@ public class Main {
 
     // LOAD SAVED DATA
     loadAllData();
+    Product.setIdCounter(getMaxProductId() + 1);
 
     // ONLY ADD SAMPLE DATA FIRST TIME
     if (shops.isEmpty()) {
@@ -432,12 +433,24 @@ public static boolean emailExists(String email) {
     accessoryShop.addProduct(p16);
     accessoryShop.addProduct(p17);
 
-
 // Sample users
     customers.add(new Customer("C001", "Ali Khan", "ali@gmail.com", "1234"));
     customers.add(new Customer("C002", "Sara Ahmed", "sara@gmail.com", "1234"));
     admins.add(new Admin("A001", "Admin User", "admin@shop.com", "admin123"));
     }
+    
+//Product ID generator
+    public static int getMaxProductId() {
+    int max = 0;
+    for (Shop shop : shops) {
+        for (Product product : shop.getProducts()) {
+            if (product.getProductId() > max) {
+                max = product.getProductId();
+            }
+        }
+    }
+    return max;
+}
 
 // ─── CLEAR ALL (used on logout) ────────────────────────────────
     public static void logout() {
@@ -448,7 +461,6 @@ public static boolean emailExists(String email) {
         }
     }
     
-
 // Saving data to file
 public static void saveAllData() {
 
@@ -535,4 +547,5 @@ public static void loadAllData() {
             "All data loaded successfully!"
     );
 }
+
 }

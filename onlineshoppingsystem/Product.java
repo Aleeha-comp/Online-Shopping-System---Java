@@ -259,6 +259,12 @@ public class Product implements Serializable, Discountable {
         }
     }
 
+    public static void setIdCounter(int idCounter) {
+        if (idCounter > 0) {
+            Product.idCounter = idCounter;
+        }
+    }
+
     // ================= STRING =================
 
     @Override
