@@ -171,7 +171,10 @@ public class CustomerDashboard extends JFrame {
 
                     rateButton.addActionListener(e -> { String input = JOptionPane.showInputDialog( this, "Enter rating (1 to 5):" );
 
-                    if (input == null || input.isEmpty()) return;
+                    if (input == null || input.isEmpty()) {
+                        JOptionPane.showMessageDialog(this,"Rating cannot be empty");
+                        return;
+                    }
 
                     try {
                         int rating = Integer.parseInt(input);
@@ -180,7 +183,9 @@ public class CustomerDashboard extends JFrame {
                         JOptionPane.showMessageDialog( this, "Rating must be between 1 and 5" );
                         
                     return;
-                 }
+                    }
+
+                    
 
                 //  IMPORTANT: update product rating
                     product.addRating( rating, customer.getName());
@@ -212,6 +217,11 @@ public class CustomerDashboard extends JFrame {
         String input =JOptionPane.showInputDialog(this,"Enter quantity:");
 
         if (input == null || input.isEmpty()) {
+            JOptionPane.showMessageDialog(this,"Quantity cannot be empty");
+        }
+
+        if (!input.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this,"Please enter a valid number");
             return;
         }
 
@@ -337,7 +347,7 @@ public class CustomerDashboard extends JFrame {
             if (customer.getCart().getItems().isEmpty()) {
                 JOptionPane.showMessageDialog(this,"Cart is empty" );
                 return;
-                }
+            }
 
                 JDialog dialog =new JDialog( this, "Checkout", true);
 
@@ -530,21 +540,21 @@ public class CustomerDashboard extends JFrame {
             return;
         }
             
-            Address address = new Address(streetField.getText(), cityField.getText(), provinceField.getText(), countryField.getText(), zipCode, "Home");
+        Address address = new Address(streetField.getText(), cityField.getText(), provinceField.getText(), countryField.getText(), zipCode, "Home");
 
-            customer.addAddress(address);
+        customer.addAddress(address);
 
-            double amount = customer.getCart().getTotal();
+        double amount = customer.getCart().getTotal();
 
-            int paymentId = customer.getOrders().size() + 1;
+        int paymentId = customer.getOrders().size() + 1;
 
-            Payment payment;
+        Payment payment;
 
-            String method = (String) paymentBox.getSelectedItem();
+        String method = (String) paymentBox.getSelectedItem();
 
-            if (method.equals("Credit Card")) {
+        if (method.equals("Credit Card")) {
 
-                payment =new CreditCardPayment(paymentId,amount,extraField.getText(),cvvField.getText());
+            payment =new CreditCardPayment(paymentId,amount,extraField.getText(),cvvField.getText());
         
         } else if (method.equals("EasyPaisa")) {
 
