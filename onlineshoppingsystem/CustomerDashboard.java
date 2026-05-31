@@ -6,13 +6,10 @@ import java.awt.*;
 public class CustomerDashboard extends JFrame {
 
     private Customer customer;
-
     private JPanel productPanel;
-
     private JLabel totalLabel;
 
     public CustomerDashboard() {
-
         customer = Main.getCurrentCustomer();
 
         setTitle("Online Shopping System");
@@ -46,9 +43,7 @@ public class CustomerDashboard extends JFrame {
 
         for (ShopCategory category : Main.getCategories()) {
 
-            JButton button = new JButton(
-                 category.getName()
-            );
+            JButton button = new JButton(category.getName());
 
             categoryPanel.add(button);
 
@@ -130,88 +125,83 @@ public class CustomerDashboard extends JFrame {
 
                 for (Product product : shop.getProducts()) {
 
-                        JPanel card = new JPanel();
+                    JPanel card = new JPanel();
 
-                        card.setLayout(new GridLayout(7, 1));  
+                    card.setLayout(new GridLayout(7, 1));  
 
-                        card.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                    card.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
-                        JLabel nameLabel = new JLabel(product.getName(), JLabel.CENTER);
+                    JLabel nameLabel = new JLabel(product.getName(), JLabel.CENTER);
 
-                        nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+                    nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
-                        JLabel categoryLabel = new JLabel( "Category: " + categoryName, JLabel.CENTER );
+                    JLabel categoryLabel = new JLabel( "Category: " + categoryName, JLabel.CENTER );
 
-                        JLabel shopLabel = new JLabel( "Shop: " + shop.getShopName(), JLabel.CENTER );
+                    JLabel shopLabel = new JLabel( "Shop: " + shop.getShopName(), JLabel.CENTER );
 
-                        JLabel priceLabel = new JLabel( "Rs. " + product.getDiscountedPrice(), JLabel.CENTER );
+                    JLabel priceLabel = new JLabel( "Rs. " + product.getDiscountedPrice(), JLabel.CENTER );
 
-                        JLabel stockLabel =new JLabel("Stock: " + product.getStock(), JLabel.CENTER );
-
-
-                        //  NEW: Rating label added
-                        JLabel ratingLabel = new JLabel( "Rating: " + String.format("%.1f", product.getAverageRating()) + "/5", JLabel.CENTER );
-
-                        JButton addButton = new JButton("Add To Cart");
-
-                        JButton rateButton = new JButton("Rate Product");
-
-                        card.add(nameLabel);
-                        card.add(categoryLabel);
-                        card.add(shopLabel);
-                        card.add(priceLabel);
-                        card.add(stockLabel);
+                    JLabel stockLabel =new JLabel("Stock: " + product.getStock(), JLabel.CENTER );
 
 
-                        //  add rating BEFORE button
-                        card.add(ratingLabel);
-                        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
+                    //  NEW: Rating label added
+                    JLabel ratingLabel = new JLabel( "Rating: " + String.format("%.1f", product.getAverageRating()) + "/5", JLabel.CENTER );
 
-                        buttonPanel.add(addButton);
-                        buttonPanel.add(rateButton);
+                    JButton addButton = new JButton("Add To Cart");
 
-                        card.add(buttonPanel);
+                    JButton rateButton = new JButton("Rate Product");
 
-                        addButton.addActionListener( e -> addToCart(product));
+                    card.add(nameLabel);
+                    card.add(categoryLabel);
+                    card.add(shopLabel);
+                    card.add(priceLabel);
+                    card.add(stockLabel);
 
-                        rateButton.addActionListener(e -> { String input = JOptionPane.showInputDialog( this, "Enter rating (1 to 5):" );
 
-                        if (input == null || input.isEmpty()) return;
+                //  add rating BEFORE button
+                    card.add(ratingLabel);
+                    JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
 
-                        try {
+                    buttonPanel.add(addButton);
+                    buttonPanel.add(rateButton);
+
+                    card.add(buttonPanel);
+
+                    addButton.addActionListener( e -> addToCart(product));
+
+                    rateButton.addActionListener(e -> { String input = JOptionPane.showInputDialog( this, "Enter rating (1 to 5):" );
+
+                    if (input == null || input.isEmpty()) return;
+
+                    try {
                         int rating = Integer.parseInt(input);
 
-                        if (rating < 1 || rating > 5) {
+                    if (rating < 1 || rating > 5) {
                         JOptionPane.showMessageDialog( this, "Rating must be between 1 and 5" );
                         
-                        return;
+                    return;
                  }
 
-        //  IMPORTANT: update product rating
-        product.addRating( rating, customer.getName());
+                //  IMPORTANT: update product rating
+                    product.addRating( rating, customer.getName());
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Thank you for your rating!"
-        );
+                    JOptionPane.showMessageDialog(this,"Thank you for your rating!");
 
-        // refresh UI to update average rating label
-        showProducts(selectedCategory);
+                // refresh UI to update average rating label
+                    showProducts(selectedCategory);
 
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Please enter a valid number"
-        );
+                    } catch (NumberFormatException ex) {
+                    
+                    JOptionPane.showMessageDialog(this,"Please enter a valid number");
+                }
+            });
+                    productPanel.add(card);
+                }
     }
-});
-                        productPanel.add(card);
-                }
-                }
         }
 
-        productPanel.revalidate();
-        productPanel.repaint();
+                productPanel.revalidate();
+                productPanel.repaint();
         }
 
         
@@ -269,83 +259,78 @@ public class CustomerDashboard extends JFrame {
             JOptionPane.showMessageDialog(this, cartText,"My Cart",JOptionPane.INFORMATION_MESSAGE);
         }
 
-                // ================= REMOVE FROM CART =================
+    // ================= REMOVE FROM CART =================
 
-                private void removeFromCart() {
+        private void removeFromCart() {
 
-                        if (customer.getCart().getItems().isEmpty()) {
-                            JOptionPane.showMessageDialog(this,"Cart is empty");
-                            return;
-                        }
+            if (customer.getCart().getItems().isEmpty()) {
+                JOptionPane.showMessageDialog(this,"Cart is empty");
+                return;
+            }
 
-                        String[] productNames =new String[customer.getCart().getItems().size()];
+            String[] productNames =new String[customer.getCart().getItems().size()];
 
-                        for (int i = 0; i < customer.getCart().getItems().size();i++) {
+            for (int i = 0; i < customer.getCart().getItems().size();i++) {
 
-                            CartItem item =customer.getCart().getItems().get(i);
+                CartItem item =customer.getCart().getItems().get(i);
 
-                            productNames[i] = item.getProduct().getName() + " x " + item.getQuantity();
-                        }
+                productNames[i] = item.getProduct().getName() + " x " + item.getQuantity();
+            }
 
-                        String selected =
-                                (String) JOptionPane.showInputDialog(this,"Select product to remove:","Remove Item",
-                                        JOptionPane.INFORMATION_MESSAGE,
-                                        null,
-                                        productNames,
-                                        productNames[0]
-                                );
+            String selected =
+                    (String) JOptionPane.showInputDialog(this,"Select product to remove:","Remove Item",
+                    JOptionPane.INFORMATION_MESSAGE,null,productNames,productNames[0]);
 
-                        if (selected == null) {
-                            return;
-                        }
+            if (selected == null) {
+                return;
+            }
 
-                        CartItem selectedItem = null;
+            CartItem selectedItem = null;
 
-                        for (CartItem item : customer.getCart().getItems()) {
+            for (CartItem item : customer.getCart().getItems()) {
 
-                            String text =item.getProduct().getName() + " x "+ item.getQuantity();
+                String text =item.getProduct().getName() + " x "+ item.getQuantity();
 
-                            if (text.equals(selected)) {
-                                selectedItem = item;
-                                break;
-                            }
-                        }
+                if (text.equals(selected)) {
+                    selectedItem = item;
+                    break;
+                }
+            }
 
-                        if (selectedItem != null) {
-                            String qtyText =JOptionPane.showInputDialog(this,"Enter quantity to remove:");
+            if (selectedItem != null) {
+                String qtyText =JOptionPane.showInputDialog(this,"Enter quantity to remove:");
 
-                            if (qtyText == null || qtyText.isEmpty()) {
-                                return;
-                            }
+                if (qtyText == null || qtyText.isEmpty()) {
+                    return;
+                }
 
-                            int removeQty =Integer.parseInt(qtyText);
+                int removeQty =Integer.parseInt(qtyText);
 
-                            int currentQty = selectedItem.getQuantity();
+                int currentQty = selectedItem.getQuantity();
 
-                            if (removeQty <= 0 ) {
-                                JOptionPane.showMessageDialog(this, "Quantity must be greater than 0");
-                                return;
-                            }
+                if (removeQty <= 0 ) {
+                    JOptionPane.showMessageDialog(this, "Quantity must be greater than 0");
+                    return;
+                }
 
-                            if (removeQty > currentQty) {
-                                JOptionPane.showMessageDialog(this,"You only have " + currentQty + " in cart");
-                                return;
-                            }
+                if (removeQty > currentQty) {
+                    JOptionPane.showMessageDialog(this,"You only have " + currentQty + " in cart");
+                    return;
+                }
 
-                            if (removeQty >= currentQty) {
-                                customer.getCart().removeItem(selectedItem.getProduct());
+                if (removeQty >= currentQty) {
+                    customer.getCart().removeItem(selectedItem.getProduct());
 
-                            } else {
+                } else {
+                    selectedItem.updateQty(currentQty - removeQty);
+                }
 
-                                selectedItem.updateQty(currentQty - removeQty);
-                            }
+                updateTotal();
 
-                            updateTotal();
-
-                            JOptionPane.showMessageDialog(this,"Cart updated");
-                        }
-                    }
-
+                JOptionPane.showMessageDialog(this,"Cart updated");
+            }
+        }
+            
 
                 // ================= CHECKOUT =================
 
@@ -540,20 +525,17 @@ public class CustomerDashboard extends JFrame {
 
         placeButton.addActionListener(e -> {
 
-           String zipCode = zipField.getText().trim();
+        String zipCode = zipField.getText().trim();
 
-            // ZIP CODE VALIDATION
-            if (!zipCode.matches("\\d{5}")) {
-
-                JOptionPane.showMessageDialog(dialog, "Zip Code must contain exactly 5 digits");
-
+        // ZIP CODE VALIDATION
+        if (!zipCode.matches("\\d{5}")) {
+            JOptionPane.showMessageDialog(dialog, "Zip Code must contain exactly 5 digits");
             return;
-            }
+        }
             
             Address address = new Address(streetField.getText(), cityField.getText(), provinceField.getText(), countryField.getText(), zipCode, "Home");
 
             customer.addAddress(address);
-            
 
             double amount = customer.getCart().getTotal();
 
@@ -565,59 +547,32 @@ public class CustomerDashboard extends JFrame {
 
             if (method.equals("Credit Card")) {
 
-                payment =
-                        new CreditCardPayment(
-                                paymentId,
-                                amount,
-                                extraField.getText(),
-                                cvvField.getText()
-                        );
+                payment =new CreditCardPayment(paymentId,amount,extraField.getText(),cvvField.getText());
         
         } else if (method.equals("EasyPaisa")) {
 
-                if (amount > 50000) {
-
-                        JOptionPane.showMessageDialog(dialog, "EasyPaisa transaction cannot exceed Rs. 50,000" );
-
-                        return;
-        }
-
-    payment =
-            new EasyPaisaPayment(
-                    paymentId,
-                    amount,
-                    extraField.getText()
-            );
-
-        } else {
-
-                payment =
-                        new CashOnDelivery(
-                                paymentId,
-                                amount,
-                                true
-                        );
+            if (amount > 50000) {
+                JOptionPane.showMessageDialog(dialog, "EasyPaisa transaction cannot exceed Rs. 50,000" );
+                return;
             }
 
-            Order order =
-                    customer.placeOrder(
-                            address,
-                            payment
-                    );
+            payment =new EasyPaisaPayment(paymentId,amount,extraField.getText());
 
-            if (order != null) {
+        } else {
+            payment =new CashOnDelivery(paymentId,amount,true);
+        }
 
-                String receipt = "========== ORDER RECEIPT ==========\n\n";
+        Order order =customer.placeOrder(address,payment);
 
-                receipt += "Customer: "
-                        + customer.getName()
-                        + "\n";
+        if (order != null) {
 
-                receipt += "Order ID: "
-                        + order.getOrderId()
-                        + "\n\n";
+            String receipt = "========== ORDER RECEIPT ==========\n\n";
 
-                receipt += "Items:\n";
+            receipt += "Customer: " + customer.getName() + "\n";
+
+            receipt += "Order ID: " + order.getOrderId() + "\n\n";
+
+            receipt += "Items:\n";
 
                 for (CartItem item : order.getItems()) {
 
@@ -629,36 +584,26 @@ public class CustomerDashboard extends JFrame {
                             + "\n";
                 }
 
-                receipt += "\n----------------------------\n";
+            receipt += "\n----------------------------\n";
 
-                receipt += "Total Bill: Rs. "
-                        + order.getTotal()
-                        + "\n\n";
+            receipt += "Total Bill: Rs. " + order.getTotal() + "\n\n";
 
-                receipt += "Address:\n"
-                        + address.getFullAddress()
-                        + "\n\n";
+            receipt += "Address:\n" + address.getFullAddress() + "\n\n";
 
-                receipt += "Payment Method: "
-                                + method
-                                + "\n";
+            receipt += "Payment Method: " + method+ "\n";
+ 
+            receipt += "Order Status: Confirmed";
 
-                        receipt += "Order Status: Confirmed";
+            JOptionPane.showMessageDialog(dialog,receipt,"Order Receipt", JOptionPane.INFORMATION_MESSAGE);
+            
+            dialog.dispose();
 
-                        JOptionPane.showMessageDialog(
-                                dialog,
-                                receipt,
-                                "Order Receipt",
-                                JOptionPane.INFORMATION_MESSAGE
-                        );
-                dialog.dispose();
+            updateTotal();
 
-                updateTotal();
+            showProducts("All");
 
-                showProducts("All");
-
-                Main.saveAllData();
-            }
+            Main.saveAllData();
+        }
         });
 
         dialog.setVisible(true);
@@ -683,7 +628,5 @@ public class CustomerDashboard extends JFrame {
 
         dispose();
     }
-
-
      
 }
