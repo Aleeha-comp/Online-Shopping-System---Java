@@ -21,7 +21,7 @@ public class CustomerDashboard extends JFrame {
 
         setLayout(new BorderLayout());
 
-        // ------------------ TITLE ------------------
+    // ------------------ TITLE ------------------
 
         JLabel title = new JLabel("Online Shopping System", JLabel.CENTER);
 
@@ -29,7 +29,7 @@ public class CustomerDashboard extends JFrame {
 
         add(title, BorderLayout.NORTH);
 
-        // ------------------ CATEGORY PANEL -------------
+    // ------------------ CATEGORY PANEL -------------
 
         JPanel categoryPanel = new JPanel();
 
@@ -54,7 +54,7 @@ public class CustomerDashboard extends JFrame {
 
         add(categoryPanel, BorderLayout.WEST);
 
-        // ------------------ PRODUCT PANEL -------------------
+    // ------------------ PRODUCT PANEL -------------------
 
         productPanel = new JPanel();
 
@@ -64,7 +64,7 @@ public class CustomerDashboard extends JFrame {
 
         add(scrollPane, BorderLayout.CENTER);
 
-        // ------------------ BOTTOM PANEL -------------------
+    // ------------------ BOTTOM PANEL -------------------
 
         JPanel bottomPanel = new JPanel();
 
@@ -93,7 +93,7 @@ public class CustomerDashboard extends JFrame {
         add(bottomPanel, BorderLayout.SOUTH);
 
 
-        // ----------------- BUTTON ACTIONS ----------------
+     // ----------------- BUTTON ACTIONS ----------------
 
         viewCartButton.addActionListener( e -> viewCart());
 
@@ -104,7 +104,7 @@ public class CustomerDashboard extends JFrame {
         logoutButton.addActionListener( e -> logout());
 
 
-        // ------------------ LOAD PRODUCTS ----------------
+    // ------------------ LOAD PRODUCTS ----------------
 
         showProducts("All");
 
@@ -144,7 +144,7 @@ public class CustomerDashboard extends JFrame {
                     JLabel stockLabel =new JLabel("Stock: " + product.getStock(), JLabel.CENTER );
 
 
-                    //  NEW: Rating label added
+                //  NEW: Rating label added
                     JLabel ratingLabel = new JLabel( "Rating: " + String.format("%.1f", product.getAverageRating()) + "/5", JLabel.CENTER );
 
                     JButton addButton = new JButton("Add To Cart");
@@ -218,9 +218,7 @@ public class CustomerDashboard extends JFrame {
         int quantity = Integer.parseInt(input);
 
         if (!product.isInStock(quantity)) {
-
             JOptionPane.showMessageDialog(this,"Not enough stock available");
-
             return;
         }
 
@@ -332,152 +330,151 @@ public class CustomerDashboard extends JFrame {
         }
             
 
-                // ================= CHECKOUT =================
+    // ================= CHECKOUT =================
 
-                private void checkout() {
+        private void checkout() {
 
-                    if (customer.getCart().getItems().isEmpty()) {
-                        JOptionPane.showMessageDialog(this,"Cart is empty" );
-                        return;
-                    }
+            if (customer.getCart().getItems().isEmpty()) {
+                JOptionPane.showMessageDialog(this,"Cart is empty" );
+                return;
+                }
 
-                    JDialog dialog =new JDialog( this, "Checkout", true);
+                JDialog dialog =new JDialog( this, "Checkout", true);
 
-                    dialog.setSize(400, 430);
+                dialog.setSize(400, 430);
 
-                    dialog.setLocationRelativeTo(this);
+                dialog.setLocationRelativeTo(this);
 
-                    JPanel panel = new JPanel();
+                JPanel panel = new JPanel();
 
-                    panel.setLayout(null);
+                panel.setLayout(null);
 
-                    dialog.add(panel);
+                dialog.add(panel);
 
-                    JLabel total =new JLabel("Total Bill: Rs. " + customer.getCart().getTotal());
+                JLabel total =new JLabel("Total Bill: Rs. " + customer.getCart().getTotal());
 
-                    total.setBounds(120, 10, 200, 25);
+                total.setBounds(120, 10, 200, 25);
 
-                    panel.add(total);
+                panel.add(total);
 
-                    JLabel streetLabel = new JLabel("Street:");
+                JLabel streetLabel = new JLabel("Street:");
 
-                    streetLabel.setBounds(40, 50, 100, 25);
+                streetLabel.setBounds(40, 50, 100, 25);
 
-                    panel.add(streetLabel);
+                panel.add(streetLabel);
 
-                    JTextField streetField = new JTextField();
+                JTextField streetField = new JTextField();
 
-                    streetField.setBounds(160, 50, 180, 25);
+                streetField.setBounds(160, 50, 180, 25);
 
-                    panel.add(streetField);
+                panel.add(streetField);
 
-                    JLabel cityLabel = new JLabel("City:");
+                JLabel cityLabel = new JLabel("City:");
 
-                    cityLabel.setBounds(40, 90, 100, 25);
+                cityLabel.setBounds(40, 90, 100, 25);
 
-                    panel.add(cityLabel);
+                panel.add(cityLabel);
 
-                    JTextField cityField = new JTextField();
+                JTextField cityField = new JTextField();
 
-                    cityField.setBounds(160, 90, 180, 25);
+                cityField.setBounds(160, 90, 180, 25);
 
-                    panel.add(cityField);
+                panel.add(cityField);
 
-                    JLabel provinceLabel = new JLabel("Province:");
+                JLabel provinceLabel = new JLabel("Province:");
 
-                    provinceLabel.setBounds(40, 130, 100, 25);
+                provinceLabel.setBounds(40, 130, 100, 25);
 
-                    panel.add(provinceLabel);
+                panel.add(provinceLabel);
 
-                    JTextField provinceField = new JTextField();
+                JTextField provinceField = new JTextField();
 
-                    provinceField.setBounds(160, 130, 180, 25);
+                provinceField.setBounds(160, 130, 180, 25);
 
-                    panel.add(provinceField);
+                panel.add(provinceField);
 
-                    JLabel countryLabel = new JLabel("Country:");
+                JLabel countryLabel = new JLabel("Country:");
 
-                    countryLabel.setBounds(40, 170, 100, 25);
+                countryLabel.setBounds(40, 170, 100, 25);
 
-                    panel.add(countryLabel);
+                panel.add(countryLabel);
 
-                    JTextField countryField = new JTextField();
+                JTextField countryField = new JTextField();
 
-                    countryField.setBounds(160, 170, 180, 25);
+                countryField.setBounds(160, 170, 180, 25);
 
-                    panel.add(countryField);
+                panel.add(countryField);
 
-                    JLabel zipLabel = new JLabel("Zip Code:");
+                JLabel zipLabel = new JLabel("Zip Code:");
 
-                    zipLabel.setBounds(40, 210, 100, 25);
+                zipLabel.setBounds(40, 210, 100, 25);
 
-                    panel.add(zipLabel);
+                panel.add(zipLabel);
 
-                    JTextField zipField = new JTextField();
+                JTextField zipField = new JTextField();
 
-                    zipField.setBounds(160, 210, 180, 25);
+                zipField.setBounds(160, 210, 180, 25);
 
-                    panel.add(zipField);
+                panel.add(zipField);
 
-                    JLabel paymentLabel = new JLabel("Payment:");
+                JLabel paymentLabel = new JLabel("Payment:");
 
-                    paymentLabel.setBounds(40, 250, 100, 25);
+                paymentLabel.setBounds(40, 250, 100, 25);
 
-                    panel.add(paymentLabel);
+                panel.add(paymentLabel);
 
-                    JComboBox<String> paymentBox = new JComboBox<>();
+                JComboBox<String> paymentBox = new JComboBox<>();
 
-                    paymentBox.addItem("Cash on Delivery");
+                paymentBox.addItem("Cash on Delivery");
 
-                    paymentBox.addItem("Credit Card");
+                paymentBox.addItem("Credit Card");
 
-                    paymentBox.addItem("EasyPaisa");
+                paymentBox.addItem("EasyPaisa");
 
-                    paymentBox.setBounds(160, 250, 180, 25);
+                paymentBox.setBounds(160, 250, 180, 25);
 
-                    panel.add(paymentBox);
+                panel.add(paymentBox);
 
                     
                 JLabel extraLabel =new JLabel();
 
-            extraLabel.setBounds(40, 290, 100, 25);
+                extraLabel.setBounds(40, 290, 100, 25);
 
-            panel.add(extraLabel);
+                panel.add(extraLabel);
 
-            JTextField extraField =new JTextField();
+                JTextField extraField =new JTextField();
 
-            extraField.setBounds(160, 290, 180, 25);
+                extraField.setBounds(160, 290, 180, 25);
 
-            panel.add(extraField);
+                panel.add(extraField);
 
-            JLabel cvvLabel = new JLabel("CVV:");
+                JLabel cvvLabel = new JLabel("CVV:");
 
-            cvvLabel.setBounds(40, 320, 100, 25);
+                cvvLabel.setBounds(40, 320, 100, 25);
 
-            panel.add(cvvLabel);
+                panel.add(cvvLabel);
 
-            JTextField cvvField = new JTextField();
+                JTextField cvvField = new JTextField();
 
-            cvvField.setBounds(160, 320, 180, 25);
+                cvvField.setBounds(160, 320, 180, 25);
 
-            panel.add(cvvField);
+                panel.add(cvvField);
 
-            // ================= HIDE FIELDS INITIALLY =================
+        // ================= HIDE FIELDS INITIALLY =================
 
-            extraLabel.setVisible(false);
+                extraLabel.setVisible(false);
 
-            extraField.setVisible(false);
+                extraField.setVisible(false);
 
-            cvvLabel.setVisible(false);
+                cvvLabel.setVisible(false);
 
-            cvvField.setVisible(false);
+                cvvField.setVisible(false);
 
-            // ================= PAYMENT TYPE CHANGE =================
+        // ================= PAYMENT TYPE CHANGE =================
 
             paymentBox.addActionListener(e -> {
 
-                String method =
-                        (String) paymentBox.getSelectedItem();
+                String method = (String) paymentBox.getSelectedItem();
 
                 if (method.equals("Credit Card")) {
 
