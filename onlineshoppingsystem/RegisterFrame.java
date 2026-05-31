@@ -256,8 +256,7 @@ public class RegisterFrame extends JFrame {
         int shopId = Main.getShops().size() + 1;
         Shop shop = new Shop( shopId, shopName, category );
 
-        Seller seller = new Seller( userId, name, email, password, shopId, shopName, category, 0.0 );
-
+        Seller seller = new Seller(userId, name, email, password, shop, 0.0);
 
         Main.addSeller(seller);
 

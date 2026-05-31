@@ -79,19 +79,14 @@ public class Order implements Serializable{
         if (payment == null) {
             throw new IllegalArgumentException("Payment object cannot be null.");
         }
-
         if (items.isEmpty()) {
             throw new IllegalStateException("Cannot process payment for an empty order.");
         }
 
         this.payment = payment;
-
         payment.processPayment();
-
         this.status = "Confirmed";
-
         System.out.println("Order #" + orderId + " confirmed!");
-
         return true;
     }
 

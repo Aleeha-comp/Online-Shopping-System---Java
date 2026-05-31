@@ -11,7 +11,7 @@ public class Seller extends User implements Serializable {
 
     private ArrayList<Customer> customers;
 
-    public Seller(String userId, String name, String email, String password, int shopId, String shopName, ShopCategory category, double rating) {
+    public Seller(String userId, String name, String email, String password, Shop shop, double rating) {
         super(userId, name, email, password);
 
         if (shop == null) {
@@ -23,7 +23,7 @@ public class Seller extends User implements Serializable {
             throw new IllegalArgumentException("Rating must be between 0 and 5.");
         }
 
-        this.shop = new Shop(shopId, shopName, category);
+        this.shop = shop;
         this.rating = rating;
         this.totalSales = 0;
         this.customers = new ArrayList<>();
