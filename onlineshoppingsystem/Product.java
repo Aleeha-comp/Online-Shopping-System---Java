@@ -6,22 +6,14 @@ import java.util.*;
 public class Product implements Serializable, Discountable {
 
     private int productId;
-
     private String name;
-
     private double price;
-
     private int stock;
-
     private Shop shop;
-
     private double discountPct;
-
     private List<Review> reviews;
-
     private static int idCounter = 1;
 
-    // Constructor
     public Product(String name, double price, int stock, Shop shop) {
 
         try {
@@ -140,14 +132,6 @@ public class Product implements Serializable, Discountable {
 
     // ================= REVIEWS =================
 
-    public void addReview(Review review) {
-
-        if (review != null) {
-
-            reviews.add(review);
-        }
-    }
-
     public List<Review> getReviews() {
 
         return reviews;
@@ -176,9 +160,7 @@ public class Product implements Serializable, Discountable {
 
         Review review = new Review( reviews.size() + 1,
                 rating,
-                reviewerName
-        );
-
+                reviewerName);
         reviews.add(review);
     }
 
