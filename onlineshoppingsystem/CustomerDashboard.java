@@ -309,6 +309,7 @@ public class CustomerDashboard extends JFrame {
                 String qtyText =JOptionPane.showInputDialog(this,"Enter quantity to remove:");
 
                 if (qtyText == null || qtyText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this,"Quantity cannot be empty");
                     return;
                 }
 
