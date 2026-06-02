@@ -176,6 +176,11 @@ public class RegisterFrame extends JFrame {
 
         String password = new String(passwordField.getPassword());
 
+        if (!email.contains("@")) {
+        JOptionPane.showMessageDialog(this, "Invalid email. Email must contain '@'");
+        return;
+        }   
+
         if (password.length() != 6) {
             JOptionPane.showMessageDialog(this, "Password must be exactly 6 characters long");
 
