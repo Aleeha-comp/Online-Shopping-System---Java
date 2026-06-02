@@ -218,6 +218,7 @@ public class CustomerDashboard extends JFrame {
 
         if (input == null || input.isEmpty()) {
             JOptionPane.showMessageDialog(this,"Quantity cannot be empty");
+            return;
         }
 
         if (!input.matches("\\d+")) {
@@ -610,9 +611,44 @@ public class CustomerDashboard extends JFrame {
 
         if (method.equals("Credit Card")) {
 
-            payment =new CreditCardPayment(paymentId,amount,extraField.getText(),cvvField.getText());
-        
+            String cardNumber = extraField.getText().trim();
+            String cvv = cvvField.getText().trim();
+
+            if (cardNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog,  "Card Number cannot be empty");
+                return;
+            }
+
+            if (!cardNumber.matches("\\d{16}")) {
+                JOptionPane.showMessageDialog(dialog,"Card Number must contain exactly 16 digits");
+            return;
+            }
+
+            if (cvv.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog,"CVV cannot be empty");
+                return;
+            }
+
+            if (!cvv.matches("\\d{3}")) {
+                JOptionPane.showMessageDialog(dialog,"CVV must contain exactly 3 digits");
+            return;
+            }
+
+            payment =new CreditCardPayment(paymentId,amount,cardNumber,cvv);
+
         } else if (method.equals("EasyPaisa")) {
+
+            String phoneNumber = extraField.getText().trim();
+
+            if (phoneNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog,"Phone Number cannot be empty");
+                return;
+            }
+
+            if (!phoneNumber.matches("\\d{11}")) {
+                JOptionPane.showMessageDialog(dialog,"Phone Number must contain exactly 11 digits");
+                return;
+            }
 
             if (amount > 50000) {
                 JOptionPane.showMessageDialog(dialog, "EasyPaisa transaction cannot exceed Rs. 50,000" );
