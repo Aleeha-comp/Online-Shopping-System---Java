@@ -210,7 +210,7 @@ public class CustomerDashboard extends JFrame {
         }
 
         
-    // ================= ADD TO CART =================
+    // ----------------- ADD TO CART -----------------
 
     private void addToCart(Product product) {
 
@@ -239,7 +239,7 @@ public class CustomerDashboard extends JFrame {
         JOptionPane.showMessageDialog(this,"Added to cart");
     }
 
-    // ================= VIEW CART =================
+    // ----------------- VIEW CART -----------------
 
         private void viewCart() {
 
@@ -267,7 +267,7 @@ public class CustomerDashboard extends JFrame {
             JOptionPane.showMessageDialog(this, cartText,"My Cart",JOptionPane.INFORMATION_MESSAGE);
         }
 
-    // ================= REMOVE FROM CART =================
+    // ----------------- REMOVE FROM CART -----------------
 
         private void removeFromCart() {
 
@@ -341,7 +341,7 @@ public class CustomerDashboard extends JFrame {
         }
             
 
-    // ================= CHECKOUT =================
+    // ----------------- CHECKOUT -----------------
 
         private void checkout() {
 
@@ -471,7 +471,7 @@ public class CustomerDashboard extends JFrame {
 
                 panel.add(cvvField);
 
-        // ================= HIDE FIELDS INITIALLY =================
+        // ----------------- HIDE FIELDS INITIALLY -----------------
 
                 extraLabel.setVisible(false);
 
@@ -481,7 +481,7 @@ public class CustomerDashboard extends JFrame {
 
                 cvvField.setVisible(false);
 
-        // ================= PAYMENT TYPE CHANGE =================
+        // ----------------- PAYMENT TYPE CHANGE -----------------
 
             paymentBox.addActionListener(e -> {
 
@@ -548,7 +548,7 @@ public class CustomerDashboard extends JFrame {
         return;
     }
 
-    // ================= STREET VALIDATION =================
+    // ----------------- STREET VALIDATION -----------------
     if (!street.matches("[a-zA-Z0-9 ]+")) {
     JOptionPane.showMessageDialog(dialog,
             "Street can contain only letters and numbers");
@@ -561,7 +561,7 @@ public class CustomerDashboard extends JFrame {
         return;
     }
 
-    // ================= CITY VALIDATION =================
+    // ----------------- CITY VALIDATION -----------------
     if (!city.matches("[a-zA-Z ]+")) {
         JOptionPane.showMessageDialog(dialog,
                 "City must contain alphabets only");
@@ -574,7 +574,7 @@ public class CustomerDashboard extends JFrame {
         return;
     }
 
-    // ================= PROVINCE VALIDATION =================
+    // ----------------- PROVINCE VALIDATION -----------------
     if (!province.matches("[a-zA-Z ]+")) {
         JOptionPane.showMessageDialog(dialog,
                 "Province must contain alphabets only");
@@ -584,10 +584,7 @@ public class CustomerDashboard extends JFrame {
     if (province.length() > 15) {
         JOptionPane.showMessageDialog(dialog,
                 "Province cannot be more than 15 characters");
-        return;
-    }
-
-    // ================= COUNTRY VALIDATION =================
+        ----------------- COUNTRY VALIDATION -----------------
     if (!country.matches("[a-zA-Z ]+")) {
         JOptionPane.showMessageDialog(dialog,
                 "Country must contain alphabets only");
@@ -600,14 +597,14 @@ public class CustomerDashboard extends JFrame {
         return;
     }
 
-    // ================= ZIP VALIDATION =================
+    // -------------- ZIP VALIDATION ----------------
     if (!zipCode.matches("\\d{5}")) {
         JOptionPane.showMessageDialog(dialog,
                 "Zip Code must contain exactly 5 digits");
         return;
     }
 
-    // ================= CREATE ADDRESS =================
+    // ------------ CREATE ADDRESS ----------------
     Address address = new Address(
             street,
             city,
@@ -617,20 +614,7 @@ public class CustomerDashboard extends JFrame {
             "Home"
     );
 
-        /*
 
-        placeButton.addActionListener(e -> {
-
-        String zipCode = zipField.getText().trim();
-
-        // ZIP CODE VALIDATION
-        if (!zipCode.matches("\\d{5}")) {
-            JOptionPane.showMessageDialog(dialog, "Zip Code must contain exactly 5 digits");
-            return;
-        }
-            
-        Address address = new Address(streetField.getText(), cityField.getText(), provinceField.getText(), countryField.getText(), zipCode, "Home");
- */
         customer.addAddress(address);
 
         double amount = customer.getCart().getTotal();
@@ -705,14 +689,14 @@ public class CustomerDashboard extends JFrame {
         dialog.setVisible(true);
     }
 
-    // ================= UPDATE TOTAL =================
+    // ------------ UPDATE TOTAL ----------------
 
     private void updateTotal() {
 
         totalLabel.setText("Cart Total: Rs. "  + customer.getCart().getTotal());
     }
 
-    // ================= LOGOUT =================
+    // ------------ LOGOUT ----------------
 
     private void logout() {
 
