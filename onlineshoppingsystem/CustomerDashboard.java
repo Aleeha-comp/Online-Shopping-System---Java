@@ -539,81 +539,64 @@ public class CustomerDashboard extends JFrame {
         String country = countryField.getText().trim();
         String zipCode = zipField.getText().trim();
 
-    // ================= EMPTY CHECK =================
-    if (street.isEmpty() || city.isEmpty() || province.isEmpty()
-            || country.isEmpty() || zipCode.isEmpty()) {
+    // ------------- EMPTY CHECK ----------------
+    if (street.isEmpty() || city.isEmpty() || province.isEmpty() || country.isEmpty() || zipCode.isEmpty()) {
 
-        JOptionPane.showMessageDialog(dialog,
-                "Please fill all address fields");
+        JOptionPane.showMessageDialog(dialog,"Please fill all address fields");
         return;
     }
 
     // ----------------- STREET VALIDATION -----------------
     if (!street.matches("[a-zA-Z0-9 ]+")) {
-    JOptionPane.showMessageDialog(dialog,
-            "Street can contain only letters and numbers");
-    return;
-}
+        JOptionPane.showMessageDialog(dialog,"Street can contain only letters and numbers");
+        return;
+    }
 
     if (street.length() > 4) {
-        JOptionPane.showMessageDialog(dialog,
-                "Street cannot contain more than 4 characters");
+        JOptionPane.showMessageDialog(dialog,"Street cannot contain more than 4 characters");
         return;
     }
 
     // ----------------- CITY VALIDATION -----------------
     if (!city.matches("[a-zA-Z ]+")) {
-        JOptionPane.showMessageDialog(dialog,
-                "City must contain alphabets only");
+        JOptionPane.showMessageDialog(dialog,"City must contain alphabets only");
         return;
     }
 
     if (city.length() > 15) {
-        JOptionPane.showMessageDialog(dialog,
-                "City cannot be more than 15 characters");
+        JOptionPane.showMessageDialog(dialog,"City cannot be more than 15 characters");
         return;
     }
 
     // ----------------- PROVINCE VALIDATION -----------------
     if (!province.matches("[a-zA-Z ]+")) {
-        JOptionPane.showMessageDialog(dialog,
-                "Province must contain alphabets only");
+        JOptionPane.showMessageDialog(dialog,"Province must contain alphabets only");
         return;
     }
 
     if (province.length() > 15) {
-        JOptionPane.showMessageDialog(dialog,
-                "Province cannot be more than 15 characters");
-        ----------------- COUNTRY VALIDATION -----------------
+        JOptionPane.showMessageDialog(dialog,"Province cannot be more than 15 characters");
+        return;
+    }
+    //----------------- COUNTRY VALIDATION -----------------
     if (!country.matches("[a-zA-Z ]+")) {
-        JOptionPane.showMessageDialog(dialog,
-                "Country must contain alphabets only");
+        JOptionPane.showMessageDialog(dialog, "Country must contain alphabets only");
         return;
     }
 
     if (country.length() > 15) {
-        JOptionPane.showMessageDialog(dialog,
-                "Country cannot be more than 15 characters");
+        JOptionPane.showMessageDialog(dialog,  "Country cannot be more than 15 characters");
         return;
     }
 
     // -------------- ZIP VALIDATION ----------------
     if (!zipCode.matches("\\d{5}")) {
-        JOptionPane.showMessageDialog(dialog,
-                "Zip Code must contain exactly 5 digits");
+        JOptionPane.showMessageDialog(dialog,  "Zip Code must contain exactly 5 digits");
         return;
     }
 
     // ------------ CREATE ADDRESS ----------------
-    Address address = new Address(
-            street,
-            city,
-            province,
-            country,
-            zipCode,
-            "Home"
-    );
-
+    Address address = new Address(street, city, province, country, zipCode,"Home");
 
         customer.addAddress(address);
 
@@ -685,7 +668,7 @@ public class CustomerDashboard extends JFrame {
             Main.saveAllData();
         }
         });
-
+    
         dialog.setVisible(true);
     }
 
