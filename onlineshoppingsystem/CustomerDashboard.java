@@ -622,6 +622,10 @@ public class CustomerDashboard extends JFrame {
             payment =new EasyPaisaPayment(paymentId,amount,extraField.getText());
 
         } else {
+            if (amount > 20000) {
+                JOptionPane.showMessageDialog(dialog, "Cash on Delivery cannot be more than Rs. 20,000" );
+                return;
+            }
             payment =new CashOnDelivery(paymentId,amount,true);
         }
 
