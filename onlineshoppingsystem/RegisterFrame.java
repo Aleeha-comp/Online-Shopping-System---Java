@@ -176,6 +176,22 @@ public class RegisterFrame extends JFrame {
 
         String password = new String(passwordField.getPassword());
 
+        // NAME VALIDATION
+        if (!name.matches("[a-zA-Z ]+")) {
+            JOptionPane.showMessageDialog(this,"Name can contain alphabets only");
+            return;
+        }
+
+        if (name.length() > 50) {
+            JOptionPane.showMessageDialog(this,"Name cannot be more than 50 characters");
+            return;
+        }
+
+        if (!email.contains("@") || !email.contains(".")) {
+        JOptionPane.showMessageDialog(this, "Please enter a valid email address");
+        return;
+        }  
+
         if (password.length() != 6) {
             JOptionPane.showMessageDialog(this, "Password must be exactly 6 characters long");
 

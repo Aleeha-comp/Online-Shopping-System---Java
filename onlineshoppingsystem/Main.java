@@ -543,9 +543,7 @@ public static void loadAllData() {
 
     categories = FileHandling.loadData("categories.dat");
 
-    System.out.println(
-            "All data loaded successfully!"
-    );
+    System.out.println("All data loaded successfully!");
 }
 
 }
