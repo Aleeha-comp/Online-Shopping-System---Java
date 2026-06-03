@@ -104,9 +104,7 @@ public class Main {
         // SAVE IMMEDIATELY
         saveAllData();
 
-        System.out.println(
-                "Shop added successfully!"
-        );
+        System.out.println("Shop added successfully!");
     }
 
     catch (Exception e) {
