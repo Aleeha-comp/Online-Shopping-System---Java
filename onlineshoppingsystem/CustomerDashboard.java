@@ -2,6 +2,8 @@ package onlineshoppingsystem;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class CustomerDashboard extends JFrame {
 
@@ -47,10 +49,20 @@ public class CustomerDashboard extends JFrame {
 
             categoryPanel.add(button);
 
-            button.addActionListener(e -> showProducts(category.getName()));
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    showProducts(category.getName());
+                }
+            });
         }
         
-        allButton.addActionListener(e -> showProducts("All"));
+        allButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showProducts("All");
+            }
+        });
 
         add(categoryPanel, BorderLayout.WEST);
 
@@ -95,13 +107,33 @@ public class CustomerDashboard extends JFrame {
 
      // ----------------- BUTTON ACTIONS ----------------
 
-        viewCartButton.addActionListener( e -> viewCart());
+        viewCartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewCart();
+            }
+        });
 
-        removeButton.addActionListener( e -> removeFromCart());
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeFromCart();
+            }
+        });
 
-        checkoutButton.addActionListener( e -> checkout());
+        checkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkout();
+            }
+        });
 
-        logoutButton.addActionListener( e -> logout());
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logout();
+            }
+        });
 
 
     // ------------------ LOAD PRODUCTS ----------------
@@ -167,7 +199,12 @@ public class CustomerDashboard extends JFrame {
 
                     card.add(buttonPanel);
 
-                    addButton.addActionListener( e -> addToCart(product));
+                    addButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            addToCart(product);
+                        }
+                    });
 
                     rateButton.addActionListener(e -> { String input = JOptionPane.showInputDialog( this, "Enter rating (1 to 5):" );
 
@@ -484,7 +521,9 @@ public class CustomerDashboard extends JFrame {
 
         // ----------------- PAYMENT TYPE CHANGE -----------------
 
-            paymentBox.addActionListener(e -> {
+            paymentBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
 
                 String method = (String) paymentBox.getSelectedItem();
 
@@ -524,7 +563,7 @@ public class CustomerDashboard extends JFrame {
 
                     cvvField.setVisible(false);
                 }
-            });
+            }});
 
         JButton placeButton = new JButton("Place Order");
 
