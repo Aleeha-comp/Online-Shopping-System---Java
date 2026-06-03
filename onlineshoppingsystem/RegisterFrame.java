@@ -169,7 +169,12 @@ public class RegisterFrame extends JFrame {
 
         panel.add(registerButton);
 
-        registerButton.addActionListener( e -> registerUser() );
+        registerButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerUser();
+            }
+        });
     }
 
 
