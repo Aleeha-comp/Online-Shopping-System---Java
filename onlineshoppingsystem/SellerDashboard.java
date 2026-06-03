@@ -2,6 +2,8 @@ package onlineshoppingsystem;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.*;
 
 // GUI window for the seller to manage their shop and products
@@ -61,12 +63,36 @@ public class SellerDashboard extends JFrame {
 
         add(panel, BorderLayout.SOUTH);
 
-    
-        addButton.addActionListener(e -> addProduct());
-        removeButton.addActionListener(e -> removeProduct());
-        discountButton.addActionListener(e -> applyDiscount());
-        updateButton.addActionListener(e -> updateProduct());
-        logoutButton.addActionListener(e -> logout());
+            
+                addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addProduct();
+            }
+        });
+
+        removeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                removeProduct();
+            }
+        });
+
+        discountButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                applyDiscount();
+            }
+        });
+
+        updateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                updateProduct();
+            }
+        });
+
+        logoutButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                logout();
+            }
+        });
 
         loadProducts();
     }
