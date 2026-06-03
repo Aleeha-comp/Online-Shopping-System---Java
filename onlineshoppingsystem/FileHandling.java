@@ -19,7 +19,6 @@ public class FileHandling {
     }
 
     // ---------------- LOAD GENERIC DATA ----------------
-    @SuppressWarnings("unchecked")
     public static <T> ArrayList<T> loadData(String fileName) {
         try {
             File file = new File(fileName);
