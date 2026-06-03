@@ -3,6 +3,7 @@ package onlineshoppingsystem;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,17 +82,47 @@ public class AdminDashboard extends JFrame {
         mainPanel.add(userPanel);
 
         // ================= BUTTON ACTIONS =================
-        removeShopButton.addActionListener(e -> removeShop());
+        removeShopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeShop();
+            }
+        });
 
-        refreshShopButton.addActionListener(e -> loadShops());
+        refreshShopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadShops();
+            }
+        });
 
-        refreshUserButton.addActionListener(e -> loadUsers());
+        refreshUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            loadUsers();
+            }
+        });
 
-        removeUserButton.addActionListener(e -> removeUser());
+        removeUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeUser();
+            }
+        });
 
-        sellerDetailsButton.addActionListener(e -> viewSellerDetails());
+        sellerDetailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewSellerDetails();
+            }
+        });
 
-        logoutButton.addActionListener(e -> logout());
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logout();
+            }
+        });
 
         // ================= LOAD DATA =================
         loadShops();

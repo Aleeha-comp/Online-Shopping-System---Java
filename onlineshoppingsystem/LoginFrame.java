@@ -2,6 +2,7 @@ package onlineshoppingsystem;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class LoginFrame extends JFrame {
 
@@ -70,12 +71,29 @@ public class LoginFrame extends JFrame {
         panel.add(registerButton);
 
         // Role change listener
-        roleBox.addActionListener(e -> updateRegisterButton());
+        roleBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateRegisterButton();
+            }
+        });
+
         updateRegisterButton();
 
         // Button actions
-        loginButton.addActionListener(e -> login());
-        registerButton.addActionListener(e -> openRegister());
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                login();
+        }
+        });
+
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openRegister();
+            }
+        });
     }
 
 
