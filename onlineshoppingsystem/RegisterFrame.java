@@ -2,6 +2,7 @@ package onlineshoppingsystem;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class RegisterFrame extends JFrame {
 
@@ -131,7 +132,12 @@ public class RegisterFrame extends JFrame {
 
         // ---------------- ROLE CHANGE ----------------
 
-        roleBox.addActionListener(e -> { String role = (String) roleBox.getSelectedItem();
+        roleBox.addActionListener(new ActionListener() {
+
+    @Override
+        public void actionPerformed(ActionEvent e) {
+
+            String role = (String) roleBox.getSelectedItem();
 
             if (role.equals("Seller")) {
 
@@ -143,9 +149,7 @@ public class RegisterFrame extends JFrame {
 
                 categoryBox.setVisible(true);
 
-            }
-
-            else {
+            } else {
 
                 shopLabel.setVisible(false);
 
@@ -155,7 +159,8 @@ public class RegisterFrame extends JFrame {
 
                 categoryBox.setVisible(false);
             }
-        });
+        }
+    });
 
         JButton registerButton = new JButton("Register");
 
